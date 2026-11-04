@@ -1,0 +1,40 @@
+<header class="header">
+  <a class="brand" routerLink="/" aria-label="Huella, ir a Mundo">
+    <svg class="brand__logo" width="34" height="34" viewBox="0 0 34 34" aria-hidden="true">
+      <circle class="brand__disc" cx="17" cy="17" r="16" />
+      <path class="brand__pin" d="M17 8c-4 0-7 3-7 7 0 5 7 11 7 11s7-6 7-11c0-4-3-7-7-7z" />
+      <circle class="brand__disc" cx="17" cy="15" r="2.6" />
+    </svg>
+    <span class="brand__name">huella</span>
+  </a>
+
+  <nav class="views" aria-label="Vistas del mapa">
+    @for (view of views; track view.path) {
+      <a
+        class="views__link"
+        [routerLink]="'/' + view.path"
+        routerLinkActive="is-active"
+        [routerLinkActiveOptions]="{ exact: true }"
+        ariaCurrentWhenActive="page"
+        >{{ view.label }}</a
+      >
+    }
+  </nav>
+
+  <div class="actions">
+    <button
+      type="button"
+      class="round-button theme-toggle"
+      [attr.aria-label]="themeLabel()"
+      [attr.title]="themeLabel()"
+      (click)="theme.toggle()"
+    >
+      @if (isDark()) {
+        <svg lucideSun [size]="19" aria-hidden="true"></svg>
+      } @else {
+        <svg lucideMoon [size]="19" aria-hidden="true"></svg>
+      }
+    </button>
+    <button type="button" class="round-button avatar" aria-label="Mi perfil">{{ initials }}</button>
+  </div>
+</header>

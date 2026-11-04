@@ -1,0 +1,38 @@
+# Construye las imágenes y corre lint y pruebas dentro de los contenedores,
+# con los mismos comandos que en local (make lint / make test).
+name: CI
+
+on:
+  push:
+  pull_request:
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: Preparar .env
+        run: cp .env.example .env
+
+      - name: Construir imágenes
+        run: docker compose build
+
+      - name: Lint
+        run: make lint
+
+      - name: Pruebas
+        run: make test
+
+      - name: Logs si algo falla
+        if: failure()
+        run: docker compose logs
+
+      - name: Limpiar
+        if: always()
+        run: docker compose down -v

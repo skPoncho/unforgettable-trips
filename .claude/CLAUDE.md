@@ -28,7 +28,8 @@ App web para registrar viajes **centrada en mapas**: cada país, estado de Méxi
 
 ### Técnicas
 - **Todo corre en contenedores Docker**, en desarrollo y en producción: `db` (PostgreSQL + PostGIS), `api` y `web`. En desarrollo el código se monta como volumen con recarga en caliente. Los comandos se ejecutan con `make` / `docker compose`, **nunca** con Python, `uv`, Node o Postgres instalados en la Mac.
-- **Frontend**: Angular 22, componentes standalone, signals, sin zone.js, SCSS, Vitest, ESLint + Prettier. Iconos de Lucide (`lucide-angular`).
+- **Frontend**: Angular 22, componentes standalone, signals, sin zone.js, SCSS, Vitest, ESLint + Prettier. Iconos de Lucide con **`@lucide/angular`** (componentes por icono, p. ej. `<svg lucideSun [size]="19">`). El paquete viejo `lucide-angular` se abandonó en 1.0.0 y no soporta Angular 22.
+- **Imagen de PostGIS**: `imresamu/postgis` (multiarquitectura, del mismo mantenedor de `postgis/postgis`, que solo publica amd64). Versión fijada en `docker-compose.yml`.
 - **Mapas**: solo **D3 + TopoJSON** en SVG. Zoom con d3-zoom; el globo 3D es una proyección ortográfica girable. MapLibre solo si después se pide zoom a nivel calle en el detalle de viaje.
 - **Backend**: FastAPI + SQLAlchemy 2 + GeoAlchemy2 + Alembic, Pydantic v2, `uv`, ruff, pytest. PostgreSQL + PostGIS.
 - Tipos de TypeScript generados desde el OpenAPI de FastAPI (`openapi-typescript`).
@@ -66,12 +67,19 @@ App web para registrar viajes **centrada en mapas**: cada país, estado de Méxi
 
 ## Comandos
 
-Se completan en la fase 0. Previstos:
+Solo se necesita Docker Desktop encendido. `make help` lista todo.
 
-- `make dev`: levanta `db`, `api` y `web` (`localhost:4200` y `localhost:8000`).
-- `make test` / `make lint`: pruebas y lint de api y web dentro de los contenedores.
-- `make migrate`, `make seed`, `make load-geo`, `make build-geo`.
+- `make dev`: construye y levanta `db`, `api` y `web` (`localhost:4200`, `localhost:8000`; crea `.env` desde `.env.example` si falta). La api migra al arrancar.
+- `make stop` / `make down` / `make logs`.
+- `make test` / `make lint`: pruebas y lint de api y web dentro de los contenedores (lo mismo corre en CI). `make format` aplica ruff y Prettier.
+- `make migrate`: migraciones de Alembic. `make seed` llega en la fase 2; `make load-geo` y `make build-geo` en la fase 1.
 - `make shell-api` / `make shell-web`: terminal dentro del contenedor.
+
+Notas:
+- Las pruebas de api usan la BD `huella_test`, que `tests/conftest.py` crea y migra sola.
+- `node_modules` vive en un volumen de Docker; `web/docker-entrypoint.sh` reinstala si cambió `package-lock.json`. Para agregar paquetes: `make shell-web` y `npm install …`.
+- Las dependencias de Python viven en `/opt/venv` dentro de la imagen; tras cambiar `pyproject.toml`, corre `uv lock` en `make shell-api` y vuelve a `make dev` (reconstruye).
+- `src/testing/` del web tiene utilidades solo para pruebas (p. ej. `mockSystemTheme`, porque jsdom no trae `matchMedia`).
 
 ## Cómo trabajar en este repo
 

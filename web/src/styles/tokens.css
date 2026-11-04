@@ -1,0 +1,141 @@
+/*
+ * Huella · tokens de diseño. FUENTE ÚNICA de colores, fuentes y radios.
+ * Los componentes solo usan var(--…); no se escriben colores sueltos.
+ *
+ * Tema oscuro por defecto. ThemeService (y el script de index.html) siempre escriben
+ * data-theme en <html>; el bloque @media es solo respaldo si JavaScript no corre.
+ * Origen: design/tokens.css más los extras de las maquetas (design/pantallas).
+ */
+
+:root {
+  --font-display: 'Bricolage Grotesque', sans-serif;
+  --font-body: 'Instrument Sans', system-ui, sans-serif;
+  --font-mono: 'IBM Plex Mono', monospace;
+
+  --radius-map: 28px;
+  --radius-card: 22px;
+  --radius-pill: 999px;
+
+  --tap-target: 44px;
+}
+
+:root,
+:root[data-theme='dark'] {
+  color-scheme: dark;
+
+  --bg: #0b1620;
+  --panel: #122230;
+  --panel-2: #182b3a;
+  --line: #24394a;
+  --text: #eef2f4;
+  --text-sub: #b5c4cf;
+  --text-muted: #9db0be;
+
+  --map-ocean: #0e1b25;
+  --map-land: #1c2b38;
+  --map-land-line: #2c4052;
+
+  --accent: #f4b740;
+  --on-accent: #1a1204;
+  --accent-text: #f4b740;
+  --accent-stopover: rgba(244, 183, 64, 0.38);
+  --visited-line: #ffe2a3;
+  --visited-glow: 6px;
+
+  --wish: #7fd8ce;
+  --wish-text: #cff3ee;
+
+  --inverse: #eef2f4;
+  --on-inverse: #0b1620;
+
+  --overlay: rgba(18, 34, 48, 0.95);
+  --overlay-line: #35506a;
+  --scrim: rgba(5, 10, 15, 0.74);
+  --shadow: 0 20px 50px rgba(0, 0, 0, 0.45);
+
+  --track: #1d3243;
+  --dot-off: #1f3446;
+  --placeholder: #16293a;
+  --stripe: rgba(255, 255, 255, 0.035);
+}
+
+:root[data-theme='light'] {
+  color-scheme: light;
+
+  --bg: #eef1f4;
+  --panel: #ffffff;
+  --panel-2: #f4f6f8;
+  --line: #d6dee5;
+  --text: #0f1e2a;
+  --text-sub: #3e5263;
+  --text-muted: #556a7b;
+
+  --map-ocean: #e2e9ee;
+  --map-land: #ffffff;
+  --map-land-line: #c3cfd9;
+
+  --accent: #f2ae2e;
+  --on-accent: #1a1204;
+  --accent-text: #8a5a00;
+  --accent-stopover: rgba(242, 174, 46, 0.42);
+  --visited-line: #b87a06;
+  --visited-glow: 0px;
+
+  --wish: #167468;
+  --wish-text: #0f5c53;
+
+  --inverse: #0f1e2a;
+  --on-inverse: #ffffff;
+
+  --overlay: rgba(255, 255, 255, 0.97);
+  --overlay-line: #d6dee5;
+  --scrim: rgba(15, 30, 42, 0.42);
+  --shadow: 0 20px 50px rgba(15, 30, 42, 0.16);
+
+  --track: #e1e7ec;
+  --dot-off: #d5dde3;
+  --placeholder: #dce4ea;
+  --stripe: rgba(15, 30, 42, 0.045);
+}
+
+/* Respaldo sin JavaScript: mismos valores que [data-theme='light']. */
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme]) {
+    color-scheme: light;
+
+    --bg: #eef1f4;
+    --panel: #ffffff;
+    --panel-2: #f4f6f8;
+    --line: #d6dee5;
+    --text: #0f1e2a;
+    --text-sub: #3e5263;
+    --text-muted: #556a7b;
+
+    --map-ocean: #e2e9ee;
+    --map-land: #ffffff;
+    --map-land-line: #c3cfd9;
+
+    --accent: #f2ae2e;
+    --on-accent: #1a1204;
+    --accent-text: #8a5a00;
+    --accent-stopover: rgba(242, 174, 46, 0.42);
+    --visited-line: #b87a06;
+    --visited-glow: 0px;
+
+    --wish: #167468;
+    --wish-text: #0f5c53;
+
+    --inverse: #0f1e2a;
+    --on-inverse: #ffffff;
+
+    --overlay: rgba(255, 255, 255, 0.97);
+    --overlay-line: #d6dee5;
+    --scrim: rgba(15, 30, 42, 0.42);
+    --shadow: 0 20px 50px rgba(15, 30, 42, 0.16);
+
+    --track: #e1e7ec;
+    --dot-off: #d5dde3;
+    --placeholder: #dce4ea;
+    --stripe: rgba(15, 30, 42, 0.045);
+  }
+}

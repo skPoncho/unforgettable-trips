@@ -1,0 +1,95 @@
+// Encabezado según design/pantallas/Main.dc.html. Solo tokens de src/styles/tokens.css.
+
+.header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 16px 20px;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: var(--tap-target);
+  color: var(--text);
+  text-decoration: none;
+  border-radius: var(--radius-pill);
+}
+
+.brand__disc {
+  fill: var(--accent);
+}
+
+.brand__pin {
+  fill: var(--on-accent);
+}
+
+.brand__name {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 26px;
+  letter-spacing: -0.02em;
+}
+
+.views {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  padding: 4px;
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-pill);
+}
+
+.views__link {
+  display: inline-flex;
+  align-items: center;
+  min-height: 40px;
+  padding: 0 18px;
+  border-radius: var(--radius-pill);
+  color: var(--text-sub);
+  font-weight: 500;
+  font-size: 14px;
+  text-decoration: none;
+  transition:
+    background-color 0.15s ease,
+    color 0.15s ease;
+
+  &:hover {
+    color: var(--text);
+  }
+
+  &.is-active {
+    background: var(--accent);
+    color: var(--on-accent);
+    font-weight: 600;
+  }
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-left: auto;
+}
+
+.round-button {
+  display: grid;
+  place-items: center;
+  width: var(--tap-target);
+  height: var(--tap-target);
+  padding: 0;
+  border-radius: 50%;
+  border: 1px solid var(--line);
+  background: var(--panel);
+  color: var(--text);
+  cursor: pointer;
+}
+
+.avatar {
+  background: var(--panel-2);
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 16px;
+}

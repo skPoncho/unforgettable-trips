@@ -1,0 +1,63 @@
+# Huella · entorno de desarrollo. Todo corre aquí: no se instala Python, Node ni Postgres en la Mac.
+name: huella
+
+x-db-env: &db-env
+  POSTGRES_USER: ${POSTGRES_USER:-huella}
+  POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-huella}
+  POSTGRES_DB: ${POSTGRES_DB:-huella}
+
+services:
+  db:
+    # postgis/postgis solo publica amd64; esta es la versión multiarquitectura
+    # que publica uno de sus mantenedores (corre nativa en Apple Silicon y en CI).
+    image: imresamu/postgis:17-3.5-bookworm
+    environment: *db-env
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    ports:
+      - "${DB_PORT:-5432}:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 3s
+      timeout: 3s
+      retries: 20
+
+  api:
+    build:
+      context: ./api
+      target: dev
+    environment:
+      <<: *db-env
+      DATABASE_URL: postgresql+psycopg://${POSTGRES_USER:-huella}:${POSTGRES_PASSWORD:-huella}@db:5432/${POSTGRES_DB:-huella}
+      TEST_DATABASE_URL: postgresql+psycopg://${POSTGRES_USER:-huella}:${POSTGRES_PASSWORD:-huella}@db:5432/${POSTGRES_DB:-huella}_test
+    volumes:
+      - ./api:/app
+    ports:
+      - "${API_PORT:-8000}:8000"
+    depends_on:
+      db:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/health')"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+      start_period: 10s
+
+  web:
+    build:
+      context: ./web
+      target: dev
+    volumes:
+      - ./web:/app
+      # node_modules vive en un volumen para no mezclar binarios de Linux con la Mac.
+      - web-node-modules:/app/node_modules
+    ports:
+      - "${WEB_PORT:-4200}:4200"
+    depends_on:
+      api:
+        condition: service_healthy
+
+volumes:
+  db-data:
+  web-node-modules:
