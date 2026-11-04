@@ -2,7 +2,7 @@
 
 Concepto: **un atlas que se enciende.** En tema oscuro los países visitados brillan como luces de ciudad sobre tinta azul ("atlas nocturno"). En tema claro el mapa es tierra blanca sobre océano gris azulado y el ámbar funciona como tinta ("atlas de día").
 
-Las maquetas de referencia están en `design/pantallas/` (`Sistema.dc.html` resume este documento visualmente). Los tokens también están listos para usar en `design/tokens.css` (variables CSS con ambos temas).
+Las maquetas de referencia están en `design/pantallas/` (`Sistema.dc.html` resume este documento visualmente). Los tokens también están listos para usar en `design/tokens.css` (variables CSS con ambos temas). A partir de la fase 0 la **fuente única** de tokens es `web/src/styles/tokens.css`; `design/tokens.css` queda solo como referencia.
 
 ## Reglas de color
 
@@ -73,6 +73,6 @@ Extras: en oscuro, los países visitados llevan un halo (desenfoque gaussiano de
 
 ## Datos geográficos y créditos
 
-- Países: Natural Earth vía el paquete npm `world-atlas` (dominio público).
-- Estados de México: paquete npm `@svg-maps/mexico` (licencia **CC BY 4.0**: requiere atribución visible en la app). Alternativas: INEGI Marco Geoestadístico o Natural Earth admin-1.
-- Ciudades para geocodificación inversa: candidato GeoNames `cities15000` (CC BY 4.0).
+- Países: Natural Earth (dominio público). En el mapa, vía el paquete npm `world-atlas` 50m (la de 110m no trae países chicos como Vaticano o Andorra); los que no se alcanzan a ver se dibujan además como punto. En PostGIS, Natural Earth 10m.
+- Estados de México: **Natural Earth admin-1** (dominio público), tanto para el mapa como para PostGIS. Las maquetas usaron `@svg-maps/mexico` (CC BY 4.0), pero ese paquete trae trazos ya proyectados y no sirve para geocodificar ni para proyectar con D3.
+- Ciudades para geocodificación inversa: GeoNames **`cities5000`** (CC BY 4.0: requiere atribución visible en la app). La de 15000 no incluye lugares como Hakone.

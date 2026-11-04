@@ -1,5 +1,7 @@
 # Huella · Plan propuesto (borrador)
 
+> **Reemplazado por `docs/PLAN.md`.** Se conserva solo como historial.
+
 Este es un punto de partida para que Claude Code lo afine con Carlos y lo convierta en `docs/PLAN.md`, con tareas pequeñas y criterios de aceptación. Cada fase debe terminar con algo visible en el navegador y un commit.
 
 ## Fase 0 · Cimientos
