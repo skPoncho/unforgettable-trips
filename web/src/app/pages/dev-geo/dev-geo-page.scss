@@ -95,6 +95,28 @@
   stroke-width: 0.9;
 }
 
+// Estados del usuario (fase 2): visitado, escala y lista de deseos (docs/DISENO.md).
+.map__land--visited,
+.map__dot--visited {
+  fill: var(--accent);
+  stroke: var(--visited-line);
+  filter: drop-shadow(0 0 var(--visited-glow) var(--accent));
+}
+
+.map__land--stopover,
+.map__dot--stopover {
+  fill: var(--accent-stopover);
+  stroke: var(--accent);
+  stroke-width: 1;
+}
+
+.map__land--wish,
+.map__dot--wish {
+  stroke: var(--wish);
+  stroke-width: 1.1;
+  stroke-dasharray: 3 2.5;
+}
+
 .map__land--active {
   fill: var(--accent);
   stroke: var(--visited-line);
@@ -109,6 +131,79 @@
 .map__dot--active {
   fill: var(--accent);
   stroke: var(--visited-line);
+}
+
+.progress {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 8px 24px;
+  padding: 16px 20px;
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-map);
+}
+
+.progress__headline {
+  margin: 0;
+  color: var(--text-sub);
+}
+
+.progress__figure {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 40px;
+  letter-spacing: -0.02em;
+  color: var(--accent-text);
+}
+
+.progress__note {
+  color: var(--text-muted);
+  font-size: 14px;
+}
+
+.progress__list,
+.legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 16px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-family: var(--font-mono);
+  font-size: 13px;
+  color: var(--text);
+}
+
+.progress__list--muted,
+.legend {
+  color: var(--text-muted);
+}
+
+.legend li {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.legend__swatch {
+  width: 14px;
+  height: 10px;
+  border-radius: 3px;
+  border: 1px solid transparent;
+}
+
+.legend__swatch--visited {
+  background: var(--accent);
+}
+
+.legend__swatch--stopover {
+  background: var(--accent-stopover);
+  border-color: var(--accent);
+}
+
+.legend__swatch--wish {
+  border: 1px dashed var(--wish);
 }
 
 .tooltip {

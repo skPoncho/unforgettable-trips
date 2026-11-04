@@ -184,8 +184,8 @@ Después se pueden agregar `city_id` y `monument_id` con un check de "exactament
 
 ## Vistas derivadas (las reglas de negocio viven aquí)
 
-- **`user_country_status`** (usuario, país): `visited` si hay al menos una parada `stay` en ese país **o** es el país de casa; `stopover` si solo hay escalas. Columna `first_visited_on` = la fecha de llegada más antigua (la casa cuenta desde el inicio). Solo los países con `counts_in_progress` suman a los 195.
+- **`user_country_status`** (usuario, país): `visited` si hay al menos una parada `stay` en ese país **o** es el país de casa; `stopover` si solo hay escalas. Columna `first_visited_on` = la fecha de llegada más antigua; para la casa es nula (cuenta desde siempre) e `is_home` es verdadero. Solo los países con `counts_in_progress` suman a los 195.
 - **`user_subdivision_status`**: la misma regla para estados de México.
 - **`user_stamps`** (usuario, monumento): monumentos con al menos un recuerdo ligado, con la fecha del primero.
-- **Visibilidad efectiva** de un recuerdo: la más restrictiva entre `trips.visibility` y `memories.visibility`, con el orden `private` < `link` < `public`. Implementada como función SQL o método de servicio, usada en todos los endpoints de lectura para terceros.
+- **Visibilidad efectiva** de un recuerdo: la más restrictiva entre `trips.visibility` y `memories.visibility`, con el orden `private` < `link` < `public`. Implementada como la función SQL `effective_visibility(trip, memory)`: el enum de Postgres está declarado en ese orden, así que es `LEAST(trip, COALESCE(memory, trip))`.
 - **Progreso**: conteos sobre las vistas anteriores (países 195, por continente, estados 32, ciudades distintas, sellos, viajes, fotos).

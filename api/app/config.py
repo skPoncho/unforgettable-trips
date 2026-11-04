@@ -12,6 +12,10 @@ class Settings(BaseSettings):
     database_url: str = "postgresql+psycopg://huella:huella@db:5432/huella"
     # Descargas de Natural Earth y GeoNames (montada desde ~/.cache/huella/geo).
     geo_cache_dir: Path = Path("/cache")
+    # Fotos (volumen photos-data). En la fase 8 se podrá apuntar a S3.
+    storage_dir: Path = Path("/data/photos")
+    # Hasta la fase 8 (cuentas) todas las peticiones actúan como este usuario (make seed).
+    current_user_handle: str = "carlos"
 
 
 @lru_cache

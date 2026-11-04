@@ -40,8 +40,15 @@ App web para registrar viajes **centrada en mapas**: cada país, estado de Méxi
 - Países: `world-atlas` 50m para el mapa; Natural Earth 10m (v5.1.2) en PostGIS para punto → país. Progreso sobre 195 países (193 de la ONU, Vaticano y Palestina) con 35/44/48/54/14 por continente: Rusia en Europa; Turquía, Chipre, el Cáucaso y Kazajistán en Asia; Egipto en África. Catálogo en `api/data/countries.csv`.
 - **Territorios** (decidido en la fase 1): Groenlandia, Puerto Rico, Taiwán, Kosovo, Sáhara Occidental, Hong Kong, Macao y demás se pintan en el mapa con su nombre pero **no suman al progreso, ni siquiera a su soberano**. Lo que Natural Earth ya incluye dentro de un país (Guayana Francesa, Canarias, Åland…) cuenta como ese país; Somalilandia y Chipre del Norte se funden con Somalia y Chipre. El mapeo vive en `api/data/natural_earth.json`.
 - Estados de México: **Natural Earth admin-1** (dominio público) para mapa y PostGIS. `@svg-maps/mexico` solo se usó para las maquetas (son trazos ya proyectados, no coordenadas).
-- Ciudades: GeoNames **`cities5000`** con nombres en español (CC BY 4.0: requiere atribución visible).
+- Ciudades: GeoNames **`cities5000`** con nombres en español (CC BY 4.0: requiere atribución visible). Se descartan los barrios (`PPLX`, p. ej. Castro Pretorio en Roma) para que un punto en el centro dé la ciudad y no el barrio (fase 2).
 - Sellos de monumentos: se derivan de los recuerdos ligados a un monumento; no hay tabla propia.
+
+### API del usuario (fase 2)
+- Hasta la fase 8 todas las peticiones actúan como el usuario semilla (`current_user`, handle `carlos`, configurable con `CURRENT_USER_HANDLE`). Sin `make seed`, `/api/me/*` responde 503.
+- Lo que no existe **o es de otro usuario** responde **404** (nunca 403), para no revelar que existe.
+- País y estado de una parada se calculan desde el punto (`app/geo/locate.py`, lo mismo que `/api/geo/reverse`). Si no se manda `city_id`, una **estancia** toma la ciudad más cercana y una **escala** queda sin ciudad (aeropuertos).
+- Las reglas de "visitado" viven en las vistas `user_country_status` / `user_subdivision_status` y la visibilidad efectiva en la función SQL `effective_visibility()` (migración 0004). La casa tiene `first_visited_on` nulo: cuenta desde siempre.
+- Los archivos de fotos se borran después del commit (`app/services/photos.py`); claves `users/{user_id}/photos/{photo_id}/{original|display|thumb}.jpg`.
 
 ## Decisiones abiertas (pregúntale a Carlos antes de fijarlas)
 
@@ -72,7 +79,8 @@ Solo se necesita Docker Desktop encendido. `make help` lista todo.
 - `make dev`: construye y levanta `db`, `api` y `web` (`localhost:4200`, `localhost:8000`; crea `.env` desde `.env.example` si falta). La api migra al arrancar.
 - `make stop` / `make down` / `make logs`.
 - `make test` / `make lint`: pruebas y lint de api y web dentro de los contenedores (lo mismo corre en CI). `make format` aplica ruff y Prettier.
-- `make migrate`: migraciones de Alembic. `make seed` llega en la fase 2.
+- `make migrate`: migraciones de Alembic.
+- `make seed`: recrea al usuario semilla (Carlos, casa en Ciudad de México) con los viajes, monumentos y 412 fotos de relleno de las maquetas (`app/seed/data.py`). Idempotente; necesita `make load-geo` antes y tarda ~20 s.
 - `make load-geo`: carga países, estados de México y ciudades (GeoNames `cities5000`) en PostGIS. Idempotente; la primera vez descarga ~250 MB y tarda ~1 min.
 - `make build-geo`: regenera `web/public/geo/world.topo.json` y `mexico.topo.json` (contenedor `geo`, perfil `tools`). Los TopoJSON se guardan en git.
 - `make shell-api` / `make shell-web`: terminal dentro del contenedor.
@@ -83,7 +91,9 @@ Notas:
 - Las dependencias de Python viven en `/opt/venv` dentro de la imagen; tras cambiar `pyproject.toml`, corre `uv lock` en `make shell-api` y vuelve a `make dev` (reconstruye).
 - `src/testing/` del web tiene utilidades solo para pruebas (p. ej. `mockSystemTheme`, porque jsdom no trae `matchMedia`).
 - Las descargas geográficas viven en `~/.cache/huella/geo` (fuera del repo; se monta en `/cache` de `api` y `geo`; se cambia con `HOST_GEO_CACHE`). Las pruebas de geo cargan los datos reales en `huella_test` la primera vez (fixture `geo_data`).
-- `localhost:4200/dev/geo` es la página de verificación de los datos geográficos (no aparece en el encabezado).
+- `localhost:4200/dev/geo` es la página de verificación de los datos geográficos y del progreso del usuario semilla (no aparece en el encabezado). La API documentada está en `localhost:8000/docs`.
+- Las fotos viven en el volumen `photos-data` (`/data/photos` en `api`); las pruebas usan una carpeta temporal (fixture `storage`).
+- Fixtures de pruebas de usuario en `tests/conftest.py`: `db` (vacía los datos de usuario al terminar), `make_user`, `act_as` y `user`.
 
 ## Cómo trabajar en este repo
 

@@ -54,8 +54,8 @@ format: ## Aplica el formato en api y web
 migrate: ## Aplica las migraciones de Alembic
 	$(API_RUN) alembic upgrade head
 
-seed: ## Carga datos semilla (llega en la fase 2)
-	@echo "make seed llega en la fase 2."
+seed: geo-cache ## Recrea el usuario semilla con viajes, recuerdos y fotos (idempotente)
+	$(API_RUN) python -m app.seed
 
 build-geo: geo-cache ## Genera web/public/geo/*.topo.json (mundo y México)
 	$(COMPOSE) run --rm geo

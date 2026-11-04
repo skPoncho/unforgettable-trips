@@ -4,6 +4,7 @@ import { TestBed } from '@angular/core/testing';
 import type { Topology } from 'topojson-specification';
 
 import type { Country, Subdivision } from '../../core/geo-api';
+import type { Progress, UserMap } from '../../core/me-api';
 import { DevGeoPage } from './dev-geo-page';
 
 // Cuadrados en sentido horario (convención de d3-geo para polígonos pequeños).
@@ -66,6 +67,44 @@ const states: Subdivision[] = [
   { code: 'MX-YUC', name_es: 'Yucatán', country_iso3: 'MEX' },
 ];
 
+const progress: Progress = {
+  countries: { visited: 2, total: 195, stopover_only: 1 },
+  continents: [
+    { continent: 'america', visited: 1, total: 35 },
+    { continent: 'europe', visited: 0, total: 44 },
+    { continent: 'asia', visited: 1, total: 48 },
+    { continent: 'africa', visited: 0, total: 54 },
+    { continent: 'oceania', visited: 0, total: 14 },
+  ],
+  subdivisions: { country_iso3: 'MEX', visited: 1, total: 32 },
+  cities: 3,
+  monuments: 1,
+  trips: 2,
+  photos: 10,
+  wishlist: 1,
+};
+
+const userMap: UserMap = {
+  countries: [
+    {
+      iso3: 'MEX',
+      status: 'visited',
+      first_visited_on: null,
+      is_home: true,
+      counts_in_progress: true,
+    },
+    {
+      iso3: 'JPN',
+      status: 'stopover',
+      first_visited_on: '2025-03-08',
+      is_home: false,
+      counts_in_progress: true,
+    },
+  ],
+  subdivisions: [{ code: 'MX-CMX', status: 'visited', first_visited_on: null, is_home: true }],
+  wishlist: ['TUV'],
+};
+
 describe('DevGeoPage', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -74,10 +113,18 @@ describe('DevGeoPage', () => {
     });
   });
 
-  async function render(fail = false) {
+  async function render(fail = false, userFails = false) {
     const fixture = TestBed.createComponent(DevGeoPage);
     fixture.detectChanges();
     const http = TestBed.inject(HttpTestingController);
+    if (userFails) {
+      http
+        .expectOne('/api/me/progress')
+        .flush({ detail: 'Corre make seed.' }, { status: 503, statusText: 'Error' });
+    } else {
+      http.expectOne('/api/me/progress').flush(progress);
+      http.expectOne('/api/me/map').flush(userMap);
+    }
     if (fail) {
       http
         .expectOne((r) => r.url === '/api/geo/countries')
@@ -125,7 +172,7 @@ describe('DevGeoPage', () => {
 
     element.querySelector('[data-id="JPN"]')!.dispatchEvent(new Event('pointerenter'));
     await fixture.whenStable();
-    expect(element.querySelector('.tooltip')?.textContent?.trim()).toBe('Japón');
+    expect(element.querySelector('.tooltip strong')?.textContent?.trim()).toBe('Japón');
 
     element.querySelector('[data-id="GRL"]')!.dispatchEvent(new Event('pointerenter'));
     await fixture.whenStable();
@@ -135,6 +182,49 @@ describe('DevGeoPage', () => {
     element.querySelector('[data-id="MX-YUC"]')!.dispatchEvent(new Event('pointerenter'));
     await fixture.whenStable();
     expect(element.querySelector('.tooltip')?.textContent?.trim()).toBe('Yucatán');
+  });
+
+  it('pinta visitados, escalas y deseos con lo que da la API', async () => {
+    const { element } = await render();
+    const classes = (id: string) => element.querySelector(`[data-id="${id}"]`)?.classList;
+
+    expect(classes('MEX')).toContain('map__land--visited');
+    expect(classes('JPN')).toContain('map__land--stopover');
+    expect(classes('TUV')).toContain('map__dot--wish');
+    expect(classes('GRL')?.contains('map__land--visited')).toBe(false);
+    expect(classes('MX-CMX')).toContain('map__land--visited');
+    expect(classes('MX-YUC')?.contains('map__land--visited')).toBe(false);
+  });
+
+  it('muestra el progreso del usuario', async () => {
+    const { element } = await render();
+    const text = element.querySelector('.progress')?.textContent?.replace(/\s+/g, ' ');
+    expect(text).toContain('2 de 195 países');
+    expect(text).toContain('(1 solo escala)');
+    expect(text).toContain('América 1/35');
+    expect(text).toContain('Estados 1/32');
+  });
+
+  it('el tooltip dice si es escala, casa o deseo', async () => {
+    const { fixture, element } = await render();
+    const tooltipFor = async (id: string) => {
+      element.querySelector(`[data-id="${id}"]`)!.dispatchEvent(new Event('pointerenter'));
+      await fixture.whenStable();
+      return element.querySelector('.tooltip')?.textContent;
+    };
+
+    expect(await tooltipFor('JPN')).toContain('Escala · 2025');
+    expect(await tooltipFor('MEX')).toContain('Visitado · Casa');
+    expect(await tooltipFor('TUV')).toContain('Lista de deseos');
+  });
+
+  it('sin usuario semilla dibuja los mapas sin pintar y pide make seed', async () => {
+    const { element } = await render(false, true);
+    expect(element.querySelector('[role="status"]')?.textContent).toContain('make seed');
+    expect(
+      element.querySelectorAll('svg[aria-label="Mapa del mundo"] path.map__land'),
+    ).toHaveLength(3);
+    expect(element.querySelector('.map__land--visited')).toBeNull();
   });
 
   it('avisa si la API no responde', async () => {

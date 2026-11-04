@@ -8,16 +8,12 @@ from sqlalchemy import text
 from sqlalchemy.orm import Session
 
 from app.db import get_session
+from app.geo.locate import locate
 from app.models import Continent
 
 router = APIRouter(prefix="/api/geo", tags=["geo"])
 
 SessionDep = Annotated[Session, Depends(get_session)]
-
-# Tolerancia para puntos en la costa o en el mar cerca de tierra (aeropuertos, playas).
-COAST_TOLERANCE_M = 20_000
-# Radio máximo para la "ciudad más cercana".
-CITY_RADIUS_M = 50_000
 
 
 class LonLat(BaseModel):
@@ -196,79 +192,21 @@ def reverse(
     Si el punto cae fuera de todo polígono (costa, aeropuerto junto al mar) se toma el
     país más cercano a menos de 20 km.
     """
-    params = {"lon": lon, "lat": lat, "tolerance": COAST_TOLERANCE_M}
-    point = "ST_SetSRID(ST_MakePoint(:lon, :lat), 4326)"
-    # El filtro en grados usa el índice; la distancia real se mide en metros (geography).
-    nearest_polygon = f"""
-        SELECT {{cols}} FROM {{table}} t
-        WHERE {{extra}} (ST_Intersects(t.geom, {point})
-               OR (ST_DWithin(t.geom, {point}, 1.0)
-                   AND ST_DWithin(t.geom::geography, {point}::geography, :tolerance)))
-        ORDER BY ST_Intersects(t.geom, {point}) DESC,
-                 ST_Distance(t.geom::geography, {point}::geography)
-        LIMIT 1
-    """
-    country = (
-        session.execute(
-            text(
-                nearest_polygon.format(
-                    cols="t.id, t.iso3, t.name_es, t.counts_in_progress",
-                    table="countries",
-                    extra="",
-                )
-            ),
-            params,
-        )
-        .mappings()
-        .first()
-    )
-    if country is None:
+    found = locate(session, lon=lon, lat=lat)
+    if found is None:
         raise HTTPException(404, "El punto no está en ningún país")
-
-    subdivision = (
-        session.execute(
-            text(
-                nearest_polygon.format(
-                    cols="t.code, t.name_es", table="subdivisions", extra="t.country_id = :cid AND"
-                )
-            ),
-            {**params, "cid": country["id"]},
-        )
-        .mappings()
-        .first()
-    )
-
-    # Entre las ciudades cercanas del mismo país gana la de menor distancia relativa a su
-    # tamaño: así un punto en Fushimi da Kioto y no un pueblo vecino a la misma distancia.
-    city = (
-        session.execute(
-            text(
-                f"""
-            SELECT id, name_es, distance_m FROM (
-                SELECT id, name_es, population,
-                       ST_Distance(location::geography, {point}::geography) AS distance_m
-                FROM cities WHERE country_id = :cid
-                ORDER BY location <-> {point} LIMIT 20
-            ) near
-            WHERE distance_m <= :radius
-            ORDER BY distance_m / log(population + 10) LIMIT 1
-            """
-            ),
-            {**params, "cid": country["id"], "radius": CITY_RADIUS_M},
-        )
-        .mappings()
-        .first()
-    )
-
+    country, subdivision, city = found.country, found.subdivision, found.city
     return ReverseOut(
         country=CountryRef(
-            iso3=country["iso3"],
-            name_es=country["name_es"],
-            counts_in_progress=country["counts_in_progress"],
+            iso3=country.iso3,
+            name_es=country.name_es,
+            counts_in_progress=country.counts_in_progress,
         ),
-        subdivision=PlaceRef(**subdivision) if subdivision else None,
+        subdivision=PlaceRef(code=subdivision.code, name_es=subdivision.name_es)
+        if subdivision
+        else None,
         city=NearestCity(
-            id=city["id"], name_es=city["name_es"], distance_km=round(city["distance_m"] / 1000, 1)
+            id=city.id, name_es=city.name_es, distance_km=round(city.distance_m / 1000, 1)
         )
         if city
         else None,

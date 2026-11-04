@@ -20,7 +20,10 @@ if TYPE_CHECKING:
     from app.geo.load import LoadReport
 
 # Columnas de cities5000.txt (https://download.geonames.org/export/dump/readme.txt).
-GEONAMEID, NAME, LAT, LON, COUNTRY, ADMIN1, POPULATION = 0, 1, 4, 5, 8, 10, 14
+GEONAMEID, NAME, LAT, LON, FEATURE_CODE, COUNTRY, ADMIN1, POPULATION = 0, 1, 4, 5, 7, 8, 10, 14
+# Barrios ("section of populated place": Castro Pretorio en Roma, Intendente en Lisboa).
+# Se descartan para que un punto en el centro dé la ciudad y no el barrio.
+SKIPPED_FEATURE_CODES = {"PPLX"}
 
 
 def _read_zip_lines(path: Path, member: str) -> Iterator[list[str]]:
@@ -62,7 +65,9 @@ def spanish_names(ids: set[str]) -> dict[str, str]:
 
 def load_cities(conn: Connection, report: "LoadReport") -> None:
     source = geonames("cities5000.zip")
-    rows = list(_read_zip_lines(source, "cities5000.txt"))
+    all_rows = list(_read_zip_lines(source, "cities5000.txt"))
+    rows = [r for r in all_rows if r[FEATURE_CODE] not in SKIPPED_FEATURE_CODES]
+    report.cities_skipped["barrios"] = len(all_rows) - len(rows)
     names_es = spanish_names({row[GEONAMEID] for row in rows})
 
     conn.execute(
@@ -134,6 +139,19 @@ def load_cities(conn: Connection, report: "LoadReport") -> None:
                 subdivision_id = EXCLUDED.subdivision_id,
                 location = EXCLUDED.location,
                 population = EXCLUDED.population
+            """
+        )
+    )
+    # Ciudades que ya no vienen (p. ej. barrios de cargas anteriores), si nada las usa.
+    conn.execute(
+        text(
+            """
+            DELETE FROM cities c
+            WHERE NOT EXISTS (SELECT 1 FROM gn_matched m
+                              WHERE m.id = c.id AND m.country_id IS NOT NULL)
+              AND NOT EXISTS (SELECT 1 FROM stops s WHERE s.city_id = c.id)
+              AND NOT EXISTS (SELECT 1 FROM users u WHERE u.home_city_id = c.id)
+              AND NOT EXISTS (SELECT 1 FROM monuments mo WHERE mo.city_id = c.id)
             """
         )
     )

@@ -35,6 +35,8 @@ services:
       - ./api:/app
       # Descargas de Natural Earth y GeoNames, fuera del repo (make load-geo).
       - ${HOST_GEO_CACHE:-~/.cache/huella/geo}:/cache
+      # Fotos de los usuarios (StorageBackend en disco).
+      - photos-data:/data/photos
     ports:
       - "${API_PORT:-8000}:8000"
     depends_on:
@@ -76,5 +78,6 @@ services:
 
 volumes:
   db-data:
+  photos-data:
   web-node-modules:
   geo-node-modules:
