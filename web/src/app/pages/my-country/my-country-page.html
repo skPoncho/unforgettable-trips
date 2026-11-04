@@ -32,6 +32,7 @@
         [states]="r.states"
         [stamps]="stamps()"
         [selected]="selected()"
+        [highlighted]="estado() ?? null"
         (picked)="chooseMonument($event)"
       />
     </section>
@@ -65,6 +66,8 @@
                   <li
                     class="chip chip--on"
                     [class.chip--stopover]="s.status === 'stopover'"
+                    [class.chip--highlight]="s.code === estado()"
+                    [attr.aria-current]="s.code === estado() ? 'true' : null"
                     [attr.title]="s.is_home ? 'Casa' : s.status === 'stopover' ? 'Escala' : null"
                   >
                     {{ s.name_es }}

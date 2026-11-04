@@ -170,6 +170,26 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
+  '/api/me/timeline': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /**
+     * Get Timeline
+     * @description Reproduce tu historia: qué se encendió cada año y el progreso al cierre de cada año.
+     */
+    get: operations['get_timeline_api_me_timeline_get'];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   '/api/me/countries/{iso3}': {
     parameters: {
       query?: never;
@@ -516,6 +536,29 @@ export interface paths {
      * @description Variante `display` (para ver) o `thumb` (miniatura) de una foto tuya.
      */
     get: operations['get_photo_api_photos__photo_id___variant__get'];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  '/api/search': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /**
+     * Search
+     * @description Tus lugares (visitados o sellados), viajes y recuerdos, sin acentos ni mayúsculas.
+     *
+     *     Un viaje coincide por título, resumen o alguna parada; un recuerdo, por su texto, el
+     *     lugar de su parada o su monumento.
+     */
+    get: operations['search_api_search_get'];
     put?: never;
     post?: never;
     delete?: never;
@@ -1161,6 +1204,110 @@ export interface components {
       subdivision: components['schemas']['PlaceRef'] | null;
       city: components['schemas']['NearestCity'] | null;
     };
+    /** SearchMemory */
+    SearchMemory: {
+      /**
+       * Id
+       * Format: uuid
+       */
+      id: string;
+      /**
+       * Trip Id
+       * Format: uuid
+       */
+      trip_id: string;
+      /** Trip Title */
+      trip_title: string;
+      /**
+       * Stop Number
+       * @description Nula si el recuerdo es de una escala
+       */
+      stop_number: number | null;
+      /** Place Name */
+      place_name: string;
+      /** Monument Name */
+      monument_name: string | null;
+      /**
+       * Occurred On
+       * Format: date
+       */
+      occurred_on: string;
+      /**
+       * Snippet
+       * @description Fragmento del texto alrededor de la coincidencia
+       */
+      snippet: string;
+      /**
+       * Photo Id
+       * @description Primera foto del recuerdo
+       */
+      photo_id: string | null;
+    };
+    /** SearchOut */
+    SearchOut: {
+      /** Places */
+      places: components['schemas']['SearchPlace'][];
+      /** Trips */
+      trips: components['schemas']['SearchTrip'][];
+      /** Memories */
+      memories: components['schemas']['SearchMemory'][];
+    };
+    /**
+     * SearchPlace
+     * @description Un lugar tuyo: país, estado o ciudad visitados, o monumento sellado.
+     */
+    SearchPlace: {
+      /**
+       * Kind
+       * @enum {string}
+       */
+      kind: 'country' | 'subdivision' | 'city' | 'monument';
+      /**
+       * Key
+       * @description ISO3, código de estado, id de ciudad o slug del monumento
+       */
+      key: string;
+      /** Name */
+      name: string;
+      /**
+       * Context
+       * @description Dónde está: país, o estado y país
+       */
+      context: string | null;
+      /** Country Iso3 */
+      country_iso3: string;
+      /** Is Home */
+      is_home: boolean;
+      /**
+       * Trip Id
+       * @description Ciudad o monumento: viaje de la estancia o recuerdo más reciente ahí
+       */
+      trip_id: string | null;
+      /**
+       * Stop Number
+       * @description Número de estancia en ese viaje (?parada=)
+       */
+      stop_number: number | null;
+    };
+    /** SearchTrip */
+    SearchTrip: {
+      /**
+       * Id
+       * Format: uuid
+       */
+      id: string;
+      /** Title */
+      title: string;
+      /** Starts On */
+      starts_on: string | null;
+      /** Ends On */
+      ends_on: string | null;
+      /**
+       * Matched Place
+       * @description La parada que coincidió, si el título no coincide (p. ej. Kioto en Japón)
+       */
+      matched_place: string | null;
+    };
     /**
      * StampTrip
      * @description Viaje del primer recuerdo del monumento; adonde lleva "Ver recuerdos de este lugar".
@@ -1423,6 +1570,82 @@ export interface components {
      * @enum {string}
      */
     Theme: 'system' | 'dark' | 'light';
+    /** TimelineCity */
+    TimelineCity: {
+      /** Id */
+      id: number;
+      /**
+       * Status
+       * @enum {string}
+       */
+      status: 'visited' | 'stopover';
+    };
+    /** TimelineCountry */
+    TimelineCountry: {
+      /** Iso3 */
+      iso3: string;
+      /**
+       * Status
+       * @enum {string}
+       */
+      status: 'visited' | 'stopover';
+    };
+    /**
+     * TimelineHome
+     * @description Lo que cuenta desde siempre por ser la casa: ya está encendido en el primer año.
+     */
+    TimelineHome: {
+      /** Countries */
+      countries: string[];
+      /** Subdivisions */
+      subdivisions: string[];
+      /** Cities */
+      cities: number[];
+    };
+    /** TimelineOut */
+    TimelineOut: {
+      home: components['schemas']['TimelineHome'];
+      /**
+       * Years
+       * @description Del año de la primera visita al actual, sin huecos (puede haber años vacíos)
+       */
+      years: components['schemas']['TimelineYear'][];
+    };
+    /**
+     * TimelineProgress
+     * @description Totales acumulados al cierre del año (mismas reglas que /api/me/progress).
+     */
+    TimelineProgress: {
+      countries: components['schemas']['CountriesProgress'];
+      /** Continents */
+      continents: components['schemas']['ContinentProgress'][];
+      subdivisions: components['schemas']['SubdivisionsProgress'];
+    };
+    /** TimelineSubdivision */
+    TimelineSubdivision: {
+      /** Code */
+      code: string;
+      /**
+       * Status
+       * @enum {string}
+       */
+      status: 'visited' | 'stopover';
+    };
+    /**
+     * TimelineYear
+     * @description Lo que se encendió ese año, o pasó de escala a visitado, y el progreso a su cierre.
+     */
+    TimelineYear: {
+      /** Year */
+      year: number;
+      /** Countries */
+      countries: components['schemas']['TimelineCountry'][];
+      /** Subdivisions */
+      subdivisions: components['schemas']['TimelineSubdivision'][];
+      /** Cities */
+      cities: components['schemas']['TimelineCity'][];
+      progress: components['schemas']['TimelineProgress'];
+    };
     /**
      * TripDetailOut
      * @description Lo que muestra el detalle de viaje: paradas con sus recuerdos y fotos.
@@ -2008,6 +2231,26 @@ export interface operations {
         };
         content: {
           'application/json': components['schemas']['MapOut'];
+        };
+      };
+    };
+  };
+  get_timeline_api_me_timeline_get: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['TimelineOut'];
         };
       };
     };
@@ -2955,6 +3198,40 @@ export interface operations {
           [name: string]: unknown;
         };
         content?: never;
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['HTTPValidationError'];
+        };
+      };
+    };
+  };
+  search_api_search_get: {
+    parameters: {
+      query: {
+        /** @description Texto a buscar */
+        q: string;
+        /** @description Máximo por grupo */
+        limit?: number;
+      };
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['SearchOut'];
+        };
       };
       /** @description Validation Error */
       422: {

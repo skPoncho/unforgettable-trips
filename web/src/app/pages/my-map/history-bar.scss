@@ -1,0 +1,98 @@
+// Reproduce tu historia, según design/pantallas/Main.dc.html. Solo tokens.
+
+:host {
+  flex: 1 1 420px;
+  min-width: 0;
+  display: flex;
+}
+
+.history {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 6px 18px 6px 6px;
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-pill);
+}
+
+.play {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: var(--tap-target);
+  height: var(--tap-target);
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: var(--accent);
+  color: var(--on-accent);
+  cursor: pointer;
+
+  &:disabled {
+    cursor: default;
+    opacity: 0.6;
+  }
+}
+
+.history__body {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.history__text {
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+.years {
+  display: grid;
+  grid-template-columns: repeat(var(--years), minmax(0, 1fr));
+  gap: 4px;
+}
+
+.year {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 4px;
+  min-height: 24px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.year__bar {
+  height: 4px;
+  border-radius: 2px;
+  background: var(--line);
+  transition: background-color 0.3s ease;
+}
+
+.year--on .year__bar {
+  background: var(--accent);
+}
+
+.year__label {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--text-muted);
+}
+
+.year--current .year__label {
+  color: var(--accent-text);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .year__bar {
+    transition: none;
+  }
+}

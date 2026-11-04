@@ -57,7 +57,7 @@ App web para registrar viajes **centrada en mapas**: cada país, estado de Méxi
 - Fotos: `GET /api/photos/{id}/{display|thumb}` con verificación de dueño (se adelantó la lectura de la 4.6). El original con EXIF nunca se sirve.
 - Tipos del web generados con `make gen-api` en `web/src/app/core/api/` (`openapi.json` y `schema.d.ts`, en git; alias en `types.ts`). CI falla si no están al día. `openapi-typescript` aún no acepta TypeScript 6: corre con `npx` y versión fijada, fuera de `package.json`.
 - Zoom del mapa: botones, arrastre y Ctrl/⌘ + rueda (la rueda sola desplaza la página).
-- Controles de fases posteriores (búsqueda, Compartir, globo y Reproduce tu historia) se muestran como en la maqueta con `aria-disabled` y el aviso "Próximamente · fase N". "Nuevo recuerdo" funciona desde la fase 4.
+- Controles de fases posteriores se muestran como en la maqueta con `aria-disabled` y el aviso "Próximamente · fase N" (hoy solo "Compartir mi mapa", fase 8). "Nuevo recuerdo" funciona desde la fase 4; búsqueda, globo y Reproduce tu historia desde la fase 7.
 - `/viajes` (lista) y `/viajes/:id` existen para que la tarjeta y la tira naveguen; el detalle completo es de la fase 5.
 
 ### Nuevo recuerdo (fase 4)
@@ -85,6 +85,14 @@ App web para registrar viajes **centrada en mapas**: cada país, estado de Méxi
 - `PATCH /api/me` con `home_city_id` (nulo la quita; ciudad desconocida → 422). En las semillas CDMX solo cuenta por ser la casa: mudarla a Monterrey deja 12/32 (sale CDMX, entra Nuevo León).
 - Web: `/mi-pais` con `?pestana=ciudades|monumentos` (Estados no va en la URL) y `?monumento=<slug>`; sin monumento se muestra el sello más reciente. `/ciudades` y `/monumentos` redirigen a esas pestañas y el encabezado marca la pestaña abierta (`activeView` en `views.ts`). El porcentaje se redondea hacia abajo (12/32 = 37 %).
 - Menú de perfil en el avatar (`layout/header/profile-menu.ts`) con la ciudad de casa; usa el buscador de ciudades compartido (`shared/place-search.ts`). Al guardar, `HomeEvents` avisa y Mi mapa y Mi país recargan. `Profile` guarda `/api/me` (iniciales del avatar).
+
+### Historia, globo y búsqueda (fase 7)
+- **Línea de tiempo**: la migración 0007 agrega `first_stay_on` (primera estancia; nula si solo hubo escalas o si es la casa) a `user_country_status`, `user_subdivision_status` y `user_city_status`. `GET /api/me/timeline` (`app/services/timeline.py`) da `home` (cuenta desde siempre) y `years`, del primer año al actual sin huecos: lo que se encendió o pasó de escala a visitado ese año y el progreso acumulado. El último año coincide con `/api/me/progress`.
+- **Reproducción** (web): `HistoryPlayer` y `mapAtYear` en `core/history.ts`; `year` nulo es hoy (mapa completo). 1.4 s por año; elegir un año pausa; reproducir sigue desde el año elegido o empieza de nuevo si está en el último, y se queda en el último. El mapa, el panel de progreso y el año encima del mapa siguen al año; las tarjetas de país muestran los datos completos. La barra (`history-bar.ts`) se proyecta dentro de `WorldMap`.
+- **Globo**: `drawWorld()` devuelve un `WorldDrawing` con `view({ alpha, center, zoom })`: alpha 0 es Equal Earth, 1 el globo ortográfico y en medio la transición (`geoProjectionMutator`, ~1 s). El globo usa el mundo simplificado con **`topojson-simplify`** (cuantil 0.1 y sin islas de menos de ~2,500 km², pero cada país conserva su parte más grande): ~13 ms por cuadro contra ~75 con el 50m completo. Abre centrado en la casa; arrastre gira (latitud ±70°), +/− y Ctrl/⌘ + rueda acercan, las flechas giran con el globo enfocado. Los puntos a menos de ~11° de la orilla se esconden. Con "reducir movimiento" la transición es inmediata.
+- **Búsqueda**: `GET /api/search?q=` (`app/services/search.py`) busca **solo en lo del usuario** (países, estados y ciudades visitados, monumentos sellados, viajes y recuerdos), sin acentos ni mayúsculas y con tolerancia a errores (`word_similarity`). No lleva índices trigram: cada consulta filtra primero por `user_id`. Un viaje coincide por título, resumen o parada (`matched_place`); un recuerdo, por texto, parada o monumento.
+- Destinos de la búsqueda (`core/search.ts`): país → `/?pais=ISO3` (abre su tarjeta; al cerrarla se quita de la URL), estado → `/mi-pais?estado=MX-OAX` (resaltado en mapa y lista), ciudad o monumento → su estancia más reciente (`/viajes/:id?parada=N`), viaje → su detalle, recuerdo → su parada. Una ciudad que solo es la casa va a Ciudades de Mi país.
+- Encabezado: `layout/header/search-box.ts` (combobox de WAI-ARIA): desde 2 letras, ↑↓ y Enter, Esc cierra y luego borra, "/" enfoca.
 
 ## Decisiones abiertas (pregúntale a Carlos antes de fijarlas)
 
@@ -124,7 +132,7 @@ Solo se necesita Docker Desktop encendido. `make help` lista todo.
 
 Notas:
 - Las pruebas de api usan la BD `huella_test`, que `tests/conftest.py` crea y migra sola.
-- `node_modules` vive en un volumen de Docker; `web/docker-entrypoint.sh` reinstala si cambió `package-lock.json`. Para agregar paquetes: `make shell-web` y `npm install …`.
+- `node_modules` vive en un volumen de Docker; `web/docker-entrypoint.sh` reinstala si cambió `package-lock.json`. Para agregar paquetes: `make shell-web` y `npm install …`. Si después corres `make test` con `make dev` levantado, la reinstalación en el volumen compartido puede tumbar `ng serve` (esbuild se bloquea): `docker compose up -d web` lo levanta de nuevo.
 - Las dependencias de Python viven en `/opt/venv` dentro de la imagen; tras cambiar `pyproject.toml`, corre `uv lock` en `make shell-api` y vuelve a `make dev` (reconstruye).
 - `src/testing/` del web tiene utilidades solo para pruebas (p. ej. `mockSystemTheme`, porque jsdom no trae `matchMedia`, y `fixtures.ts` con datos tipados como la API).
 - En pruebas con `httpResource`, `fixture.whenStable()` espera a que respondan las peticiones: primero `TestBed.tick()` y `flush`, después `whenStable()`.

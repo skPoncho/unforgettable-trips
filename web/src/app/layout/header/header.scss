@@ -67,36 +67,6 @@
   }
 }
 
-.search {
-  flex: 1 1 240px;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  min-height: var(--tap-target);
-  padding: 0 16px;
-  background: var(--panel);
-  border: 1px solid var(--line);
-  border-radius: var(--radius-pill);
-  color: var(--text-muted);
-  cursor: not-allowed;
-}
-
-.search__input {
-  flex: 1;
-  min-width: 0;
-  background: transparent;
-  border: 0;
-  outline: none;
-  color: var(--text);
-  font: inherit;
-  font-size: 15px;
-  cursor: not-allowed;
-
-  &::placeholder {
-    color: var(--text-muted);
-  }
-}
-
 .actions {
   display: flex;
   flex-wrap: wrap;

@@ -2,6 +2,7 @@ import { Component, computed, input } from '@angular/core';
 
 import type { Country } from '../../core/geo-api';
 import type { Progress, UserMap } from '../../core/me-api';
+import type { TimelineProgress } from '../../core/api/types';
 import { CONTINENT_NAMES, nextMilestone } from '../../core/format';
 import { firstVisitYear } from '../../core/user-map';
 
@@ -11,7 +12,7 @@ type DotKind = 'visited' | 'stopover' | 'off';
 @Component({
   selector: 'app-progress-panel',
   template: `
-    @let p = progress();
+    @let p = shown();
     <section class="card progress" aria-labelledby="progress-title">
       <h2 id="progress-title" class="eyebrow">{{ eyebrow() }}</h2>
       <p class="headline">
@@ -79,23 +80,35 @@ export class ProgressPanel {
   readonly progress = input.required<Progress>();
   readonly map = input.required<UserMap>();
   readonly countries = input.required<Country[]>();
+  /** Reproduce tu historia: el progreso al cierre del año que se muestra (null = hoy). */
+  readonly frame = input<{ year: number; progress: TimelineProgress } | null>(null);
+
+  /** Países y continentes: los de hoy o los del año de la historia. */
+  protected readonly shown = computed<Progress>(() => {
+    const progress = this.progress();
+    const frame = this.frame();
+    if (!frame) return progress;
+    const { countries, continents } = frame.progress;
+    return { ...progress, countries, continents };
+  });
 
   /** "TU MUNDO · 2019 — HOY": desde el año de la primera visita (la casa no tiene fecha). */
   protected readonly eyebrow = computed(() => {
     const first = firstVisitYear(this.map());
-    return first === null ? 'Tu mundo' : `Tu mundo · ${first} — hoy`;
+    const until = this.frame()?.year ?? 'hoy';
+    return first === null ? 'Tu mundo' : `Tu mundo · ${first} — ${until}`;
   });
 
   /** Un punto por país: primero los visitados, luego las escalas (hueco), luego el resto. */
   protected readonly dots = computed<DotKind[]>(() => {
-    const { visited, total, stopover_only } = this.progress().countries;
+    const { visited, total, stopover_only } = this.shown().countries;
     return Array.from({ length: total }, (_, i) =>
       i < visited - stopover_only ? 'visited' : i < visited ? 'stopover' : 'off',
     );
   });
 
   protected readonly dotsLabel = computed(() => {
-    const { visited, total, stopover_only } = this.progress().countries;
+    const { visited, total, stopover_only } = this.shown().countries;
     const base = `${visited} de ${total} países encendidos`;
     if (!stopover_only) return base;
     return stopover_only === 1
@@ -103,10 +116,10 @@ export class ProgressPanel {
       : `${base}, ${stopover_only} de ellos por escala`;
   });
 
-  protected readonly milestone = computed(() => nextMilestone(this.progress().countries.visited));
+  protected readonly milestone = computed(() => nextMilestone(this.shown().countries.visited));
 
   protected readonly continents = computed(() =>
-    this.progress().continents.map((c) => ({
+    this.shown().continents.map((c) => ({
       ...c,
       name: CONTINENT_NAMES[c.continent],
       percent: c.total ? (c.visited / c.total) * 100 : 0,

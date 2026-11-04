@@ -43,9 +43,11 @@ type Segment = 'visited' | 'stopover' | 'off';
   styleUrl: './my-country-page.scss',
 })
 export class MyCountryPage {
-  /** Query params (?pestana=ciudades&monumento=monte-alban). */
+  /** Query params (?pestana=ciudades&monumento=monte-alban&estado=MX-OAX). */
   readonly pestana = input<string>();
   readonly monumento = input<string>();
+  /** Estado resaltado (?estado=MX-OAX), p. ej. al elegirlo en la búsqueda. */
+  readonly estado = input<string>();
 
   private readonly router = inject(Router);
   private readonly route = inject(ActivatedRoute);

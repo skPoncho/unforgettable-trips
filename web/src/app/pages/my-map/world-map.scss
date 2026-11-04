@@ -93,6 +93,12 @@ ol {
   }
 }
 
+.square--on {
+  border-color: var(--inverse);
+  background: var(--inverse);
+  color: var(--on-inverse);
+}
+
 // --- Mapa --------------------------------------------------------------------------------
 
 .stage {
@@ -112,6 +118,16 @@ ol {
   &:active {
     cursor: grabbing;
   }
+
+  // El globo recibe el foco para girarlo con flechas; con el mouse no lleva recuadro.
+  &:focus:not(:focus-visible) {
+    outline: none;
+  }
+
+  &:focus-visible {
+    outline-offset: -2px;
+    border-radius: var(--radius-map);
+  }
 }
 
 // Los bordes no engordan con el zoom.
@@ -124,6 +140,27 @@ path,
   fill: var(--map-sphere);
   stroke: var(--map-sphere-line);
   stroke-width: 1;
+}
+
+// Globo: la esfera se ve como disco y el borde se oscurece (sombreado de globe-shade).
+.map--globe .sphere {
+  stroke: var(--map-land-line);
+  stroke-width: 1.5;
+}
+
+.globe-shade {
+  fill: url(#globe-shade);
+  pointer-events: none;
+}
+
+.globe-shade__center {
+  stop-color: var(--map-sphere);
+  stop-opacity: 0;
+}
+
+.globe-shade__edge {
+  stop-color: var(--map-sphere);
+  stop-opacity: 0.55;
 }
 
 .graticule {
@@ -373,6 +410,32 @@ path,
   cursor: pointer;
 }
 
+// --- Año de la historia (mientras se reproduce o se elige un año) ------------------------
+
+.history-year {
+  position: absolute;
+  left: 8px;
+  bottom: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  pointer-events: none;
+}
+
+.history-year__value {
+  font-family: var(--font-display);
+  font-size: 44px;
+  font-weight: 700;
+  line-height: 1;
+  color: var(--accent-text);
+}
+
+.history-year__count {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
 @media (prefers-reduced-motion: reduce) {
   .country--lit,
   .small--lit,
@@ -387,7 +450,7 @@ path,
   color: var(--text-muted);
 }
 
-// --- Abajo: historia (fase 7) y leyenda ------------------------------------------------
+// --- Abajo: historia (HistoryBar, proyectada desde Mi mapa) y leyenda -------------------
 
 .bottom {
   position: absolute;
@@ -399,73 +462,6 @@ path,
   flex-wrap: wrap;
   align-items: center;
   gap: 14px 24px;
-}
-
-.history {
-  flex: 1 1 420px;
-  min-width: 0;
-  display: flex;
-  align-items: center;
-  gap: 14px;
-  padding: 6px 18px 6px 6px;
-  background: var(--panel);
-  border: 1px solid var(--line);
-  border-radius: var(--radius-pill);
-}
-
-.play {
-  flex: none;
-  display: grid;
-  place-items: center;
-  width: var(--tap-target);
-  height: var(--tap-target);
-  padding: 0;
-  border: 0;
-  border-radius: 50%;
-  background: var(--accent);
-  color: var(--on-accent);
-  cursor: not-allowed;
-}
-
-.history__body {
-  flex: 1;
-  min-width: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-}
-
-.history__text {
-  font-size: 12px;
-  color: var(--text-muted);
-}
-
-.years {
-  display: grid;
-  grid-template-columns: repeat(var(--years), minmax(0, 1fr));
-  gap: 4px;
-}
-
-.year {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-}
-
-.year__bar {
-  height: 4px;
-  border-radius: 2px;
-  background: var(--accent);
-}
-
-.year__label {
-  font-family: var(--font-mono);
-  font-size: 11px;
-  color: var(--text-muted);
-}
-
-.year--current .year__label {
-  color: var(--accent-text);
 }
 
 .legend {

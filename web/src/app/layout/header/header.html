@@ -21,20 +21,10 @@
     }
   </nav>
 
-  <!-- Búsqueda (fase 7) y compartir (fase 8): visibles pero aún sin acción. -->
-  <label class="search" title="Próximamente · fase 7">
-    <svg lucideSearch [size]="18" aria-hidden="true"></svg>
-    <span class="visually-hidden">Buscar (próximamente)</span>
-    <input
-      class="search__input"
-      type="search"
-      placeholder="Busca un lugar, un viaje o un recuerdo…"
-      readonly
-      aria-disabled="true"
-    />
-  </label>
+  <app-search-box />
 
   <div class="actions">
+    <!-- Compartir (fase 8): visible pero aún sin acción. -->
     <button type="button" class="pill-button" aria-disabled="true" title="Próximamente · fase 8">
       <svg lucideShare2 [size]="17" aria-hidden="true"></svg>
       Compartir mi mapa

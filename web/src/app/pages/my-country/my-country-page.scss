@@ -186,6 +186,12 @@
   font-weight: 600;
 }
 
+// El estado elegido en la búsqueda (?estado=).
+.chip--highlight {
+  outline: 2px solid var(--text);
+  outline-offset: 2px;
+}
+
 .chip--stopover {
   background: var(--accent-stopover);
   color: var(--text);

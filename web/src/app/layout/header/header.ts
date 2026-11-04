@@ -1,16 +1,17 @@
 import { Component, computed, inject } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { NavigationEnd, Router, RouterLink } from '@angular/router';
-import { LucideMoon, LucidePlus, LucideSearch, LucideShare2, LucideSun } from '@lucide/angular';
+import { LucideMoon, LucidePlus, LucideShare2, LucideSun } from '@lucide/angular';
 import { filter, map } from 'rxjs';
 
 import { ThemeService } from '../../core/theme.service';
 import { MAP_VIEWS, activeView } from '../../views';
 import { ProfileMenu } from './profile-menu';
+import { SearchBox } from './search-box';
 
 @Component({
   selector: 'app-header',
-  imports: [RouterLink, ProfileMenu, LucideSun, LucideMoon, LucideSearch, LucideShare2, LucidePlus],
+  imports: [RouterLink, ProfileMenu, SearchBox, LucideSun, LucideMoon, LucideShare2, LucidePlus],
   templateUrl: './header.html',
   styleUrl: './header.scss',
 })

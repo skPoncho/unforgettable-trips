@@ -56,3 +56,12 @@ export type MemorySuggestion = Schemas['MemorySuggestion'];
 export type SuggestedPlace = Schemas['SuggestedPlace'];
 export type SuggestedTrip = Schemas['SuggestedTrip'];
 export type SuggestedMonument = Schemas['SuggestedMonument'];
+
+export type Timeline = Schemas['TimelineOut'];
+export type TimelineYear = Schemas['TimelineYear'];
+export type TimelineProgress = Schemas['TimelineProgress'];
+
+export type SearchResults = Schemas['SearchOut'];
+export type SearchPlace = Schemas['SearchPlace'];
+export type SearchTrip = Schemas['SearchTrip'];
+export type SearchMemory = Schemas['SearchMemory'];

@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 
 from app.errors import install_handlers
-from app.routers import geo, health, me, memories, photos, trips
+from app.routers import geo, health, me, memories, photos, search, trips
 
 app = FastAPI(title="Huella API", version="0.4.0")
 install_handlers(app)
@@ -13,3 +13,4 @@ app.include_router(me.router)
 app.include_router(trips.router)
 app.include_router(memories.router)
 app.include_router(photos.router)
+app.include_router(search.router)

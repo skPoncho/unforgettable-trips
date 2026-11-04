@@ -348,6 +348,26 @@
         }
       }
     },
+    "/api/me/timeline": {
+      "get": {
+        "tags": ["me"],
+        "summary": "Get Timeline",
+        "description": "Reproduce tu historia: qué se encendió cada año y el progreso al cierre de cada año.",
+        "operationId": "get_timeline_api_me_timeline_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TimelineOut"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/me/countries/{iso3}": {
       "get": {
         "tags": ["me"],
@@ -1489,6 +1509,65 @@
           },
           "404": {
             "description": "No existe o no es tuya"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/search": {
+      "get": {
+        "tags": ["search"],
+        "summary": "Search",
+        "description": "Tus lugares (visitados o sellados), viajes y recuerdos, sin acentos ni mayúsculas.\n\nUn viaje coincide por título, resumen o alguna parada; un recuerdo, por su texto, el\nlugar de su parada o su monumento.",
+        "operationId": "search_api_search_get",
+        "parameters": [
+          {
+            "name": "q",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 2,
+              "maxLength": 80,
+              "description": "Texto a buscar",
+              "title": "Q"
+            },
+            "description": "Texto a buscar"
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 10,
+              "minimum": 1,
+              "description": "Máximo por grupo",
+              "default": 5,
+              "title": "Limit"
+            },
+            "description": "Máximo por grupo"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SearchOut"
+                }
+              }
+            }
           },
           "422": {
             "description": "Validation Error",
@@ -3019,6 +3098,243 @@
         "required": ["country", "subdivision", "city"],
         "title": "ReverseOut"
       },
+      "SearchMemory": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "trip_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Trip Id"
+          },
+          "trip_title": {
+            "type": "string",
+            "title": "Trip Title"
+          },
+          "stop_number": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Stop Number",
+            "description": "Nula si el recuerdo es de una escala"
+          },
+          "place_name": {
+            "type": "string",
+            "title": "Place Name"
+          },
+          "monument_name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Monument Name"
+          },
+          "occurred_on": {
+            "type": "string",
+            "format": "date",
+            "title": "Occurred On"
+          },
+          "snippet": {
+            "type": "string",
+            "title": "Snippet",
+            "description": "Fragmento del texto alrededor de la coincidencia"
+          },
+          "photo_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Photo Id",
+            "description": "Primera foto del recuerdo"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "trip_id",
+          "trip_title",
+          "stop_number",
+          "place_name",
+          "monument_name",
+          "occurred_on",
+          "snippet",
+          "photo_id"
+        ],
+        "title": "SearchMemory"
+      },
+      "SearchOut": {
+        "properties": {
+          "places": {
+            "items": {
+              "$ref": "#/components/schemas/SearchPlace"
+            },
+            "type": "array",
+            "title": "Places"
+          },
+          "trips": {
+            "items": {
+              "$ref": "#/components/schemas/SearchTrip"
+            },
+            "type": "array",
+            "title": "Trips"
+          },
+          "memories": {
+            "items": {
+              "$ref": "#/components/schemas/SearchMemory"
+            },
+            "type": "array",
+            "title": "Memories"
+          }
+        },
+        "type": "object",
+        "required": ["places", "trips", "memories"],
+        "title": "SearchOut"
+      },
+      "SearchPlace": {
+        "properties": {
+          "kind": {
+            "type": "string",
+            "enum": ["country", "subdivision", "city", "monument"],
+            "title": "Kind"
+          },
+          "key": {
+            "type": "string",
+            "title": "Key",
+            "description": "ISO3, código de estado, id de ciudad o slug del monumento"
+          },
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "context": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Context",
+            "description": "Dónde está: país, o estado y país"
+          },
+          "country_iso3": {
+            "type": "string",
+            "title": "Country Iso3"
+          },
+          "is_home": {
+            "type": "boolean",
+            "title": "Is Home"
+          },
+          "trip_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Trip Id",
+            "description": "Ciudad o monumento: viaje de la estancia o recuerdo más reciente ahí"
+          },
+          "stop_number": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Stop Number",
+            "description": "Número de estancia en ese viaje (?parada=)"
+          }
+        },
+        "type": "object",
+        "required": [
+          "kind",
+          "key",
+          "name",
+          "context",
+          "country_iso3",
+          "is_home",
+          "trip_id",
+          "stop_number"
+        ],
+        "title": "SearchPlace",
+        "description": "Un lugar tuyo: país, estado o ciudad visitados, o monumento sellado."
+      },
+      "SearchTrip": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "title": {
+            "type": "string",
+            "title": "Title"
+          },
+          "starts_on": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Starts On"
+          },
+          "ends_on": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Ends On"
+          },
+          "matched_place": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Matched Place",
+            "description": "La parada que coincidió, si el título no coincide (p. ej. Kioto en Japón)"
+          }
+        },
+        "type": "object",
+        "required": ["id", "title", "starts_on", "ends_on", "matched_place"],
+        "title": "SearchTrip"
+      },
       "StampTrip": {
         "properties": {
           "id": {
@@ -3703,6 +4019,158 @@
         "type": "string",
         "enum": ["system", "dark", "light"],
         "title": "Theme"
+      },
+      "TimelineCity": {
+        "properties": {
+          "id": {
+            "type": "integer",
+            "title": "Id"
+          },
+          "status": {
+            "type": "string",
+            "enum": ["visited", "stopover"],
+            "title": "Status"
+          }
+        },
+        "type": "object",
+        "required": ["id", "status"],
+        "title": "TimelineCity"
+      },
+      "TimelineCountry": {
+        "properties": {
+          "iso3": {
+            "type": "string",
+            "title": "Iso3"
+          },
+          "status": {
+            "type": "string",
+            "enum": ["visited", "stopover"],
+            "title": "Status"
+          }
+        },
+        "type": "object",
+        "required": ["iso3", "status"],
+        "title": "TimelineCountry"
+      },
+      "TimelineHome": {
+        "properties": {
+          "countries": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Countries"
+          },
+          "subdivisions": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Subdivisions"
+          },
+          "cities": {
+            "items": {
+              "type": "integer"
+            },
+            "type": "array",
+            "title": "Cities"
+          }
+        },
+        "type": "object",
+        "required": ["countries", "subdivisions", "cities"],
+        "title": "TimelineHome",
+        "description": "Lo que cuenta desde siempre por ser la casa: ya está encendido en el primer año."
+      },
+      "TimelineOut": {
+        "properties": {
+          "home": {
+            "$ref": "#/components/schemas/TimelineHome"
+          },
+          "years": {
+            "items": {
+              "$ref": "#/components/schemas/TimelineYear"
+            },
+            "type": "array",
+            "title": "Years",
+            "description": "Del año de la primera visita al actual, sin huecos (puede haber años vacíos)"
+          }
+        },
+        "type": "object",
+        "required": ["home", "years"],
+        "title": "TimelineOut"
+      },
+      "TimelineProgress": {
+        "properties": {
+          "countries": {
+            "$ref": "#/components/schemas/CountriesProgress"
+          },
+          "continents": {
+            "items": {
+              "$ref": "#/components/schemas/ContinentProgress"
+            },
+            "type": "array",
+            "title": "Continents"
+          },
+          "subdivisions": {
+            "$ref": "#/components/schemas/SubdivisionsProgress"
+          }
+        },
+        "type": "object",
+        "required": ["countries", "continents", "subdivisions"],
+        "title": "TimelineProgress",
+        "description": "Totales acumulados al cierre del año (mismas reglas que /api/me/progress)."
+      },
+      "TimelineSubdivision": {
+        "properties": {
+          "code": {
+            "type": "string",
+            "title": "Code"
+          },
+          "status": {
+            "type": "string",
+            "enum": ["visited", "stopover"],
+            "title": "Status"
+          }
+        },
+        "type": "object",
+        "required": ["code", "status"],
+        "title": "TimelineSubdivision"
+      },
+      "TimelineYear": {
+        "properties": {
+          "year": {
+            "type": "integer",
+            "title": "Year"
+          },
+          "countries": {
+            "items": {
+              "$ref": "#/components/schemas/TimelineCountry"
+            },
+            "type": "array",
+            "title": "Countries"
+          },
+          "subdivisions": {
+            "items": {
+              "$ref": "#/components/schemas/TimelineSubdivision"
+            },
+            "type": "array",
+            "title": "Subdivisions"
+          },
+          "cities": {
+            "items": {
+              "$ref": "#/components/schemas/TimelineCity"
+            },
+            "type": "array",
+            "title": "Cities"
+          },
+          "progress": {
+            "$ref": "#/components/schemas/TimelineProgress"
+          }
+        },
+        "type": "object",
+        "required": ["year", "countries", "subdivisions", "cities", "progress"],
+        "title": "TimelineYear",
+        "description": "Lo que se encendió ese año, o pasó de escala a visitado, y el progreso a su cierre."
       },
       "TripDetailOut": {
         "properties": {

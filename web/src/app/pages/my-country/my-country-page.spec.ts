@@ -37,7 +37,7 @@ describe('MyCountryPage', () => {
     http.expectOne(`${ME}/passport?country=MEX`).flush(mexicoPassport);
   }
 
-  async function render(inputs: { pestana?: string; monumento?: string } = {}) {
+  async function render(inputs: { pestana?: string; monumento?: string; estado?: string } = {}) {
     const fixture = TestBed.createComponent(MyCountryPage);
     for (const [name, value] of Object.entries(inputs)) fixture.componentRef.setInput(name, value);
     TestBed.tick();
@@ -116,6 +116,13 @@ describe('MyCountryPage', () => {
     expect(all('.group')).toEqual(['VISITADOS · 2', 'POR DESCUBRIR · 1']);
     expect(all('.chip--on')).toEqual(['Ciudad de México (casa)', 'Oaxaca']);
     expect(all('.chip:not(.chip--on)')).toEqual(['Yucatán']);
+  });
+
+  it('?estado= resalta el estado en la lista y en el mapa (desde la búsqueda)', async () => {
+    const { all, el } = await render({ estado: 'MX-OAX' });
+    expect(all('.chip--highlight')).toEqual(['Oaxaca']);
+    expect(el.querySelector('.chip--highlight')?.getAttribute('aria-current')).toBe('true');
+    expect(el.querySelectorAll('.state--highlight')).toHaveLength(1);
   });
 
   it('pestaña Ciudades: la casa y el número de viajes', async () => {

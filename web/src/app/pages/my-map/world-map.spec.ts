@@ -203,4 +203,83 @@ describe('WorldMap', () => {
     expect(el.querySelector('.lit')?.textContent).toContain('Recuerdo guardado');
     expect(el.querySelector('.country--lit')).toBeNull();
   });
+
+  it('?pais= abre la tarjeta del país y avisa al cerrarla', async () => {
+    const { fixture, el } = await render();
+    const cleared = vi.fn();
+    fixture.componentInstance.focusCleared.subscribe(cleared);
+    fixture.componentRef.setInput('focus', 'JPN');
+    await fixture.whenStable();
+    http.expectOne('/api/me/countries/JPN').flush(japanSummary);
+    await fixture.whenStable();
+    expect(el.querySelector('app-country-card .name')?.textContent).toBe('Japón');
+
+    document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape' }));
+    await fixture.whenStable();
+    expect(el.querySelector('app-country-card')).toBeNull();
+    expect(cleared).toHaveBeenCalledOnce();
+  });
+
+  describe('globo 3D', () => {
+    // Con "reducir movimiento" la transición es inmediata.
+    beforeEach(() => vi.stubGlobal('matchMedia', () => ({ matches: true })));
+    afterEach(() => vi.unstubAllGlobals());
+
+    const globeButton = (el: HTMLElement) =>
+      el.querySelector<HTMLButtonElement>('[aria-label="Vista de globo 3D"]')!;
+
+    it('se abre mirando hacia la casa (o la primera ciudad) y vuelve al plano', async () => {
+      const { fixture, el } = await render();
+      globeButton(el).click();
+      await fixture.whenStable();
+
+      expect(globeButton(el).getAttribute('aria-pressed')).toBe('true');
+      const svg = el.querySelector('svg.map')!;
+      expect(svg.classList).toContain('map--globe');
+      expect(svg.getAttribute('tabindex')).toBe('0');
+      expect(el.querySelector('.globe-shade')).not.toBeNull();
+      // Sin ciudad de casa en los datos, mira a Tokio: Japón al frente, México detrás.
+      expect(el.querySelector('[data-id="JPN"]')).not.toBeNull();
+      expect(el.querySelector('[data-id="MEX"]')).toBeNull();
+
+      globeButton(el).click();
+      await fixture.whenStable();
+      expect(svg.classList).not.toContain('map--globe');
+      expect(el.querySelector('[data-id="MEX"]')).not.toBeNull();
+      expect(el.querySelector('.globe-shade')).toBeNull();
+    });
+
+    it('las flechas lo giran y lo de atrás se esconde', async () => {
+      const { fixture, el } = await render();
+      globeButton(el).click();
+      await fixture.whenStable();
+      expect(el.querySelectorAll('.city__light')).toHaveLength(1);
+
+      const svg = el.querySelector('svg.map')!;
+      for (let i = 0; i < 18; i++) {
+        svg.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowLeft', bubbles: true }));
+      }
+      await fixture.whenStable();
+      // Media vuelta: ahora se ve México y Tokio queda detrás.
+      expect(el.querySelector('[data-id="MEX"]')).not.toBeNull();
+      expect(el.querySelector('[data-id="JPN"]')).toBeNull();
+      expect(el.querySelectorAll('.city__light')).toHaveLength(0);
+    });
+
+    it('+ y − acercan el globo', async () => {
+      const { fixture, el } = await render();
+      globeButton(el).click();
+      await fixture.whenStable();
+      const zoomIn = el.querySelector<HTMLButtonElement>('[aria-label="Acercar"]')!;
+      const zoomOut = el.querySelector<HTMLButtonElement>('[aria-label="Alejar"]')!;
+      const radius = () => Number(el.querySelector('.globe-shade')!.getAttribute('r'));
+      const before = radius();
+      expect(zoomOut.disabled).toBe(true);
+
+      zoomIn.click();
+      await fixture.whenStable();
+      expect(radius()).toBeGreaterThan(before);
+      expect(zoomOut.disabled).toBe(false);
+    });
+  });
 });

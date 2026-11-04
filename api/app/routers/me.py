@@ -14,9 +14,10 @@ from app.schemas import (
     PassportOut,
     ProgressOut,
     SubdivisionOverview,
+    TimelineOut,
     WishlistEntry,
 )
-from app.services import me, my_country
+from app.services import me, my_country, timeline
 
 router = APIRouter(prefix="/api/me", tags=["me"])
 
@@ -54,6 +55,12 @@ def get_progress(session: SessionDep, user: CurrentUserDep) -> ProgressOut:
 def get_map(session: SessionDep, user: CurrentUserDep) -> MapOut:
     """Estado de cada país, estado y ciudad visitados, monumentos sellados y deseos."""
     return me.world_map(session, user)
+
+
+@router.get("/timeline", response_model=TimelineOut)
+def get_timeline(session: SessionDep, user: CurrentUserDep) -> TimelineOut:
+    """Reproduce tu historia: qué se encendió cada año y el progreso al cierre de cada año."""
+    return timeline.timeline(session, user)
 
 
 @router.get(

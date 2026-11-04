@@ -35,6 +35,19 @@ def test_seed_reproduces_the_mockups_and_is_idempotent(client, db, storage):
     assert statuses["PAN"]["status"] == "stopover"
     assert statuses["MEX"]["is_home"] is True
 
+    # Reproduce tu historia (fase 7): de 2019 a hoy, en el orden de la primera visita.
+    history = client.get("/api/me/timeline").json()
+    assert history["home"]["countries"] == ["MEX"]
+    assert [y["year"] for y in history["years"]][:8] == list(range(2019, 2027))
+    lit = {y["year"]: sorted(c["iso3"] for c in y["countries"]) for y in history["years"]}
+    assert lit[2019] == []  # México ya estaba encendido por la casa
+    assert lit[2020] == ["CRI", "GTM"]
+    assert lit[2025] == ["JPN", "PAN"]
+    assert lit[2026] == ["ESP", "FRA", "PRT"]
+    assert {"iso3": "PAN", "status": "stopover"} in history["years"][6]["countries"]
+    assert history["years"][-1]["progress"]["countries"] == body["countries"]
+    assert history["years"][-1]["progress"]["subdivisions"] == body["subdivisions"]
+
     japan = next(t for t in client.get("/api/trips").json() if t["title"] == "Japón")
     assert (japan["days"], japan["city_count"], japan["photo_count"]) == (14, 6, 84)
     assert japan["monument_count"] == 4

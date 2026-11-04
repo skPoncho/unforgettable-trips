@@ -410,6 +410,105 @@ class MapOut(BaseModel):
     wishlist: list[str] = Field(description="ISO3 de la lista de deseos")
 
 
+# --- Línea de tiempo (Reproduce tu historia) ---------------------------------------------
+
+
+class TimelineCountry(BaseModel):
+    iso3: str
+    status: PlaceStatus
+
+
+class TimelineSubdivision(BaseModel):
+    code: str
+    status: PlaceStatus
+
+
+class TimelineCity(BaseModel):
+    id: int
+    status: PlaceStatus
+
+
+class TimelineHome(BaseModel):
+    """Lo que cuenta desde siempre por ser la casa: ya está encendido en el primer año."""
+
+    countries: list[str]
+    subdivisions: list[str]
+    cities: list[int]
+
+
+class TimelineProgress(BaseModel):
+    """Totales acumulados al cierre del año (mismas reglas que /api/me/progress)."""
+
+    countries: CountriesProgress
+    continents: list[ContinentProgress]
+    subdivisions: SubdivisionsProgress
+
+
+class TimelineYear(BaseModel):
+    """Lo que se encendió ese año, o pasó de escala a visitado, y el progreso a su cierre."""
+
+    year: int
+    countries: list[TimelineCountry]
+    subdivisions: list[TimelineSubdivision]
+    cities: list[TimelineCity]
+    progress: TimelineProgress
+
+
+class TimelineOut(BaseModel):
+    home: TimelineHome
+    years: list[TimelineYear] = Field(
+        description="Del año de la primera visita al actual, sin huecos (puede haber años vacíos)"
+    )
+
+
+# --- Búsqueda ---------------------------------------------------------------------------
+
+SearchPlaceKind = Literal["country", "subdivision", "city", "monument"]
+
+
+class SearchPlace(BaseModel):
+    """Un lugar tuyo: país, estado o ciudad visitados, o monumento sellado."""
+
+    kind: SearchPlaceKind
+    key: str = Field(description="ISO3, código de estado, id de ciudad o slug del monumento")
+    name: str
+    context: str | None = Field(description="Dónde está: país, o estado y país")
+    country_iso3: str
+    is_home: bool
+    trip_id: uuid.UUID | None = Field(
+        description="Ciudad o monumento: viaje de la estancia o recuerdo más reciente ahí"
+    )
+    stop_number: int | None = Field(description="Número de estancia en ese viaje (?parada=)")
+
+
+class SearchTrip(BaseModel):
+    id: uuid.UUID
+    title: str
+    starts_on: date | None
+    ends_on: date | None
+    matched_place: str | None = Field(
+        description="La parada que coincidió, si el título no coincide (p. ej. Kioto en Japón)"
+    )
+
+
+class SearchMemory(BaseModel):
+    id: uuid.UUID
+    trip_id: uuid.UUID
+    trip_title: str
+    stop_number: int | None = Field(description="Nula si el recuerdo es de una escala")
+    place_name: str
+    monument_name: str | None
+    occurred_on: date
+    snippet: str = Field(description="Fragmento del texto alrededor de la coincidencia")
+    photo_id: uuid.UUID | None = Field(description="Primera foto del recuerdo")
+
+
+class SearchOut(BaseModel):
+    places: list[SearchPlace]
+    trips: list[SearchTrip]
+    memories: list[SearchMemory]
+
+
 class CountryTrip(BaseModel):
     """Un viaje que pasó por el país, con las fechas de lo que estuvo ahí."""
 

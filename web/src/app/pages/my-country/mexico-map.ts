@@ -53,6 +53,7 @@ interface Pin {
               <path
                 class="state"
                 [class.state--stopover]="statusOf(shape.id) === 'stopover'"
+                [class.state--highlight]="shape.id === highlighted()"
                 [attr.d]="shape.d"
               >
                 <title>{{ shape.name }}</title>
@@ -113,6 +114,8 @@ export class MexicoMap {
   readonly states = input.required<SubdivisionOverview[]>();
   readonly stamps = input.required<PassportStamp[]>();
   readonly selected = input<PassportStamp | null>(null);
+  /** Estado resaltado (?estado=MX-OAX, p. ej. desde la búsqueda). */
+  readonly highlighted = input<string | null>(null);
   readonly picked = output<string>();
 
   private readonly statusByCode = computed(

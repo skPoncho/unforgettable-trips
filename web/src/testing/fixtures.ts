@@ -13,7 +13,10 @@ import type {
   Me,
   Passport,
   Progress,
+  SearchResults,
   SubdivisionOverview,
+  Timeline,
+  TimelineProgress,
   Trip,
   TripDetail,
   TripMemory,
@@ -141,6 +144,47 @@ export const userMap: UserMap = {
     },
   ],
   wishlist: ['EGY', 'ARG'],
+};
+
+/** Progreso de un año de la historia: solo cambian países y continentes. */
+const yearProgress = (america: number, asia: number, stopovers: number): TimelineProgress => ({
+  countries: { visited: america + asia, total: 195, stopover_only: stopovers },
+  continents: progress.continents.map((c) => ({
+    ...c,
+    visited: c.continent === 'america' ? america : c.continent === 'asia' ? asia : 0,
+  })),
+  subdivisions: { country_iso3: 'MEX', visited: 2, total: 32 },
+});
+
+/** Línea de tiempo de userMap: México por la casa, Oaxaca en 2019, Japón y Panamá en 2025. */
+export const timeline: Timeline = {
+  home: { countries: ['MEX'], subdivisions: ['MX-CMX'], cities: [] },
+  years: [
+    {
+      year: 2019,
+      countries: [],
+      subdivisions: [{ code: 'MX-OAX', status: 'visited' }],
+      cities: [],
+      progress: yearProgress(1, 0, 0),
+    },
+    ...[2020, 2021, 2022, 2023, 2024].map((year) => ({
+      year,
+      countries: [],
+      subdivisions: [],
+      cities: [],
+      progress: yearProgress(1, 0, 0),
+    })),
+    {
+      year: 2025,
+      countries: [
+        { iso3: 'JPN', status: 'visited' },
+        { iso3: 'PAN', status: 'stopover' },
+      ],
+      subdivisions: [],
+      cities: [{ id: 1850147, status: 'visited' }],
+      progress: yearProgress(2, 1, 1),
+    },
+  ],
 };
 
 export const JAPAN_TRIP_ID = 'ea4d5b39-0ca3-40f5-a6f7-2024345fe951';
@@ -512,4 +556,42 @@ export const me: Me = {
   },
   theme: 'system',
   profile_public: false,
+};
+
+/** /api/search?q=kioto con las semillas: la ciudad, el viaje y el recuerdo de Fushimi Inari. */
+export const kyotoSearch: SearchResults = {
+  places: [
+    {
+      kind: 'city',
+      key: '1857910',
+      name: 'Kioto',
+      context: 'Japón',
+      country_iso3: 'JPN',
+      is_home: false,
+      trip_id: JAPAN_TRIP_ID,
+      stop_number: 3,
+    },
+  ],
+  trips: [
+    {
+      id: JAPAN_TRIP_ID,
+      title: 'Japón',
+      starts_on: '2025-03-08',
+      ends_on: '2025-03-21',
+      matched_place: 'Kioto',
+    },
+  ],
+  memories: [
+    {
+      id: '4c29efd8-735d-433d-a531-11666393f9f5',
+      trip_id: JAPAN_TRIP_ID,
+      trip_title: 'Japón',
+      stop_number: 3,
+      place_name: 'Kioto',
+      monument_name: 'Fushimi Inari-taisha',
+      occurred_on: '2025-03-13',
+      snippet: 'Subimos Fushimi Inari a las siete de la mañana para evitar a la gente.',
+      photo_id: null,
+    },
+  ],
 };

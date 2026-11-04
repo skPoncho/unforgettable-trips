@@ -13,15 +13,15 @@ import {
   viewChild,
 } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { LucideGlobe, LucideMinus, LucidePlay, LucidePlus, LucideX } from '@lucide/angular';
+import { LucideGlobe, LucideMinus, LucidePlus, LucideX } from '@lucide/angular';
 import { select } from 'd3-selection';
 import 'd3-transition';
-import { type ZoomBehavior, zoom } from 'd3-zoom';
+import { type ZoomBehavior, zoom, zoomIdentity } from 'd3-zoom';
 
-import type { MapDrawing, Point } from '../../core/map/geo-shapes';
+import type { GlobeView, Point, WorldDrawing } from '../../core/map/geo-shapes';
 import type { CountryStatus, UserMap } from '../../core/me-api';
 import type { SavedMemory } from '../../core/memory-events';
-import { firstVisitYear } from '../../core/user-map';
+import type { HistoryFrame } from '../../core/history';
 import { CountryCard } from './country-card';
 import { CountrySummaries } from './country-summaries';
 
@@ -58,6 +58,21 @@ const CARD = { width: 290, height: 300, gap: 28 };
 const HIDE_DELAY_MS = 150;
 /** Cuánto se queda el aviso de "se encendió" después de guardar un recuerdo. */
 const LIT_NOTICE_MS = 7000;
+/** Globo: duración de la transición, acercamiento máximo, giro con flechas y límite de latitud. */
+const GLOBE_MS = 1000;
+const GLOBE_MAX_ZOOM = 4;
+const GLOBE_KEY_STEP = 10;
+const GLOBE_MAX_LAT = 70;
+/** Centro del globo si no hay casa. */
+const GLOBE_DEFAULT_CENTER: readonly [number, number] = [0, 20];
+/** Un arrastre de más de esto no cuenta como clic. */
+const DRAG_THRESHOLD_PX = 4;
+
+const easeInOut = (t: number) => (t < 0.5 ? 4 * t * t * t : 1 - (-2 * t + 2) ** 3 / 2);
+
+function prefersReducedMotion(): boolean {
+  return typeof matchMedia === 'function' && matchMedia('(prefers-reduced-motion: reduce)').matches;
+}
 
 /** "Islandia", "Islandia y Reikiavik", "Japón, Kioto y Nara". */
 function listNames(names: string[]): string {
@@ -72,21 +87,30 @@ function listNames(names: string[]): string {
  */
 @Component({
   selector: 'app-world-map',
-  imports: [CountryCard, LucidePlus, LucideMinus, LucideGlobe, LucidePlay, LucideX, RouterLink],
+  imports: [CountryCard, LucidePlus, LucideMinus, LucideGlobe, LucideX, RouterLink],
   templateUrl: './world-map.html',
   styleUrl: './world-map.scss',
   host: {
     '(document:keydown.escape)': 'close()',
     '(document:click)': 'onDocumentClick($event)',
+    '(document:pointermove)': 'onDrag($event)',
+    '(document:pointerup)': 'endDrag()',
+    '(document:pointercancel)': 'endDrag()',
   },
 })
 export class WorldMap {
-  readonly drawing = input.required<MapDrawing>();
+  readonly drawing = input.required<WorldDrawing>();
   readonly userMap = input.required<UserMap>();
   /** Recuerdo recién guardado: se animan los lugares que encendió. */
   readonly saved = input<SavedMemory | null>(null);
   /** El aviso ya se mostró. */
   readonly savedShown = output<void>();
+  /** Reproduce tu historia: el año que se muestra (userMap ya viene recortado a ese año). */
+  readonly history = input<HistoryFrame | null>(null);
+  /** País cuya tarjeta se abre al llegar (?pais=JPN, p. ej. desde la búsqueda). */
+  readonly focus = input<string | null>(null);
+  /** Se cerró la tarjeta del país de `focus`. */
+  readonly focusCleared = output<void>();
 
   protected readonly summaries = inject(CountrySummaries);
   private readonly destroyRef = inject(DestroyRef);
@@ -104,6 +128,29 @@ export class WorldMap {
   private readonly scale = signal(1);
   private zoomBehavior: ZoomBehavior<SVGSVGElement, unknown> | null = null;
 
+  // --- Globo 3D ------------------------------------------------------------------------
+
+  /** El usuario pidió el globo (la transición puede ir a medias). */
+  protected readonly globe = signal(false);
+  /** 0 = plano, 1 = globo; en medio, la transición. */
+  private readonly alpha = signal(0);
+  private readonly center = signal<readonly [number, number]>(GLOBE_DEFAULT_CENTER);
+  private readonly globeZoom = signal(1);
+  private frame: number | null = null;
+  private drag: { x: number; y: number; center: readonly [number, number]; moved: boolean } | null =
+    null;
+  /** El último arrastre movió el globo: el clic que lo termina no abre la tarjeta. */
+  private dragged = false;
+
+  /** Lo que se dibuja: el mundo plano o el globo con su giro y acercamiento. */
+  protected readonly view = computed<WorldDrawing>(() => {
+    const view: GlobeView = { alpha: this.alpha(), center: this.center(), zoom: this.globeZoom() };
+    return this.drawing().view(view);
+  });
+
+  /** El globo ya terminó de abrirse (se puede girar). */
+  protected readonly isGlobe = computed(() => this.alpha() >= 1);
+
   /** País bajo el mouse o con el foco, y país fijado con clic. */
   private readonly hovered = signal<string | null>(null);
   protected readonly pinned = signal<string | null>(null);
@@ -118,10 +165,32 @@ export class WorldMap {
       }
     });
 
-    afterNextRender(() => this.setUpZoom());
+    afterNextRender(() => {
+      this.setUpZoom();
+      // El mundo simplificado del globo se prepara cuando el navegador está libre.
+      if (typeof requestIdleCallback === 'function') {
+        const idle = requestIdleCallback(() =>
+          this.drawing().view({ alpha: 1, center: GLOBE_DEFAULT_CENTER, zoom: 1 }),
+        );
+        this.destroyRef.onDestroy(() => cancelIdleCallback(idle));
+      }
+    });
     this.destroyRef.onDestroy(() => {
       this.cancelHide();
       this.clearLitTimer();
+      this.cancelFrame();
+    });
+
+    // ?pais=: abre su tarjeta y, en el globo, gira hacia él.
+    effect(() => {
+      const iso3 = this.focus();
+      if (!iso3 || !this.isOpenable(iso3)) return;
+      untracked(() => {
+        this.summaries.load(iso3);
+        this.pinned.set(iso3);
+        const location = this.drawing().locate(iso3);
+        if (this.globe() && location) this.center.set([location.lon, location.lat]);
+      });
     });
 
     // El aviso de "se encendió" se va solo.
@@ -138,8 +207,14 @@ export class WorldMap {
 
   private litTimer: ReturnType<typeof setTimeout> | null = null;
 
-  protected readonly litCountries = computed(() => new Set(this.saved()?.lit.countries ?? []));
-  protected readonly litCities = computed(() => new Set(this.saved()?.lit.cities ?? []));
+  /** Lo recién encendido: por el recuerdo guardado o por el año de la historia. */
+  protected readonly litCountries = computed(
+    () =>
+      new Set([...(this.saved()?.lit.countries ?? []), ...(this.history()?.lit.countries ?? [])]),
+  );
+  protected readonly litCities = computed(
+    () => new Set([...(this.saved()?.lit.cities ?? []), ...(this.history()?.lit.cities ?? [])]),
+  );
 
   protected readonly litNotice = computed(() => {
     const saved = this.saved();
@@ -191,9 +266,9 @@ export class WorldMap {
   protected readonly groups = computed(() => {
     const groups = { land: [], wish: [], visited: [], stopover: [] } as Record<
       'land' | 'wish' | 'visited' | 'stopover',
-      MapDrawing['shapes']
+      WorldDrawing['shapes']
     >;
-    for (const shape of this.drawing().shapes) {
+    for (const shape of this.view().shapes) {
       groups[this.paint(shape.id) ?? 'land'].push(shape);
     }
     return groups;
@@ -219,7 +294,7 @@ export class WorldMap {
   }
 
   protected readonly smallCountries = computed(() =>
-    this.drawing().dots.map((dot) => {
+    this.view().dots.map((dot) => {
       const [x, y] = this.toView([dot.x, dot.y]);
       return { ...dot, x, y };
     }),
@@ -227,7 +302,7 @@ export class WorldMap {
 
   protected readonly cityLights = computed(() => {
     if (!this.layers().has('cities')) return [];
-    const { project } = this.drawing();
+    const { project } = this.view();
     return this.userMap().cities.flatMap((city) => {
       const p = project(city.location);
       if (!p) return [];
@@ -238,7 +313,7 @@ export class WorldMap {
 
   protected readonly monumentPins = computed(() => {
     if (!this.layers().has('monuments')) return [];
-    const { project } = this.drawing();
+    const { project } = this.view();
     return this.userMap().monuments.flatMap((m) => {
       const p = project(m.location);
       if (!p) return [];
@@ -251,8 +326,8 @@ export class WorldMap {
 
   private readonly anchors = computed(() => {
     const anchors = new Map<string, { name: string; point: Point }>();
-    for (const s of this.drawing().shapes) anchors.set(s.id, { name: s.name, point: s.anchor });
-    for (const d of this.drawing().dots) anchors.set(d.id, { name: d.name, point: [d.x, d.y] });
+    for (const s of this.view().shapes) anchors.set(s.id, { name: s.name, point: s.anchor });
+    for (const d of this.view().dots) anchors.set(d.id, { name: d.name, point: [d.x, d.y] });
     return anchors;
   });
 
@@ -300,6 +375,8 @@ export class WorldMap {
   // --- Eventos ----------------------------------------------------------------------------
 
   protected enter(iso3: string): void {
+    // Mientras se gira el globo no se abren tarjetas al pasar.
+    if (this.drag?.moved) return;
     this.cancelHide();
     this.tooltip.set(null);
     this.summaries.load(iso3);
@@ -318,8 +395,10 @@ export class WorldMap {
   protected pin(event: Event, iso3: string): void {
     event.preventDefault();
     event.stopPropagation();
+    if (this.dragged) return;
     this.summaries.load(iso3);
-    this.pinned.set(this.pinned() === iso3 ? null : iso3);
+    if (this.pinned() === iso3) this.unpin();
+    else this.pinned.set(iso3);
   }
 
   /** Nombre y estado de un país sin tarjeta (por descubrir, deseo o territorio). */
@@ -346,15 +425,21 @@ export class WorldMap {
   }
 
   close(): void {
-    this.pinned.set(null);
+    this.unpin();
     this.hovered.set(null);
+  }
+
+  private unpin(): void {
+    if (this.pinned() === null) return;
+    this.pinned.set(null);
+    if (this.focus()) this.focusCleared.emit();
   }
 
   protected onDocumentClick(event: MouseEvent): void {
     if (!this.pinned()) return;
     const card = this.card()?.nativeElement;
     if (card && event.target instanceof Node && card.contains(event.target)) return;
-    this.pinned.set(null);
+    this.unpin();
   }
 
   protected toggleLayer(layer: Layer): void {
@@ -367,6 +452,10 @@ export class WorldMap {
   }
 
   protected zoomBy(factor: number): void {
+    if (this.globe()) {
+      this.zoomGlobe(factor);
+      return;
+    }
     if (!this.zoomBehavior) return;
     select(this.svg().nativeElement)
       .transition()
@@ -374,16 +463,141 @@ export class WorldMap {
       .call(this.zoomBehavior.scaleBy, factor);
   }
 
-  /** Años de la historia (fase 7 la reproduce): desde la primera visita hasta hoy. */
-  protected readonly years = computed(() => {
-    const now = new Date().getFullYear();
-    const start = firstVisitYear(this.userMap()) ?? now;
-    return Array.from({ length: now - start + 1 }, (_, i) => start + i);
+  protected readonly zoomStep = ZOOM_STEP;
+  protected readonly canZoomIn = computed(() =>
+    this.globe() ? this.globeZoom() < GLOBE_MAX_ZOOM - 0.01 : this.transform().k < MAX_ZOOM - 0.01,
+  );
+  protected readonly canZoomOut = computed(() =>
+    this.globe() ? this.globeZoom() > 1.01 : this.transform().k > 1.01,
+  );
+
+  // --- Globo: abrir y cerrar, girar y acercar ----------------------------------------------
+
+  /** Centro inicial del globo: la casa (o la primera ciudad visitada). */
+  private readonly homeCenter = computed<readonly [number, number]>(() => {
+    const cities = this.userMap().cities;
+    const city = cities.find((c) => c.is_home) ?? cities[0];
+    return city ? [city.location.lon, city.location.lat] : GLOBE_DEFAULT_CENTER;
   });
 
-  protected readonly zoomStep = ZOOM_STEP;
-  protected readonly canZoomIn = computed(() => this.transform().k < MAX_ZOOM - 0.01);
-  protected readonly canZoomOut = computed(() => this.transform().k > 1.01);
+  protected async toggleGlobe(): Promise<void> {
+    const toGlobe = !this.globe();
+    this.globe.set(toGlobe);
+    this.close();
+    this.tooltip.set(null);
+    if (toGlobe) {
+      // El globo se abre sin el zoom del mapa plano, mirando hacia tu casa.
+      await this.resetFlatZoom();
+      this.center.set(this.homeCenter());
+      this.globeZoom.set(1);
+    }
+    this.animateAlpha(toGlobe ? 1 : 0);
+  }
+
+  private async resetFlatZoom(): Promise<void> {
+    const t = this.transform();
+    if (!this.zoomBehavior || (t.k === 1 && t.x === 0 && t.y === 0)) return;
+    const selection = select(this.svg().nativeElement);
+    if (prefersReducedMotion()) {
+      selection.call(this.zoomBehavior.transform, zoomIdentity);
+      return;
+    }
+    await selection
+      .transition()
+      .duration(300)
+      .call(this.zoomBehavior.transform, zoomIdentity)
+      .end()
+      .catch(() => undefined);
+  }
+
+  private animateAlpha(to: number): void {
+    this.cancelFrame();
+    const from = this.alpha();
+    if (prefersReducedMotion() || typeof requestAnimationFrame !== 'function') {
+      this.alpha.set(to);
+      return;
+    }
+    const start = performance.now();
+    const duration = GLOBE_MS * Math.abs(to - from);
+    const tick = (now: number) => {
+      const t = duration ? Math.min(1, (now - start) / duration) : 1;
+      this.alpha.set(from + (to - from) * easeInOut(t));
+      this.frame = t < 1 ? requestAnimationFrame(tick) : null;
+    };
+    this.frame = requestAnimationFrame(tick);
+  }
+
+  private cancelFrame(): void {
+    if (this.frame !== null) cancelAnimationFrame(this.frame);
+    this.frame = null;
+  }
+
+  private zoomGlobe(factor: number): void {
+    this.globeZoom.update((z) => Math.min(GLOBE_MAX_ZOOM, Math.max(1, z * factor)));
+  }
+
+  /** Gira el globo: el punto del frente se mueve dlon/dlat grados. */
+  private rotateGlobe(from: readonly [number, number], dlon: number, dlat: number): void {
+    const lon = ((((from[0] + dlon) % 360) + 540) % 360) - 180;
+    const lat = Math.max(-GLOBE_MAX_LAT, Math.min(GLOBE_MAX_LAT, from[1] + dlat));
+    this.center.set([lon, lat]);
+  }
+
+  protected startDrag(event: PointerEvent): void {
+    this.dragged = false;
+    if (!this.isGlobe() || event.button !== 0) return;
+    this.drag = { x: event.clientX, y: event.clientY, center: this.center(), moved: false };
+  }
+
+  protected onDrag(event: PointerEvent): void {
+    const drag = this.drag;
+    if (!drag) return;
+    const dx = event.clientX - drag.x;
+    const dy = event.clientY - drag.y;
+    if (!drag.moved && Math.hypot(dx, dy) < DRAG_THRESHOLD_PX) return;
+    if (!drag.moved) {
+      drag.moved = true;
+      this.tooltip.set(null);
+      this.hovered.set(null);
+    }
+    // Grados por pixel: el borde del globo queda a 90° del centro.
+    const radius = (this.view().disc?.r ?? 1) * this.scale();
+    const degrees = 180 / (Math.PI * radius);
+    this.rotateGlobe(drag.center, -dx * degrees, dy * degrees);
+  }
+
+  protected endDrag(): void {
+    if (!this.drag) return;
+    this.dragged = this.drag.moved;
+    this.drag = null;
+    // El clic llega justo después de soltar; después ya se vale.
+    setTimeout(() => (this.dragged = false));
+  }
+
+  protected onGlobeWheel(event: WheelEvent): void {
+    if (!this.isGlobe() || !(event.ctrlKey || event.metaKey)) return;
+    event.preventDefault();
+    this.zoomGlobe(Math.exp(-event.deltaY * 0.002));
+  }
+
+  protected onGlobeKey(event: KeyboardEvent): void {
+    if (!this.isGlobe() || event.target !== this.svg().nativeElement) return;
+    const steps: Record<string, [number, number]> = {
+      ArrowLeft: [-GLOBE_KEY_STEP, 0],
+      ArrowRight: [GLOBE_KEY_STEP, 0],
+      ArrowUp: [0, GLOBE_KEY_STEP],
+      ArrowDown: [0, -GLOBE_KEY_STEP],
+    };
+    const step = steps[event.key];
+    if (step) {
+      event.preventDefault();
+      this.rotateGlobe(this.center(), ...step);
+    } else if (event.key === '+' || event.key === '=') {
+      this.zoomGlobe(ZOOM_STEP);
+    } else if (event.key === '-') {
+      this.zoomGlobe(1 / ZOOM_STEP);
+    }
+  }
 
   // --- Zoom y tamaño ------------------------------------------------------------------
 
@@ -399,9 +613,11 @@ export class WorldMap {
       .scaleExtent([1, MAX_ZOOM])
       .translateExtent(extent)
       // La rueda sola desplaza la página; con Ctrl/⌘ (o pellizco en el trackpad) hace zoom.
-      .filter((event: MouseEvent | WheelEvent) =>
-        event.type === 'wheel' ? event.ctrlKey || event.metaKey : !event.button,
-      )
+      .filter((event: MouseEvent | WheelEvent) => {
+        // En el globo (y durante la transición) el arrastre gira en vez de desplazar.
+        if (this.alpha() > 0) return false;
+        return event.type === 'wheel' ? event.ctrlKey || event.metaKey : !event.button;
+      })
       .on('zoom', (event: { transform: Transform }) => {
         const { k, x, y } = event.transform;
         this.transform.set({ k, x, y });

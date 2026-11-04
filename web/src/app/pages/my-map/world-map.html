@@ -35,24 +35,35 @@
       <button
         type="button"
         class="square"
-        aria-label="Vista de globo 3D (próximamente)"
-        aria-disabled="true"
-        title="Próximamente · fase 7"
+        [class.square--on]="globe()"
+        aria-label="Vista de globo 3D"
+        [attr.aria-pressed]="globe()"
+        [attr.title]="globe() ? 'Volver al mapa plano' : 'Ver como globo'"
+        (click)="toggleGlobe()"
       >
         <svg lucideGlobe [size]="18" [strokeWidth]="1.8" aria-hidden="true"></svg>
       </button>
     </div>
   </div>
 
-  @let d = drawing();
+  @let d = view();
   @let t = transform();
   <div class="stage">
     <svg
       #svg
       class="map"
+      [class.map--globe]="isGlobe()"
       [attr.viewBox]="'0 0 ' + d.width + ' ' + d.height"
       role="group"
-      aria-label="Países del mundo. Los visitados se pueden abrir con Tab y Enter."
+      [attr.tabindex]="isGlobe() ? 0 : null"
+      [attr.aria-label]="
+        isGlobe()
+          ? 'Globo terráqueo. Gíralo con las flechas o arrastrando; acerca con + y −. Los países visitados se pueden abrir con Tab y Enter.'
+          : 'Países del mundo. Los visitados se pueden abrir con Tab y Enter.'
+      "
+      (pointerdown)="startDrag($event)"
+      (wheel)="onGlobeWheel($event)"
+      (keydown)="onGlobeKey($event)"
     >
       <defs>
         <filter id="map-glow" x="-20%" y="-20%" width="140%" height="140%">
@@ -65,6 +76,11 @@
         <filter id="map-halo" x="-50%" y="-50%" width="200%" height="200%">
           <feGaussianBlur stdDeviation="3" />
         </filter>
+        <!-- Sombra del borde del globo: el centro queda limpio y la orilla se oscurece. -->
+        <radialGradient id="globe-shade" cx="42%" cy="38%" r="62%">
+          <stop offset="55%" class="globe-shade__center" />
+          <stop offset="100%" class="globe-shade__edge" />
+        </radialGradient>
       </defs>
 
       <g [attr.transform]="'translate(' + t.x + ',' + t.y + ') scale(' + t.k + ')'">
@@ -139,6 +155,16 @@
           }
         </g>
       </g>
+
+      @if (d.disc; as disc) {
+        <circle
+          class="globe-shade"
+          [attr.cx]="disc.cx"
+          [attr.cy]="disc.cy"
+          [attr.r]="disc.r"
+          aria-hidden="true"
+        />
+      }
 
       <!-- Países chicos sin polígono visible: un punto que no crece con el zoom. -->
       <g class="small-countries">
@@ -246,6 +272,15 @@
       />
     }
 
+    @if (history(); as h) {
+      <div class="history-year" aria-hidden="true">
+        <span class="history-year__value">{{ h.year }}</span>
+        <span class="history-year__count">
+          {{ h.progress.countries.visited }} de {{ h.progress.countries.total }} países
+        </span>
+      </div>
+    }
+
     @if (litNotice(); as notice) {
       <div class="lit" role="status">
         <span class="lit__dot" aria-hidden="true"></span>
@@ -266,29 +301,8 @@
   </div>
 
   <div class="bottom">
-    <div class="history" title="Próximamente · fase 7">
-      <button
-        type="button"
-        class="play"
-        aria-label="Reproducir historia (próximamente)"
-        aria-disabled="true"
-      >
-        <svg lucidePlay [size]="16" fill="currentColor" aria-hidden="true"></svg>
-      </button>
-      <div class="history__body">
-        <span class="history__text">
-          Reproduce tu historia: mira cómo se encendió tu mapa, año por año
-        </span>
-        <ol class="years" [style.--years]="years().length">
-          @for (year of years(); track year; let last = $last) {
-            <li class="year" [class.year--current]="last">
-              <span class="year__bar"></span>
-              <span class="year__label">{{ year }}</span>
-            </li>
-          }
-        </ol>
-      </div>
-    </div>
+    <!-- Reproduce tu historia: la barra la pone Mi mapa (HistoryBar). -->
+    <ng-content select="app-history-bar" />
 
     <ul class="legend" aria-label="Leyenda">
       <li><span class="swatch swatch--visited"></span>Visitado</li>
