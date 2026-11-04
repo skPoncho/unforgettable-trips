@@ -1,6 +1,7 @@
 """Puntos y atajos para las pruebas de la API del usuario."""
 
 import uuid
+from pathlib import Path
 from typing import Any
 
 from fastapi.testclient import TestClient
@@ -18,6 +19,31 @@ ZOCALO = (-99.1332, 19.4326)
 OAXACA = (-96.7266, 17.0732)
 SAN_JUAN_PR = (-66.1057, 18.4655)  # territorio: no suma
 OPEN_OCEAN = (-140.0, 0.0)
+REYKJAVIK = (-21.9426, 64.1466)
+
+# Fotos con EXIF real (python -m app.seed.fixtures).
+FIXTURES = Path(__file__).parent / "fixtures"
+
+
+def fixture_bytes(name: str) -> bytes:
+    return (FIXTURES / name).read_bytes()
+
+
+def upload(client: TestClient, *files: str | tuple[str, bytes]) -> dict[str, Any]:
+    """Sube fotos: nombres de tests/fixtures o pares (nombre, contenido)."""
+    parts = []
+    for item in files:
+        name, data = (item, fixture_bytes(item)) if isinstance(item, str) else item
+        parts.append(("files", (name, data, "application/octet-stream")))
+    response = client.post("/api/photos", files=parts)
+    assert response.status_code == 201, response.text
+    return response.json()
+
+
+def upload_ids(client: TestClient, *files: str | tuple[str, bytes]) -> list[str]:
+    body = upload(client, *files)
+    assert not body["errors"], body["errors"]
+    return [p["id"] for p in body["photos"]]
 
 
 def place(name: str, point: tuple[float, float], arrived: str, **extra: Any) -> dict[str, Any]:
@@ -45,7 +71,7 @@ def create_memory(client: TestClient, **data: Any) -> dict[str, Any]:
 
 
 def add_photo(db: Session, storage: StorageBackend, user: User, memory_id: str) -> Photo:
-    """Foto mínima (hasta que exista la subida, fase 4): cada variante guarda su nombre."""
+    """Foto mínima sin pasar por la subida: cada variante guarda su nombre."""
     photo_id = uuid.uuid4()
     key = photo_prefix(user.id, photo_id)
     for variant in VARIANTS:

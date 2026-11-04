@@ -39,7 +39,7 @@ export interface MapDrawing {
 
 type Props = Record<string, unknown> | null;
 
-function features(topology: Topology, objectName?: string): Feature<Geometry, Props>[] {
+export function features(topology: Topology, objectName?: string): Feature<Geometry, Props>[] {
   const name = objectName ?? Object.keys(topology.objects)[0];
   const object = topology.objects[name] as GeometryCollection<Props>;
   return (feature(topology, object) as FeatureCollection<Geometry, Props>).features;

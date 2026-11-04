@@ -157,7 +157,7 @@ class Photo(Base):
 
     id: Mapped[uuid.UUID] = mapped_column(**_uuid_pk)
     user_id: Mapped[uuid.UUID] = _user_fk()
-    # Nula mientras se sube; las huérfanas de más de 24 h se borran (fase 4).
+    # Nula mientras se sube; las huérfanas de más de 24 h se borran en cada subida.
     memory_id: Mapped[uuid.UUID | None] = mapped_column(
         ForeignKey("memories.id", ondelete="SET NULL"), index=True
     )
@@ -170,6 +170,8 @@ class Photo(Base):
     bytes: Mapped[int] = mapped_column(BigInteger)
     sha256: Mapped[str] = mapped_column(Text)
     taken_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
+    # Fecha local de la toma (reloj de la cámara); taken_at en UTC puede caer en otro día.
+    taken_on: Mapped[date | None] = mapped_column(Date)
     location: Mapped[WKBElement | None] = mapped_column(
         Geometry("POINT", srid=4326, spatial_index=False)
     )

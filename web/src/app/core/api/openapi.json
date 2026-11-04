@@ -2,7 +2,7 @@
   "openapi": "3.1.0",
   "info": {
     "title": "Huella API",
-    "version": "0.3.0"
+    "version": "0.4.0"
   },
   "paths": {
     "/health": {
@@ -977,7 +977,7 @@
       "post": {
         "tags": ["memories"],
         "summary": "Create Memory",
-        "description": "Crea un recuerdo en una parada o, con `place`, en un viaje automático nuevo.\n\nLa visibilidad puede ser igual o más privada que la del viaje, nunca más abierta (422).",
+        "description": "Crea un recuerdo con sus fotos en una parada, en un viaje o en un viaje automático.\n\nLa visibilidad puede ser igual o más privada que la del viaje, nunca más abierta (422).\n`lit` dice qué se encendió en el mapa con este recuerdo.",
         "operationId": "create_memory_api_memories_post",
         "requestBody": {
           "required": true,
@@ -995,7 +995,50 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/MemoryOut"
+                  "$ref": "#/components/schemas/MemoryCreatedOut"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "No existe o no es tuyo"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/memories/suggest": {
+      "post": {
+        "tags": ["memories"],
+        "summary": "Suggest Memory",
+        "description": "Sugiere lugar (GPS de las fotos), fechas, monumentos a menos de 5 km y viaje.\n\nNo guarda nada. Con `location` o fechas, se usan esas en vez de las de las fotos.",
+        "operationId": "suggest_memory_api_memories_suggest_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SuggestIn"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MemorySuggestion"
                 }
               }
             }
@@ -1148,6 +1191,84 @@
         }
       }
     },
+    "/api/photos": {
+      "post": {
+        "tags": ["photos"],
+        "summary": "Upload Photos",
+        "description": "Sube fotos todavía sin recuerdo; se ligan a uno al guardarlo (`POST /api/memories`).\n\nCada archivo se valida aparte: los rechazados van en `errors` y los demás se suben.\nSe leen la fecha y el GPS del EXIF. Las fotos sin recuerdo de más de 24 h se borran.",
+        "operationId": "upload_photos_api_photos_post",
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "$ref": "#/components/schemas/Body_upload_photos_api_photos_post"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PhotoUploadOut"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/photos/{photo_id}": {
+      "delete": {
+        "tags": ["photos"],
+        "summary": "Delete Photo",
+        "description": "Borra una foto tuya y sus archivos (p. ej. al quitarla antes de guardar el recuerdo).",
+        "operationId": "delete_photo_api_photos__photo_id__delete",
+        "parameters": [
+          {
+            "name": "photo_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Photo Id"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Successful Response"
+          },
+          "404": {
+            "description": "No existe o no es tuya"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/photos/{photo_id}/{variant}": {
       "get": {
         "tags": ["photos"],
@@ -1202,6 +1323,22 @@
   },
   "components": {
     "schemas": {
+      "Body_upload_photos_api_photos_post": {
+        "properties": {
+          "files": {
+            "items": {
+              "type": "string",
+              "contentMediaType": "application/octet-stream"
+            },
+            "type": "array",
+            "title": "Files",
+            "description": "JPG, PNG o HEIC"
+          }
+        },
+        "type": "object",
+        "required": ["files"],
+        "title": "Body_upload_photos_api_photos_post"
+      },
       "CityBrief": {
         "properties": {
           "id": {
@@ -1706,6 +1843,37 @@
         "required": ["id", "name_es", "country_iso3", "subdivision_code"],
         "title": "HomeCity"
       },
+      "LitPlaces": {
+        "properties": {
+          "countries": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Countries",
+            "description": "ISO3"
+          },
+          "subdivisions": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Subdivisions",
+            "description": "Códigos de estado, p. ej. MX-OAX"
+          },
+          "cities": {
+            "items": {
+              "type": "integer"
+            },
+            "type": "array",
+            "title": "Cities"
+          }
+        },
+        "type": "object",
+        "required": ["countries", "subdivisions", "cities"],
+        "title": "LitPlaces",
+        "description": "Lo que se encendió (o pasó de escala a visitado) con este recuerdo."
+      },
       "LonLat": {
         "properties": {
           "lon": {
@@ -1805,6 +1973,98 @@
         "required": ["id", "handle", "display_name", "home_city", "theme", "profile_public"],
         "title": "MeOut"
       },
+      "MemoryCreatedOut": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "trip_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Trip Id"
+          },
+          "stop_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Stop Id"
+          },
+          "monument": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/MonumentBrief"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "body": {
+            "type": "string",
+            "title": "Body"
+          },
+          "occurred_on": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Occurred On"
+          },
+          "visibility": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/Visibility"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "effective_visibility": {
+            "$ref": "#/components/schemas/Visibility",
+            "description": "La más restrictiva entre la del recuerdo y la del viaje"
+          },
+          "photo_count": {
+            "type": "integer",
+            "title": "Photo Count"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Created At"
+          },
+          "updated_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Updated At"
+          },
+          "lit": {
+            "$ref": "#/components/schemas/LitPlaces"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "trip_id",
+          "stop_id",
+          "monument",
+          "body",
+          "occurred_on",
+          "visibility",
+          "effective_visibility",
+          "photo_count",
+          "created_at",
+          "updated_at",
+          "lit"
+        ],
+        "title": "MemoryCreatedOut"
+      },
       "MemoryIn": {
         "properties": {
           "stop_id": {
@@ -1828,6 +2088,19 @@
                 "type": "null"
               }
             ]
+          },
+          "trip_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Trip Id",
+            "description": "Solo con `place`"
           },
           "monument_id": {
             "anyOf": [
@@ -1856,7 +2129,8 @@
                 "type": "null"
               }
             ],
-            "title": "Occurred On"
+            "title": "Occurred On",
+            "description": "Por omisión, la de la primera foto"
           },
           "visibility": {
             "anyOf": [
@@ -1868,11 +2142,21 @@
               }
             ],
             "description": "Nula = hereda la del viaje"
+          },
+          "photo_ids": {
+            "items": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "type": "array",
+            "maxItems": 200,
+            "title": "Photo Ids",
+            "description": "Fotos subidas y aún sin recuerdo, en orden (la primera es la portada)"
           }
         },
         "type": "object",
         "title": "MemoryIn",
-        "description": "Va en una parada existente (`stop_id`) o en un lugar nuevo (`place`).\n\nCon `place` se crea un viaje automático de una parada (\"Kioto · mar 2025\")."
+        "description": "Va en una parada existente (`stop_id`) o en un lugar nuevo (`place`).\n\nCon `place` y `trip_id` va a la parada del viaje con la misma ciudad y fechas que se\ncruzan, o a una parada nueva. Con `place` solo, se crea un viaje automático de una\nparada (\"Kioto · mar 2025\")."
       },
       "MemoryOut": {
         "properties": {
@@ -2025,6 +2309,81 @@
         "type": "object",
         "title": "MemoryPatch"
       },
+      "MemorySuggestion": {
+        "properties": {
+          "photo_count": {
+            "type": "integer",
+            "title": "Photo Count"
+          },
+          "located_count": {
+            "type": "integer",
+            "title": "Located Count",
+            "description": "Cuántas fotos traen GPS"
+          },
+          "place": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/SuggestedPlace"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Nulo si ninguna foto trae GPS"
+          },
+          "arrived_on": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Arrived On"
+          },
+          "departed_on": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Departed On"
+          },
+          "monuments": {
+            "items": {
+              "$ref": "#/components/schemas/SuggestedMonument"
+            },
+            "type": "array",
+            "title": "Monuments",
+            "description": "A menos de 5 km, el más cercano antes"
+          },
+          "trips": {
+            "items": {
+              "$ref": "#/components/schemas/SuggestedTrip"
+            },
+            "type": "array",
+            "title": "Trips",
+            "description": "Tus viajes cuyas fechas se cruzan; primero los que tienen parada en la ciudad"
+          }
+        },
+        "type": "object",
+        "required": [
+          "photo_count",
+          "located_count",
+          "place",
+          "arrived_on",
+          "departed_on",
+          "monuments",
+          "trips"
+        ],
+        "title": "MemorySuggestion"
+      },
       "MonumentBrief": {
         "properties": {
           "id": {
@@ -2098,6 +2457,28 @@
         "type": "object",
         "required": ["id", "name_es", "distance_km"],
         "title": "NearestCity"
+      },
+      "PhotoUploadOut": {
+        "properties": {
+          "photos": {
+            "items": {
+              "$ref": "#/components/schemas/UploadedPhoto"
+            },
+            "type": "array",
+            "title": "Photos"
+          },
+          "errors": {
+            "items": {
+              "$ref": "#/components/schemas/UploadError"
+            },
+            "type": "array",
+            "title": "Errors",
+            "description": "Archivos rechazados (los demás sí se suben)"
+          }
+        },
+        "type": "object",
+        "required": ["photos", "errors"],
+        "title": "PhotoUploadOut"
       },
       "PlaceIn": {
         "properties": {
@@ -2618,6 +2999,166 @@
         "required": ["visited", "total", "country_iso3"],
         "title": "SubdivisionsProgress"
       },
+      "SuggestIn": {
+        "properties": {
+          "photo_ids": {
+            "items": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "type": "array",
+            "maxItems": 200,
+            "title": "Photo Ids"
+          },
+          "location": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/LonLat"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "arrived_on": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Arrived On"
+          },
+          "departed_on": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Departed On"
+          }
+        },
+        "type": "object",
+        "title": "SuggestIn",
+        "description": "Fotos ya subidas. Con `location` (al cambiar de lugar) se ignora el GPS de las fotos;\ncon `arrived_on` y `departed_on`, sus fechas."
+      },
+      "SuggestedMonument": {
+        "properties": {
+          "id": {
+            "type": "integer",
+            "title": "Id"
+          },
+          "slug": {
+            "type": "string",
+            "title": "Slug"
+          },
+          "name_es": {
+            "type": "string",
+            "title": "Name Es"
+          },
+          "stamp_code": {
+            "type": "string",
+            "title": "Stamp Code"
+          },
+          "distance_km": {
+            "type": "number",
+            "title": "Distance Km"
+          }
+        },
+        "type": "object",
+        "required": ["id", "slug", "name_es", "stamp_code", "distance_km"],
+        "title": "SuggestedMonument"
+      },
+      "SuggestedPlace": {
+        "properties": {
+          "place_name": {
+            "type": "string",
+            "title": "Place Name"
+          },
+          "location": {
+            "$ref": "#/components/schemas/LonLat"
+          },
+          "city": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/CityBrief"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "subdivision": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/SubdivisionBrief"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "country": {
+            "$ref": "#/components/schemas/CountryBrief"
+          }
+        },
+        "type": "object",
+        "required": ["place_name", "location", "city", "subdivision", "country"],
+        "title": "SuggestedPlace"
+      },
+      "SuggestedTrip": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "title": {
+            "type": "string",
+            "title": "Title"
+          },
+          "visibility": {
+            "$ref": "#/components/schemas/Visibility"
+          },
+          "is_auto": {
+            "type": "boolean",
+            "title": "Is Auto"
+          },
+          "starts_on": {
+            "type": "string",
+            "format": "date",
+            "title": "Starts On"
+          },
+          "ends_on": {
+            "type": "string",
+            "format": "date",
+            "title": "Ends On"
+          },
+          "stop_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Stop Id",
+            "description": "Parada de la misma ciudad en esas fechas: el recuerdo se guardará ahí"
+          }
+        },
+        "type": "object",
+        "required": ["id", "title", "visibility", "is_auto", "starts_on", "ends_on", "stop_id"],
+        "title": "SuggestedTrip"
+      },
       "Theme": {
         "type": "string",
         "enum": ["system", "dark", "light"],
@@ -3055,6 +3596,113 @@
         },
         "type": "object",
         "title": "TripPatch"
+      },
+      "UploadError": {
+        "properties": {
+          "filename": {
+            "type": "string",
+            "title": "Filename"
+          },
+          "detail": {
+            "type": "string",
+            "title": "Detail"
+          }
+        },
+        "type": "object",
+        "required": ["filename", "detail"],
+        "title": "UploadError"
+      },
+      "UploadedPhoto": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "memory_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Memory Id",
+            "description": "Nula mientras no se guarda el recuerdo"
+          },
+          "position": {
+            "type": "integer",
+            "title": "Position"
+          },
+          "width": {
+            "type": "integer",
+            "title": "Width"
+          },
+          "height": {
+            "type": "integer",
+            "title": "Height"
+          },
+          "taken_at": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Taken At"
+          },
+          "taken_on": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Taken On",
+            "description": "Fecha local de la toma (reloj de la cámara)"
+          },
+          "location": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/LonLat"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "filename": {
+            "type": "string",
+            "title": "Filename"
+          },
+          "duplicate": {
+            "type": "boolean",
+            "title": "Duplicate",
+            "description": "Ya la habías subido: se devuelve la existente"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "memory_id",
+          "position",
+          "width",
+          "height",
+          "taken_at",
+          "taken_on",
+          "location",
+          "filename",
+          "duplicate"
+        ],
+        "title": "UploadedPhoto"
       },
       "ValidationError": {
         "properties": {

@@ -4,7 +4,16 @@
  */
 import type { Topology } from 'topojson-specification';
 
-import type { Country, CountrySummary, Progress, Trip, UserMap } from '../app/core/api/types';
+import type {
+  Country,
+  CountrySummary,
+  MemoryCreated,
+  MemorySuggestion,
+  Progress,
+  Trip,
+  UploadedPhoto,
+  UserMap,
+} from '../app/core/api/types';
 
 // Cuadrados en sentido horario (convención de d3-geo para polígonos pequeños).
 const square = (x: number, y: number) => [
@@ -193,4 +202,72 @@ export const japanTrip: Trip = {
   stopover_countries: ['PAN'],
   created_at: '2026-11-03T00:00:00Z',
   updated_at: '2026-11-03T00:00:00Z',
+};
+
+// --- Nuevo recuerdo (fase 4) ------------------------------------------------------------
+
+/** kioto_gps.jpg recién subida (sin recuerdo). */
+export const kyotoPhoto: UploadedPhoto = {
+  id: 'ph-kioto',
+  memory_id: null,
+  position: 0,
+  width: 1200,
+  height: 800,
+  taken_at: '2025-03-12T23:10:00Z',
+  taken_on: '2025-03-13',
+  location: { lon: 135.77, lat: 35.01 },
+  filename: 'kioto_gps.jpg',
+  duplicate: false,
+};
+
+export const KYOTO_STOP_ID = 'b1c1f2a0-0000-4000-8000-00000000c10b';
+
+/** Lo que sugiere la API para kioto_gps.jpg con las semillas. */
+export const kyotoSuggestion: MemorySuggestion = {
+  photo_count: 1,
+  located_count: 1,
+  place: {
+    place_name: 'Kioto',
+    location: { lon: 135.77, lat: 35.01 },
+    city: { id: 1857910, name_es: 'Kioto' },
+    subdivision: null,
+    country: { iso3: 'JPN', name_es: 'Japón' },
+  },
+  arrived_on: '2025-03-13',
+  departed_on: '2025-03-13',
+  monuments: [
+    {
+      id: 7,
+      slug: 'fushimi-inari',
+      name_es: 'Fushimi Inari-taisha',
+      stamp_code: 'INA',
+      distance_km: 4.8,
+    },
+  ],
+  trips: [
+    {
+      id: JAPAN_TRIP_ID,
+      title: 'Japón 2025',
+      visibility: 'link',
+      is_auto: false,
+      starts_on: '2025-03-08',
+      ends_on: '2025-03-21',
+      stop_id: KYOTO_STOP_ID,
+    },
+  ],
+};
+
+export const kyotoMemory: MemoryCreated = {
+  id: 'm-kioto',
+  trip_id: JAPAN_TRIP_ID,
+  stop_id: KYOTO_STOP_ID,
+  monument: null,
+  body: '',
+  occurred_on: '2025-03-13',
+  visibility: null,
+  effective_visibility: 'link',
+  photo_count: 1,
+  created_at: '2026-11-04T00:00:00Z',
+  updated_at: '2026-11-04T00:00:00Z',
+  lit: { countries: [], subdivisions: [], cities: [] },
 };

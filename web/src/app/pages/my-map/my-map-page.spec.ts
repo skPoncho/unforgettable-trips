@@ -4,6 +4,7 @@ import { TestBed } from '@angular/core/testing';
 import { provideRouter } from '@angular/router';
 
 import {
+  JAPAN_TRIP_ID,
   countries,
   japanTrip,
   panamaSummary,
@@ -11,6 +12,7 @@ import {
   userMap,
   worldTopology,
 } from '../../../testing/fixtures';
+import { MemoryEvents } from '../../core/memory-events';
 import { MyMapPage } from './my-map-page';
 
 describe('MyMapPage', () => {
@@ -70,5 +72,34 @@ describe('MyMapPage', () => {
     await fixture.whenStable();
 
     expect(el.querySelector('[role="alert"]')?.textContent).toContain('make seed');
+  });
+
+  it('al guardar un recuerdo recarga el mapa y anima lo que se encendió', async () => {
+    const { fixture, el } = render();
+    flushAll();
+    await fixture.whenStable();
+    http.expectOne('/api/me/countries/PAN').flush(panamaSummary);
+    await fixture.whenStable();
+
+    const events = TestBed.inject(MemoryEvents);
+    events.notifySaved({
+      memoryId: 'm1',
+      tripId: JAPAN_TRIP_ID,
+      lit: { countries: ['JPN'], subdivisions: [], cities: [] },
+    });
+    TestBed.tick();
+    http.expectOne('/api/me/progress').flush(progress);
+    // Una copia, como llegaría de la API.
+    http.expectOne('/api/me/map').flush(structuredClone(userMap));
+    http.expectOne('/api/trips').flush([japanTrip]);
+    await fixture.whenStable();
+    // La tarjeta de Panamá se vuelve a pedir: sus conteos pudieron cambiar.
+    http.expectOne('/api/me/countries/PAN').flush(panamaSummary);
+    await fixture.whenStable();
+
+    expect(el.querySelector('[data-id="JPN"]')?.classList).toContain('country--lit');
+    expect(el.querySelector('.lit')?.textContent).toContain('Japón se encendió en tu mapa');
+    el.querySelector<HTMLButtonElement>('.lit__close')!.click();
+    expect(events.lastSaved()).toBeNull();
   });
 });

@@ -341,11 +341,34 @@ export interface paths {
     put?: never;
     /**
      * Create Memory
-     * @description Crea un recuerdo en una parada o, con `place`, en un viaje automático nuevo.
+     * @description Crea un recuerdo con sus fotos en una parada, en un viaje o en un viaje automático.
      *
      *     La visibilidad puede ser igual o más privada que la del viaje, nunca más abierta (422).
+     *     `lit` dice qué se encendió en el mapa con este recuerdo.
      */
     post: operations['create_memory_api_memories_post'];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  '/api/memories/suggest': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    /**
+     * Suggest Memory
+     * @description Sugiere lugar (GPS de las fotos), fechas, monumentos a menos de 5 km y viaje.
+     *
+     *     No guarda nada. Con `location` o fechas, se usan esas en vez de las de las fotos.
+     */
+    post: operations['suggest_memory_api_memories_suggest_post'];
     delete?: never;
     options?: never;
     head?: never;
@@ -374,6 +397,49 @@ export interface paths {
     patch: operations['update_memory_api_memories__memory_id__patch'];
     trace?: never;
   };
+  '/api/photos': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    /**
+     * Upload Photos
+     * @description Sube fotos todavía sin recuerdo; se ligan a uno al guardarlo (`POST /api/memories`).
+     *
+     *     Cada archivo se valida aparte: los rechazados van en `errors` y los demás se suben.
+     *     Se leen la fecha y el GPS del EXIF. Las fotos sin recuerdo de más de 24 h se borran.
+     */
+    post: operations['upload_photos_api_photos_post'];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  '/api/photos/{photo_id}': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    post?: never;
+    /**
+     * Delete Photo
+     * @description Borra una foto tuya y sus archivos (p. ej. al quitarla antes de guardar el recuerdo).
+     */
+    delete: operations['delete_photo_api_photos__photo_id__delete'];
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   '/api/photos/{photo_id}/{variant}': {
     parameters: {
       query?: never;
@@ -398,6 +464,14 @@ export interface paths {
 export type webhooks = Record<string, never>;
 export interface components {
   schemas: {
+    /** Body_upload_photos_api_photos_post */
+    Body_upload_photos_api_photos_post: {
+      /**
+       * Files
+       * @description JPG, PNG o HEIC
+       */
+      files: string[];
+    };
     /** CityBrief */
     CityBrief: {
       /** Id */
@@ -623,6 +697,24 @@ export interface components {
       /** Subdivision Code */
       subdivision_code: string | null;
     };
+    /**
+     * LitPlaces
+     * @description Lo que se encendió (o pasó de escala a visitado) con este recuerdo.
+     */
+    LitPlaces: {
+      /**
+       * Countries
+       * @description ISO3
+       */
+      countries: string[];
+      /**
+       * Subdivisions
+       * @description Códigos de estado, p. ej. MX-OAX
+       */
+      subdivisions: string[];
+      /** Cities */
+      cities: number[];
+    };
     /** LonLat */
     LonLat: {
       /** Lon */
@@ -662,16 +754,62 @@ export interface components {
       /** Profile Public */
       profile_public: boolean;
     };
+    /** MemoryCreatedOut */
+    MemoryCreatedOut: {
+      /**
+       * Id
+       * Format: uuid
+       */
+      id: string;
+      /**
+       * Trip Id
+       * Format: uuid
+       */
+      trip_id: string;
+      /**
+       * Stop Id
+       * Format: uuid
+       */
+      stop_id: string;
+      monument: components['schemas']['MonumentBrief'] | null;
+      /** Body */
+      body: string;
+      /** Occurred On */
+      occurred_on: string | null;
+      visibility: components['schemas']['Visibility'] | null;
+      /** @description La más restrictiva entre la del recuerdo y la del viaje */
+      effective_visibility: components['schemas']['Visibility'];
+      /** Photo Count */
+      photo_count: number;
+      /**
+       * Created At
+       * Format: date-time
+       */
+      created_at: string;
+      /**
+       * Updated At
+       * Format: date-time
+       */
+      updated_at: string;
+      lit: components['schemas']['LitPlaces'];
+    };
     /**
      * MemoryIn
      * @description Va en una parada existente (`stop_id`) o en un lugar nuevo (`place`).
      *
-     *     Con `place` se crea un viaje automático de una parada ("Kioto · mar 2025").
+     *     Con `place` y `trip_id` va a la parada del viaje con la misma ciudad y fechas que se
+     *     cruzan, o a una parada nueva. Con `place` solo, se crea un viaje automático de una
+     *     parada ("Kioto · mar 2025").
      */
     MemoryIn: {
       /** Stop Id */
       stop_id?: string | null;
       place?: components['schemas']['PlaceIn'] | null;
+      /**
+       * Trip Id
+       * @description Solo con `place`
+       */
+      trip_id?: string | null;
       /** Monument Id */
       monument_id?: number | null;
       /**
@@ -679,10 +817,18 @@ export interface components {
        * @default
        */
       body: string;
-      /** Occurred On */
+      /**
+       * Occurred On
+       * @description Por omisión, la de la primera foto
+       */
       occurred_on?: string | null;
       /** @description Nula = hereda la del viaje */
       visibility?: components['schemas']['Visibility'] | null;
+      /**
+       * Photo Ids
+       * @description Fotos subidas y aún sin recuerdo, en orden (la primera es la portada)
+       */
+      photo_ids?: string[];
     };
     /** MemoryOut */
     MemoryOut: {
@@ -734,6 +880,32 @@ export interface components {
       occurred_on?: string | null;
       visibility?: components['schemas']['Visibility'] | null;
     };
+    /** MemorySuggestion */
+    MemorySuggestion: {
+      /** Photo Count */
+      photo_count: number;
+      /**
+       * Located Count
+       * @description Cuántas fotos traen GPS
+       */
+      located_count: number;
+      /** @description Nulo si ninguna foto trae GPS */
+      place: components['schemas']['SuggestedPlace'] | null;
+      /** Arrived On */
+      arrived_on: string | null;
+      /** Departed On */
+      departed_on: string | null;
+      /**
+       * Monuments
+       * @description A menos de 5 km, el más cercano antes
+       */
+      monuments: components['schemas']['SuggestedMonument'][];
+      /**
+       * Trips
+       * @description Tus viajes cuyas fechas se cruzan; primero los que tienen parada en la ciudad
+       */
+      trips: components['schemas']['SuggestedTrip'][];
+    };
     /** MonumentBrief */
     MonumentBrief: {
       /** Id */
@@ -773,6 +945,16 @@ export interface components {
       name_es: string;
       /** Distance Km */
       distance_km: number;
+    };
+    /** PhotoUploadOut */
+    PhotoUploadOut: {
+      /** Photos */
+      photos: components['schemas']['UploadedPhoto'][];
+      /**
+       * Errors
+       * @description Archivos rechazados (los demás sí se suben)
+       */
+      errors: components['schemas']['UploadError'][];
     };
     /**
      * PlaceIn
@@ -963,6 +1145,70 @@ export interface components {
       country_iso3: string;
     };
     /**
+     * SuggestIn
+     * @description Fotos ya subidas. Con `location` (al cambiar de lugar) se ignora el GPS de las fotos;
+     *     con `arrived_on` y `departed_on`, sus fechas.
+     */
+    SuggestIn: {
+      /** Photo Ids */
+      photo_ids?: string[];
+      location?: components['schemas']['LonLat'] | null;
+      /** Arrived On */
+      arrived_on?: string | null;
+      /** Departed On */
+      departed_on?: string | null;
+    };
+    /** SuggestedMonument */
+    SuggestedMonument: {
+      /** Id */
+      id: number;
+      /** Slug */
+      slug: string;
+      /** Name Es */
+      name_es: string;
+      /** Stamp Code */
+      stamp_code: string;
+      /** Distance Km */
+      distance_km: number;
+    };
+    /** SuggestedPlace */
+    SuggestedPlace: {
+      /** Place Name */
+      place_name: string;
+      location: components['schemas']['LonLat'];
+      city: components['schemas']['CityBrief'] | null;
+      subdivision: components['schemas']['SubdivisionBrief'] | null;
+      country: components['schemas']['CountryBrief'];
+    };
+    /** SuggestedTrip */
+    SuggestedTrip: {
+      /**
+       * Id
+       * Format: uuid
+       */
+      id: string;
+      /** Title */
+      title: string;
+      visibility: components['schemas']['Visibility'];
+      /** Is Auto */
+      is_auto: boolean;
+      /**
+       * Starts On
+       * Format: date
+       */
+      starts_on: string;
+      /**
+       * Ends On
+       * Format: date
+       */
+      ends_on: string;
+      /**
+       * Stop Id
+       * @description Parada de la misma ciudad en esas fechas: el recuerdo se guardará ahí
+       */
+      stop_id: string | null;
+    };
+    /**
      * Theme
      * @enum {string}
      */
@@ -1112,6 +1358,47 @@ export interface components {
       cover_photo_id?: string | null;
       /** Favorite Memory Id */
       favorite_memory_id?: string | null;
+    };
+    /** UploadError */
+    UploadError: {
+      /** Filename */
+      filename: string;
+      /** Detail */
+      detail: string;
+    };
+    /** UploadedPhoto */
+    UploadedPhoto: {
+      /**
+       * Id
+       * Format: uuid
+       */
+      id: string;
+      /**
+       * Memory Id
+       * @description Nula mientras no se guarda el recuerdo
+       */
+      memory_id: string | null;
+      /** Position */
+      position: number;
+      /** Width */
+      width: number;
+      /** Height */
+      height: number;
+      /** Taken At */
+      taken_at: string | null;
+      /**
+       * Taken On
+       * @description Fecha local de la toma (reloj de la cámara)
+       */
+      taken_on: string | null;
+      location: components['schemas']['LonLat'] | null;
+      /** Filename */
+      filename: string;
+      /**
+       * Duplicate
+       * @description Ya la habías subido: se devuelve la existente
+       */
+      duplicate: boolean;
     };
     /** ValidationError */
     ValidationError: {
@@ -1929,7 +2216,47 @@ export interface operations {
           [name: string]: unknown;
         };
         content: {
-          'application/json': components['schemas']['MemoryOut'];
+          'application/json': components['schemas']['MemoryCreatedOut'];
+        };
+      };
+      /** @description No existe o no es tuyo */
+      404: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['HTTPValidationError'];
+        };
+      };
+    };
+  };
+  suggest_memory_api_memories_suggest_post: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['SuggestIn'];
+      };
+    };
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['MemorySuggestion'];
         };
       };
       /** @description No existe o no es tuyo */
@@ -2049,6 +2376,75 @@ export interface operations {
         };
       };
       /** @description No existe o no es tuyo */
+      404: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['HTTPValidationError'];
+        };
+      };
+    };
+  };
+  upload_photos_api_photos_post: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        'multipart/form-data': components['schemas']['Body_upload_photos_api_photos_post'];
+      };
+    };
+    responses: {
+      /** @description Successful Response */
+      201: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['PhotoUploadOut'];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['HTTPValidationError'];
+        };
+      };
+    };
+  };
+  delete_photo_api_photos__photo_id__delete: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        photo_id: string;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      204: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+      /** @description No existe o no es tuya */
       404: {
         headers: {
           [name: string]: unknown;

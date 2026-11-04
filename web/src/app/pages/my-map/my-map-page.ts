@@ -1,10 +1,11 @@
 import { httpResource } from '@angular/common/http';
-import { Component, computed } from '@angular/core';
-import { RouterLink } from '@angular/router';
+import { Component, computed, effect, inject, untracked } from '@angular/core';
+import { RouterLink, RouterOutlet } from '@angular/router';
 import type { Topology } from 'topojson-specification';
 
 import type { Country, Progress, Trip, UserMap } from '../../core/api/types';
 import { drawWorld } from '../../core/map/geo-shapes';
+import { MemoryEvents } from '../../core/memory-events';
 import { TripCard } from '../../shared/trip-card';
 import { CountrySummaries } from './country-summaries';
 import { ProgressPanel } from './progress-panel';
@@ -16,7 +17,7 @@ const STRIP_TRIPS = 8;
 /** Pantalla 1 · Mi mapa (design/pantallas/Main.dc.html). Todos los números vienen de la API. */
 @Component({
   selector: 'app-my-map-page',
-  imports: [ProgressPanel, WorldMap, TripCard, RouterLink],
+  imports: [ProgressPanel, WorldMap, TripCard, RouterLink, RouterOutlet],
   providers: [CountrySummaries],
   template: `
     @if (failed()) {
@@ -36,7 +37,13 @@ const STRIP_TRIPS = 8;
           [map]="r.userMap"
           [countries]="r.countries"
         />
-        <app-world-map class="world" [drawing]="r.drawing" [userMap]="r.userMap" />
+        <app-world-map
+          class="world"
+          [drawing]="r.drawing"
+          [userMap]="r.userMap"
+          [saved]="saved()"
+          (savedShown)="events.clear()"
+        />
       </div>
 
       <section class="trips" aria-labelledby="trips-title">
@@ -59,10 +66,16 @@ const STRIP_TRIPS = 8;
     } @else {
       <p class="loading" role="status">Cargando tu mapa…</p>
     }
+
+    <!-- Nuevo recuerdo (/nuevo-recuerdo) se abre encima del mapa. -->
+    <router-outlet />
   `,
   styleUrl: './my-map-page.scss',
 })
 export class MyMapPage {
+  protected readonly events = inject(MemoryEvents);
+  private readonly summaries = inject(CountrySummaries);
+
   private readonly countries = httpResource<Country[]>(() => ({
     url: '/api/geo/countries',
     params: { all: 'true' },
@@ -98,6 +111,25 @@ export class MyMapPage {
     if (!drawing || !progress || !userMap || !trips || !countries) return null;
     return { drawing, progress, userMap, trips, countries };
   });
+
+  /** El recuerdo recién guardado: se anima en cuanto el mapa tiene los datos nuevos. */
+  protected readonly saved = computed(() => {
+    const saved = this.events.lastSaved();
+    return saved && !this.userMap.isLoading() ? saved : null;
+  });
+
+  constructor() {
+    // Al guardar un recuerdo cambian el mapa, el progreso y los viajes.
+    effect(() => {
+      if (!this.events.lastSaved()) return;
+      untracked(() => {
+        this.summaries.invalidate();
+        this.progress.reload();
+        this.userMap.reload();
+        this.trips.reload();
+      });
+    });
+  }
 
   protected readonly stripTrips = computed(() => (this.trips.value() ?? []).slice(0, STRIP_TRIPS));
 

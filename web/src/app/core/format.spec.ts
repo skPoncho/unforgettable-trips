@@ -1,5 +1,5 @@
 import { userMap } from '../../testing/fixtures';
-import { count, monthYear, nextMilestone } from './format';
+import { count, dateRange, monthYear, nextMilestone } from './format';
 import { firstVisitYear } from './user-map';
 
 describe('formatos', () => {
@@ -8,6 +8,13 @@ describe('formatos', () => {
     expect(monthYear('2024-12-31')).toBe('dic 2024');
     // La fecha no se corre de día por la zona horaria.
     expect(monthYear('2023-10-01')).toBe('oct 2023');
+  });
+
+  it('rangos de fechas cortos', () => {
+    expect(dateRange('2025-03-13')).toBe('13 mar 2025');
+    expect(dateRange('2025-03-13', '2025-03-16')).toBe('13–16 mar 2025');
+    expect(dateRange('2025-02-28', '2025-03-02')).toBe('28 feb – 2 mar 2025');
+    expect(dateRange('2024-12-30', '2025-01-02')).toBe('30 dic 2024 – 2 ene 2025');
   });
 
   it('singular y plural', () => {

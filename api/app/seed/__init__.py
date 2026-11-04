@@ -135,6 +135,7 @@ def _add_photos(
                 bytes=len(rendered.original),
                 sha256=rendered.sha256,
                 taken_at=taken_at,
+                taken_on=day,
                 location=_point(lon, lat),
             )
         )
@@ -167,7 +168,7 @@ def seed(engine: Engine, storage: StorageBackend, *, with_photos: bool = True) -
             me.add_wish(session, user, iso3)
 
         def add_memory(memory_in: MemoryIn, stop: data.StopSeed) -> Memory:
-            memory = memories.create_memory(session, user, memory_in)
+            memory, _ = memories.create_memory(session, user, memory_in)
             report.memories += 1
             if with_photos:
                 report.photos += _add_photos(session, storage, user, memory, stop, rng)

@@ -5,8 +5,15 @@ import uuid
 from fastapi import APIRouter, Response, status
 
 from app.deps import CurrentUserDep, SessionDep, StorageDep
-from app.schemas import MemoryIn, MemoryOut, MemoryPatch
-from app.services import memories
+from app.schemas import (
+    MemoryCreatedOut,
+    MemoryIn,
+    MemoryOut,
+    MemoryPatch,
+    MemorySuggestion,
+    SuggestIn,
+)
+from app.services import memories, suggestions
 
 router = APIRouter(prefix="/api/memories", tags=["memories"])
 
@@ -24,15 +31,28 @@ def list_memories(
     return memories.list_memories(session, user, trip_id=trip_id, stop_id=stop_id)
 
 
-@router.post("", response_model=MemoryOut, status_code=status.HTTP_201_CREATED, responses=_404)
-def create_memory(data: MemoryIn, session: SessionDep, user: CurrentUserDep) -> MemoryOut:
-    """Crea un recuerdo en una parada o, con `place`, en un viaje automático nuevo.
+@router.post(
+    "", response_model=MemoryCreatedOut, status_code=status.HTTP_201_CREATED, responses=_404
+)
+def create_memory(data: MemoryIn, session: SessionDep, user: CurrentUserDep) -> MemoryCreatedOut:
+    """Crea un recuerdo con sus fotos en una parada, en un viaje o en un viaje automático.
 
     La visibilidad puede ser igual o más privada que la del viaje, nunca más abierta (422).
+    `lit` dice qué se encendió en el mapa con este recuerdo.
     """
-    memory = memories.create_memory(session, user, data)
+    memory, lit = memories.create_memory(session, user, data)
     session.commit()
-    return memories.memory_detail(session, user, memory.id)
+    detail = memories.memory_detail(session, user, memory.id)
+    return MemoryCreatedOut(**detail.model_dump(), lit=lit)
+
+
+@router.post("/suggest", response_model=MemorySuggestion, responses=_404)
+def suggest_memory(data: SuggestIn, session: SessionDep, user: CurrentUserDep) -> MemorySuggestion:
+    """Sugiere lugar (GPS de las fotos), fechas, monumentos a menos de 5 km y viaje.
+
+    No guarda nada. Con `location` o fechas, se usan esas en vez de las de las fotos.
+    """
+    return suggestions.suggest(session, user, data)
 
 
 @router.get("/{memory_id}", response_model=MemoryOut, responses=_404)

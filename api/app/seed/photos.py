@@ -1,7 +1,8 @@
 """Fotos de relleno para las semillas: un degradado con el nombre del lugar.
 
 El original lleva EXIF con fecha y GPS (como una foto de teléfono); las variantes
-`display` y `thumb` se guardan sin metadatos, igual que hará la subida real (fase 4).
+`display` y `thumb` salen de la misma función que la subida real (app/services/images.py).
+También genera las fotos de prueba de tests/fixtures (python -m app.seed.fixtures).
 """
 
 import colorsys
@@ -14,13 +15,15 @@ from fractions import Fraction
 from PIL import Image, ImageDraw, ImageFont, ImageOps
 from PIL.TiffImagePlugin import IFDRational
 
+from app.services.images import make_variants
+
 ORIGINAL_SIZE = (1200, 800)
-THUMB_WIDTH = 400
 
 _EXIF_IFD = 0x8769
 _GPS_IFD = 0x8825
 _DATETIME = 0x0132
 _DATETIME_ORIGINAL = 0x9003
+_OFFSET_TIME_ORIGINAL = 0x9011
 _MAKE, _MODEL = 0x010F, 0x0110
 
 
@@ -46,13 +49,20 @@ def _dms(value: float) -> tuple[IFDRational, IFDRational, IFDRational]:
     )
 
 
-def _exif(taken_at: datetime, lon: float, lat: float) -> Image.Exif:
+def photo_exif(
+    taken_at: datetime, lon: float | None, lat: float | None, *, offset: str | None = None
+) -> Image.Exif:
+    """EXIF como el de un teléfono. `taken_at` es la hora local; `offset` p. ej. "+09:00"."""
     exif = Image.Exif()
     stamp = taken_at.strftime("%Y:%m:%d %H:%M:%S")
     exif[_MAKE] = "Huella"
     exif[_MODEL] = "Semilla"
     exif[_DATETIME] = stamp
     exif.get_ifd(_EXIF_IFD)[_DATETIME_ORIGINAL] = stamp
+    if offset:
+        exif.get_ifd(_EXIF_IFD)[_OFFSET_TIME_ORIGINAL] = offset
+    if lon is None or lat is None:
+        return exif
     gps = exif.get_ifd(_GPS_IFD)
     gps[1] = "N" if lat >= 0 else "S"
     gps[2] = _dms(lat)
@@ -61,7 +71,7 @@ def _exif(taken_at: datetime, lon: float, lat: float) -> Image.Exif:
     return exif
 
 
-def _jpeg(image: Image.Image, exif: Image.Exif | None = None) -> bytes:
+def jpeg(image: Image.Image, exif: Image.Exif | None = None) -> bytes:
     buffer = io.BytesIO()
     options = {"quality": 80, "optimize": True}
     if exif is not None:
@@ -70,7 +80,7 @@ def _jpeg(image: Image.Image, exif: Image.Exif | None = None) -> bytes:
     return buffer.getvalue()
 
 
-def _canvas(label: str, caption: str, seed: int) -> Image.Image:
+def canvas(label: str, caption: str, seed: int) -> Image.Image:
     hue = (seed * 0.137) % 1.0
     dark = tuple(round(c * 255) for c in colorsys.hsv_to_rgb(hue, 0.55, 0.30))
     light = tuple(round(c * 255) for c in colorsys.hsv_to_rgb((hue + 0.08) % 1, 0.45, 0.85))
@@ -85,15 +95,14 @@ def _canvas(label: str, caption: str, seed: int) -> Image.Image:
 def render_photo(
     label: str, caption: str, *, taken_at: datetime, lon: float, lat: float, seed: int
 ) -> RenderedPhoto:
-    image = _canvas(label, caption, seed)
-    original = _jpeg(image, _exif(taken_at, lon, lat))
-    thumb = image.copy()
-    thumb.thumbnail((THUMB_WIDTH, THUMB_WIDTH))
+    image = canvas(label, caption, seed)
+    original = jpeg(image, photo_exif(taken_at, lon, lat))
+    variants = make_variants(image)
     return RenderedPhoto(
         original=original,
-        display=_jpeg(image),
-        thumb=_jpeg(thumb),
-        width=image.width,
-        height=image.height,
+        display=variants.display,
+        thumb=variants.thumb,
+        width=variants.width,
+        height=variants.height,
         sha256=hashlib.sha256(original).hexdigest(),
     )

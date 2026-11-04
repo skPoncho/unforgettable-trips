@@ -212,6 +212,43 @@ path,
   fill: var(--city-light);
 }
 
+// --- Recién encendido (al guardar un recuerdo) ------------------------------------------
+
+.country--lit {
+  animation: light-up 1.8s ease-out both;
+}
+
+@keyframes light-up {
+  0% {
+    fill: var(--map-land);
+    stroke-width: 0.6;
+  }
+  45% {
+    fill: var(--visited-line);
+    stroke: var(--visited-line);
+    stroke-width: 3;
+  }
+}
+
+.small--lit,
+.city__halo--lit {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: pulse 1.2s ease-out 3;
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+  }
+  40% {
+    transform: scale(2.6);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
 .monument {
   fill: var(--accent);
   stroke: var(--map-sphere);
@@ -280,6 +317,69 @@ path,
   font-size: 13px;
   white-space: nowrap;
   pointer-events: none;
+}
+
+.lit {
+  position: absolute;
+  z-index: 3;
+  top: 8px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  max-width: calc(100% - 16px);
+  padding: 8px 8px 8px 14px;
+  border-radius: var(--radius-pill);
+  background: var(--overlay);
+  border: 1px solid var(--overlay-line);
+  box-shadow: var(--shadow);
+  font-size: 14px;
+  font-weight: 600;
+  animation: notice-in 300ms ease-out;
+}
+
+@keyframes notice-in {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -8px);
+  }
+}
+
+.lit__dot {
+  flex-shrink: 0;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--accent);
+  box-shadow: 0 0 0 4px var(--accent-stopover);
+}
+
+.lit__link {
+  color: var(--accent-text);
+  white-space: nowrap;
+}
+
+.lit__close {
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  color: var(--text-muted);
+  cursor: pointer;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .country--lit,
+  .small--lit,
+  .city__halo--lit,
+  .lit {
+    animation: none;
+  }
 }
 
 .tooltip__detail {

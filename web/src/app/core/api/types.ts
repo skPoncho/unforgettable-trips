@@ -26,3 +26,19 @@ export type CountryTrip = Schemas['CountryTrip'];
 export type Trip = Schemas['TripOut'];
 export type TripDetail = Schemas['TripDetailOut'];
 export type Stop = Schemas['StopOut'];
+
+export type City = Schemas['CityOut'];
+
+export type UploadedPhoto = Schemas['UploadedPhoto'];
+export type PhotoUpload = Schemas['PhotoUploadOut'];
+export type UploadError = Schemas['UploadError'];
+
+export type PlaceIn = Schemas['PlaceIn'];
+export type MemoryIn = Schemas['MemoryIn'];
+export type MemoryCreated = Schemas['MemoryCreatedOut'];
+export type LitPlaces = Schemas['LitPlaces'];
+export type SuggestIn = Schemas['SuggestIn'];
+export type MemorySuggestion = Schemas['MemorySuggestion'];
+export type SuggestedPlace = Schemas['SuggestedPlace'];
+export type SuggestedTrip = Schemas['SuggestedTrip'];
+export type SuggestedMonument = Schemas['SuggestedMonument'];

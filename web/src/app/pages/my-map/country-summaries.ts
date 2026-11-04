@@ -17,6 +17,12 @@ export class CountrySummaries {
     return this.cache().get(iso3);
   }
 
+  /** Olvida lo pedido (p. ej. al guardar un recuerdo cambian fotos y días). */
+  invalidate(): void {
+    this.requested.clear();
+    this.cache.set(new Map());
+  }
+
   /** Pide el resumen una sola vez. Se llama desde eventos, no desde un computed. */
   load(iso3: string): void {
     if (this.requested.has(iso3)) return;

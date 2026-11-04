@@ -16,6 +16,29 @@ export function monthYear(isoDate: string): string {
   return `${month} ${year}`;
 }
 
+const DAY_MONTH_YEAR = new Intl.DateTimeFormat('es-MX', {
+  day: 'numeric',
+  month: 'short',
+  year: 'numeric',
+  timeZone: 'UTC',
+});
+
+function dateParts(isoDate: string) {
+  const parts = DAY_MONTH_YEAR.formatToParts(new Date(`${isoDate}T00:00:00Z`));
+  const get = (type: string) => parts.find((p) => p.type === type)?.value ?? '';
+  return { day: get('day'), month: get('month').replace('.', ''), year: get('year') };
+}
+
+/** Fechas ISO → `13 mar 2025`, `13–16 mar 2025`, `28 feb – 2 mar 2025`. */
+export function dateRange(from: string, to: string = from): string {
+  const a = dateParts(from);
+  const b = dateParts(to);
+  if (from === to) return `${a.day} ${a.month} ${a.year}`;
+  if (a.year !== b.year) return `${a.day} ${a.month} ${a.year} – ${b.day} ${b.month} ${b.year}`;
+  if (a.month !== b.month) return `${a.day} ${a.month} – ${b.day} ${b.month} ${b.year}`;
+  return `${a.day}–${b.day} ${a.month} ${a.year}`;
+}
+
 /** `14 días`, `1 ciudad`, `3 ciudades`. */
 export function count(n: number, singular: string, plural: string): string {
   return `${n.toLocaleString('es-MX')} ${n === 1 ? singular : plural}`;

@@ -99,14 +99,14 @@ Reglas del plan:
 ## Fase 4 · Nuevo recuerdo (pantalla 4, `Recuerdo.dc.html`)
 
 - **4.1 Subida de fotos.** `POST /api/photos` múltiple: validación de tipo y tamaño, HEIC → JPEG, dedupe por sha256, lectura de EXIF (fecha y GPS), variantes `display` y `thumb` sin metadatos.
-- **4.2 Sugerencias.** `POST /api/memories/suggest`: lugar (GPS de las fotos → `reverse`), fecha, monumentos a menos de 2 km y viaje existente cuyas fechas coinciden.
+- **4.2 Sugerencias.** `POST /api/memories/suggest`: lugar (GPS de las fotos → `reverse`), fecha, monumentos a menos de 5 km y viaje existente cuyas fechas coinciden.
 - **4.3 Ventana y fotos.** Modal sobre el mapa atenuado, zona de arrastre, cuadrícula con indicador de ubicación, reordenar (CDK drag-drop); la primera foto es la portada.
 - **4.4 Detalles.** Lugar detectado con minimapa, "Cambiar lugar" con autocompletado, tipo de visita, vínculo a viaje y monumento, anécdota y visibilidad (solo las opciones permitidas por el viaje).
 - **4.5 Guardado.** Transacción que reusa la parada si coinciden ciudad y fechas, crea el viaje automático si no se eligió viaje y dispara la animación de "encender" en el mapa.
 - **4.6 Servir fotos.** Endpoint por variante con verificación de dueño.
 
 **Hecho cuando:**
-- Al arrastrar la foto de prueba `kioto_gps.jpg` (EXIF 35.01 N, 135.77 E, 13 mar 2025) se sugieren "Kioto, Japón", Fushimi Inari-taisha y la fecha.
+- Al arrastrar la foto de prueba `kioto_gps.jpg` (EXIF 35.01 N, 135.77 E, 13 mar 2025) se sugieren "Kioto, Japón", Fushimi Inari-taisha (a ~4.8 km, por eso el radio es de 5 km) y la fecha.
 - Al guardar una foto tomada en Reikiavik, Islandia se enciende en Mi mapa.
 - Una prueba confirma que la variante `display` no tiene GPS.
 

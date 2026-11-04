@@ -21,7 +21,7 @@
     }
   </nav>
 
-  <!-- Búsqueda (fase 7), compartir (fase 8) y nuevo recuerdo (fase 4): visibles pero aún sin acción. -->
+  <!-- Búsqueda (fase 7) y compartir (fase 8): visibles pero aún sin acción. -->
   <label class="search" title="Próximamente · fase 7">
     <svg lucideSearch [size]="18" aria-hidden="true"></svg>
     <span class="visually-hidden">Buscar (próximamente)</span>
@@ -39,15 +39,10 @@
       <svg lucideShare2 [size]="17" aria-hidden="true"></svg>
       Compartir mi mapa
     </button>
-    <button
-      type="button"
-      class="pill-button pill-button--primary"
-      aria-disabled="true"
-      title="Próximamente · fase 4"
-    >
+    <a class="pill-button pill-button--primary" routerLink="/nuevo-recuerdo">
       <svg lucidePlus [size]="18" [strokeWidth]="2.4" aria-hidden="true"></svg>
       Nuevo recuerdo
-    </button>
+    </a>
     <button
       type="button"
       class="round-button theme-toggle"

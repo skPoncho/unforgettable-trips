@@ -2,6 +2,7 @@
 
 import secrets
 import uuid
+from datetime import date
 from typing import Any
 
 from geoalchemy2 import WKTElement
@@ -15,6 +16,7 @@ from app.schemas import (
     CityBrief,
     CountryBrief,
     LonLat,
+    PlaceIn,
     StopIn,
     StopOut,
     StopPatch,
@@ -310,6 +312,53 @@ def add_stop(session: Session, user: User, trip_id: uuid.UUID, data: StopIn) -> 
     session.add(stop)
     session.flush()
     return stop
+
+
+def matching_stop(
+    session: Session,
+    trip_id: uuid.UUID,
+    city_id: int | None,
+    arrived_on: date,
+    departed_on: date,
+) -> Stop | None:
+    """La parada del viaje en la misma ciudad cuyas fechas se cruzan con las dadas."""
+    if city_id is None:
+        return None
+    return session.scalar(
+        select(Stop)
+        .where(
+            Stop.trip_id == trip_id,
+            Stop.city_id == city_id,
+            Stop.arrived_on <= departed_on,
+            Stop.departed_on >= arrived_on,
+        )
+        .order_by(Stop.position)
+        .limit(1)
+    )
+
+
+def stop_for_place(session: Session, user: User, trip_id: uuid.UUID, place: PlaceIn) -> Stop:
+    """Reusa la parada con la misma ciudad y fechas que se cruzan; si no hay, agrega una
+    nueva en orden cronológico."""
+    trip = owned_trip(session, user, trip_id)
+    departed_on = place.departed_on or place.arrived_on
+    _, _, city_id = _resolve_place(
+        session,
+        place.location,
+        place.visit_type,
+        city_id=place.city_id,
+        city_given="city_id" in place.model_fields_set,
+    )
+    found = matching_stop(session, trip.id, city_id, place.arrived_on, departed_on)
+    if found is not None:
+        return found
+    position = session.scalar(
+        select(func.count())
+        .select_from(Stop)
+        .where(Stop.trip_id == trip.id, Stop.arrived_on <= place.arrived_on)
+    )
+    stop_in = StopIn(**place.model_dump(exclude_unset=True), position=position)
+    return add_stop(session, user, trip.id, stop_in)
 
 
 def update_stop(session: Session, user: User, stop_id: uuid.UUID, patch: StopPatch) -> Stop:

@@ -1,0 +1,314 @@
+<!-- Sin cerrar al hacer clic fuera: se perderían las fotos ya elegidas. -->
+<div class="scrim" aria-hidden="true"></div>
+
+<div
+  class="dialog"
+  role="dialog"
+  aria-modal="true"
+  aria-labelledby="new-memory-title"
+  aria-describedby="new-memory-intro"
+  cdkTrapFocus
+  [cdkTrapFocusAutoCapture]="true"
+>
+  <header class="head">
+    <div class="head__text">
+      <h1 id="new-memory-title" class="head__title">Nuevo recuerdo</h1>
+      <span id="new-memory-intro" class="muted">
+        Leemos la fecha y la ubicación de tus fotos para ubicarlas en el mapa.
+      </span>
+    </div>
+    <button type="button" class="round" aria-label="Cerrar" (click)="cancel()">
+      <svg lucideX [size]="18" [strokeWidth]="2.2" aria-hidden="true"></svg>
+    </button>
+  </header>
+
+  <div class="body">
+    <!-- Izquierda: fotos -->
+    <section class="column" aria-label="Fotos">
+      <label
+        class="drop"
+        [class.drop--over]="dragOver()"
+        (dragover)="onDragOver($event)"
+        (dragleave)="dragOver.set(false)"
+        (drop)="onDrop($event)"
+      >
+        <svg
+          lucideUpload
+          class="drop__icon"
+          [size]="32"
+          [strokeWidth]="1.8"
+          aria-hidden="true"
+        ></svg>
+        <span class="drop__title">Arrastra tus fotos aquí</span>
+        <span class="muted">
+          o <span class="drop__link">elígelas desde tu PC</span> · JPG, PNG o HEIC
+        </span>
+        <input
+          class="drop__input"
+          type="file"
+          multiple
+          [accept]="accepted"
+          aria-label="Elegir fotos"
+          (change)="onFiles($event)"
+        />
+      </label>
+
+      @if (items().length) {
+        <div class="meta">
+          <span>{{ photoSummary() ?? 'Subiendo tus fotos…' }}</span>
+          @if (dateLabel(); as date) {
+            <span class="mono">{{ date }}</span>
+          }
+        </div>
+
+        <ol
+          class="grid"
+          cdkDropList
+          cdkDropListOrientation="mixed"
+          [cdkDropListData]="items()"
+          (cdkDropListDropped)="drop($event)"
+          aria-label="Fotos del recuerdo, la primera es la portada"
+        >
+          @for (item of items(); track item.key; let first = $first) {
+            <li
+              class="tile"
+              cdkDrag
+              [cdkDragDisabled]="item.status !== 'done'"
+              [class.tile--cover]="first && item.status === 'done'"
+              [class.tile--error]="item.status === 'error'"
+            >
+              @if (thumbOf(item); as src) {
+                <img class="tile__img" [src]="src" [alt]="item.name" draggable="false" />
+              } @else {
+                <span class="tile__name mono">{{ item.name }}</span>
+              }
+
+              @switch (item.status) {
+                @case ('error') {
+                  <span class="tile__overlay tile__overlay--error" role="alert">
+                    <svg lucideTriangleAlert [size]="16" aria-hidden="true"></svg>
+                    {{ item.name }}: {{ item.error }}
+                  </span>
+                }
+                @case ('done') {
+                  @if (item.photo?.location) {
+                    <span class="tile__gps" title="Tiene ubicación">
+                      <svg lucideMapPin [size]="12" fill="currentColor" aria-hidden="true"></svg>
+                      <span class="visually-hidden">Con ubicación</span>
+                    </span>
+                  }
+                  @if (first) {
+                    <span class="tile__badge">Portada</span>
+                  } @else {
+                    <button type="button" class="tile__action" (click)="makeCover(item.key)">
+                      Usar de portada
+                    </button>
+                  }
+                }
+                @default {
+                  <span class="tile__overlay" role="status">
+                    <svg lucideLoaderCircle class="spin" [size]="18" aria-hidden="true"></svg>
+                    Subiendo…
+                  </span>
+                }
+              }
+
+              <button
+                type="button"
+                class="tile__remove"
+                [attr.aria-label]="'Quitar ' + item.name"
+                (click)="remove(item.key)"
+              >
+                <svg lucideX [size]="14" [strokeWidth]="2.4" aria-hidden="true"></svg>
+              </button>
+            </li>
+          }
+        </ol>
+
+        <p class="hint">
+          <svg lucideInfo [size]="16" aria-hidden="true"></svg>
+          La primera foto será la portada. Arrastra para reordenar.
+        </p>
+      }
+    </section>
+
+    <!-- Derecha: detalles -->
+    <section class="column column--details" aria-label="Detalles">
+      <div class="place">
+        @if (place(); as p) {
+          <app-place-minimap [location]="p.location" [countryIso3]="p.country.iso3" />
+        } @else {
+          <div class="place__empty" aria-hidden="true">
+            <svg lucideMapPin [size]="26" aria-hidden="true"></svg>
+          </div>
+        }
+
+        @if (searching()) {
+          <app-place-search (picked)="choosePlace($event)" (cancelled)="searching.set(false)" />
+        } @else {
+          <div class="place__row">
+            <div class="place__text">
+              @if (placeLabel(); as label) {
+                <span class="place__kicker mono">
+                  {{ placeDetected() ? 'DETECTADO EN TUS FOTOS' : 'LUGAR ELEGIDO' }}
+                </span>
+                <span class="place__name">{{ label }}</span>
+              } @else {
+                <span class="place__kicker mono">LUGAR</span>
+                <span class="place__none">Aún no sabemos dónde fue</span>
+              }
+            </div>
+            <button type="button" class="pill" (click)="searching.set(true)">
+              {{ place() ? 'Cambiar lugar' : 'Elegir lugar' }}
+            </button>
+          </div>
+        }
+      </div>
+
+      <fieldset class="field dates">
+        <legend class="field__label">¿Cuándo?</legend>
+        <label class="dates__item">
+          <span class="muted">Llegada</span>
+          <input
+            class="input"
+            type="date"
+            [value]="arrivedOn() ?? ''"
+            (change)="setDate('arrived', $event)"
+          />
+        </label>
+        <label class="dates__item">
+          <span class="muted">Salida</span>
+          <input
+            class="input"
+            type="date"
+            [value]="departedOn() ?? ''"
+            [min]="arrivedOn() ?? ''"
+            (change)="setDate('departed', $event)"
+          />
+        </label>
+      </fieldset>
+
+      <div class="field">
+        <span id="visit-type" class="field__label">Tipo de visita</span>
+        <div class="options" role="radiogroup" aria-labelledby="visit-type">
+          @for (option of visitTypes; track option.id) {
+            <button
+              type="button"
+              role="radio"
+              class="option"
+              [class.option--on]="visitType() === option.id"
+              [attr.aria-checked]="visitType() === option.id"
+              (click)="visitType.set(option.id)"
+            >
+              <span class="option__label">{{ option.label }}</span>
+              <span class="option__hint">{{ option.hint }}</span>
+            </button>
+          }
+        </div>
+      </div>
+
+      <div class="field">
+        <span class="field__label">Vincular a</span>
+        <div class="links">
+          <label class="chip chip--on chip--select">
+            <svg lucideCheck [size]="14" [strokeWidth]="2.6" aria-hidden="true"></svg>
+            <span class="visually-hidden">Viaje</span>
+            <select class="chip__select" [value]="tripId()" (change)="chooseTrip($event)">
+              @if (suggestedTrips().length) {
+                <optgroup label="Coinciden con tus fotos">
+                  @for (trip of suggestedTrips(); track trip.id) {
+                    <option [value]="trip.id" [selected]="trip.id === tripId()">
+                      Viaje: {{ trip.title }}
+                    </option>
+                  }
+                </optgroup>
+              }
+              @if (otherTrips().length) {
+                <optgroup label="Tus viajes">
+                  @for (trip of otherTrips(); track trip.id) {
+                    <option [value]="trip.id" [selected]="trip.id === tripId()">
+                      Viaje: {{ trip.title }}
+                    </option>
+                  }
+                </optgroup>
+              }
+              <option [value]="autoTrip" [selected]="tripId() === autoTrip">
+                {{ autoTripTitle() }}
+              </option>
+            </select>
+          </label>
+
+          @for (monument of monuments(); track monument.id) {
+            @let on = monumentId() === monument.id;
+            <button
+              type="button"
+              class="chip"
+              [class.chip--on]="on"
+              [class.chip--suggested]="!on"
+              [attr.aria-pressed]="on"
+              (click)="toggleMonument(monument.id)"
+            >
+              @if (on) {
+                <svg lucideCheck [size]="14" [strokeWidth]="2.6" aria-hidden="true"></svg>
+                Monumento: {{ monument.name_es }}
+              } @else {
+                <svg lucidePlus [size]="14" [strokeWidth]="2.4" aria-hidden="true"></svg>
+                Monumento sugerido: {{ monument.name_es }}
+              }
+            </button>
+          }
+        </div>
+      </div>
+
+      <div class="field">
+        <label for="memory-body" class="field__label">¿Qué pasó aquí?</label>
+        <textarea
+          id="memory-body"
+          class="input textarea"
+          rows="4"
+          maxlength="20000"
+          placeholder="Cuenta la historia detrás de estas fotos…"
+          [value]="body()"
+          (input)="body.set($any($event.target).value)"
+        ></textarea>
+      </div>
+
+      <div class="field">
+        <span id="memory-visibility" class="field__label">¿Quién puede verlo?</span>
+        <div class="segments" role="radiogroup" aria-labelledby="memory-visibility">
+          @for (option of visibilityOptions(); track option) {
+            <button
+              type="button"
+              role="radio"
+              class="segment"
+              [class.segment--on]="visibility() === option"
+              [attr.aria-checked]="visibility() === option"
+              (click)="chooseVisibility(option)"
+            >
+              {{ visibilityLabels[option] }}
+            </button>
+          }
+        </div>
+        @if (visibilityOptions().length < 3) {
+          <span class="muted small">Un recuerdo no puede ser más abierto que su viaje.</span>
+        }
+      </div>
+    </section>
+  </div>
+
+  <footer class="foot">
+    <span class="muted small" role="status">{{ saveError() ?? footNote() }}</span>
+    <div class="foot__actions">
+      <button type="button" class="button" (click)="cancel()">Cancelar</button>
+      <button
+        type="button"
+        class="button button--primary"
+        [attr.aria-disabled]="!canSave()"
+        [attr.title]="saveHint()"
+        (click)="save()"
+      >
+        {{ saving() ? 'Guardando…' : 'Guardar y encender en el mapa' }}
+      </button>
+    </div>
+  </footer>
+</div>

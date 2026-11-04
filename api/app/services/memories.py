@@ -9,9 +9,18 @@ from sqlalchemy.orm import Session
 
 from app.errors import InvalidError, NotFoundError
 from app.models import Memory, Monument, Stop, Trip, User, Visibility
-from app.schemas import MemoryIn, MemoryOut, MemoryPatch, MonumentBrief, PlaceIn, StopIn, TripIn
-from app.services.photos import photos_of_memories, purge_photos
-from app.services.trips import add_stop, create_trip, owned_stop
+from app.schemas import (
+    LitPlaces,
+    MemoryIn,
+    MemoryOut,
+    MemoryPatch,
+    MonumentBrief,
+    PlaceIn,
+    StopIn,
+    TripIn,
+)
+from app.services.photos import owned_photos, photos_of_memories, purge_photos
+from app.services.trips import add_stop, create_trip, owned_stop, owned_trip, stop_for_place
 from app.storage import StorageBackend
 
 MONTHS_ES = ("ene", "feb", "mar", "abr", "may", "jun", "jul", "ago", "sep", "oct", "nov", "dic")
@@ -111,11 +120,59 @@ def _create_auto_trip(
     return add_stop(session, user, trip.id, stop_in)
 
 
-def create_memory(session: Session, user: User, data: MemoryIn) -> Memory:
+# Estado de cada país, estado y ciudad del usuario (las mismas vistas que el mapa).
+_STATUS_SQL = """
+SELECT 'country' AS kind, c.iso3::text AS key, u.status
+FROM user_country_status u JOIN countries c ON c.id = u.country_id WHERE u.user_id = :uid
+UNION ALL
+SELECT 'subdivision', sd.code, u.status
+FROM user_subdivision_status u JOIN subdivisions sd ON sd.id = u.subdivision_id
+WHERE u.user_id = :uid
+UNION ALL
+SELECT 'city', u.city_id::text, u.status FROM user_city_status u WHERE u.user_id = :uid
+"""
+
+
+def _statuses(session: Session, user: User) -> dict[tuple[str, str], str]:
+    rows = session.execute(text(_STATUS_SQL), {"uid": user.id})
+    return {(r.kind, r.key): r.status for r in rows}
+
+
+def _lit(before: dict[tuple[str, str], str], after: dict[tuple[str, str], str]) -> LitPlaces:
+    """Lo nuevo y lo que pasó de escala a visitado."""
+    changed = [key for key, status in after.items() if before.get(key) != status]
+    return LitPlaces(
+        countries=sorted(k for kind, k in changed if kind == "country"),
+        subdivisions=sorted(k for kind, k in changed if kind == "subdivision"),
+        cities=sorted(int(k) for kind, k in changed if kind == "city"),
+    )
+
+
+def _attach_photos(session: Session, user: User, memory: Memory, photo_ids: list) -> None:
+    photos = owned_photos(session, user, photo_ids)
+    for position, photo in enumerate(photos):
+        if photo.memory_id is not None and photo.memory_id != memory.id:
+            raise InvalidError("Una de las fotos ya está en otro recuerdo")
+        photo.memory_id = memory.id
+        photo.position = position
+    if memory.occurred_on is None:
+        days = [p.taken_on for p in photos if p.taken_on is not None]
+        memory.occurred_on = min(days) if days else None
+
+
+def create_memory(session: Session, user: User, data: MemoryIn) -> tuple[Memory, LitPlaces]:
+    """Crea el recuerdo con sus fotos. Devuelve también lo que se encendió en el mapa."""
     _check_monument(session, data.monument_id)
+    before = _statuses(session, user)
     if data.stop_id is not None:
         stop = owned_stop(session, user, data.stop_id)
         _check_visibility(data.visibility, session.get(Trip, stop.trip_id).visibility)
+        visibility = data.visibility
+    elif data.trip_id is not None:
+        assert data.place is not None
+        trip = owned_trip(session, user, data.trip_id)
+        _check_visibility(data.visibility, trip.visibility)
+        stop = stop_for_place(session, user, trip.id, data.place)
         visibility = data.visibility
     else:
         assert data.place is not None
@@ -133,7 +190,10 @@ def create_memory(session: Session, user: User, data: MemoryIn) -> Memory:
     )
     session.add(memory)
     session.flush()
-    return memory
+    if data.photo_ids:
+        _attach_photos(session, user, memory, data.photo_ids)
+        session.flush()
+    return memory, _lit(before, _statuses(session, user))
 
 
 def update_memory(session: Session, user: User, memory_id: uuid.UUID, patch: MemoryPatch) -> Memory:

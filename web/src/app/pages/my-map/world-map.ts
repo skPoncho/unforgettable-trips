@@ -7,16 +7,20 @@ import {
   effect,
   inject,
   input,
+  output,
   signal,
+  untracked,
   viewChild,
 } from '@angular/core';
-import { LucideGlobe, LucideMinus, LucidePlay, LucidePlus } from '@lucide/angular';
+import { RouterLink } from '@angular/router';
+import { LucideGlobe, LucideMinus, LucidePlay, LucidePlus, LucideX } from '@lucide/angular';
 import { select } from 'd3-selection';
 import 'd3-transition';
 import { type ZoomBehavior, zoom } from 'd3-zoom';
 
 import type { MapDrawing, Point } from '../../core/map/geo-shapes';
 import type { CountryStatus, UserMap } from '../../core/me-api';
+import type { SavedMemory } from '../../core/memory-events';
 import { firstVisitYear } from '../../core/user-map';
 import { CountryCard } from './country-card';
 import { CountrySummaries } from './country-summaries';
@@ -52,6 +56,14 @@ const ZOOM_STEP = 1.6;
 const CARD = { width: 290, height: 300, gap: 28 };
 /** Tiempo antes de cerrar la tarjeta al salir del país (para poder llegar a ella). */
 const HIDE_DELAY_MS = 150;
+/** Cuánto se queda el aviso de "se encendió" después de guardar un recuerdo. */
+const LIT_NOTICE_MS = 7000;
+
+/** "Islandia", "Islandia y Reikiavik", "Japón, Kioto y Nara". */
+function listNames(names: string[]): string {
+  if (names.length <= 1) return names[0] ?? '';
+  return `${names.slice(0, -1).join(', ')} y ${names[names.length - 1]}`;
+}
 
 /**
  * Mapa mundial de Mi mapa (D3 + TopoJSON en SVG).
@@ -60,7 +72,7 @@ const HIDE_DELAY_MS = 150;
  */
 @Component({
   selector: 'app-world-map',
-  imports: [CountryCard, LucidePlus, LucideMinus, LucideGlobe, LucidePlay],
+  imports: [CountryCard, LucidePlus, LucideMinus, LucideGlobe, LucidePlay, LucideX, RouterLink],
   templateUrl: './world-map.html',
   styleUrl: './world-map.scss',
   host: {
@@ -71,6 +83,10 @@ const HIDE_DELAY_MS = 150;
 export class WorldMap {
   readonly drawing = input.required<MapDrawing>();
   readonly userMap = input.required<UserMap>();
+  /** Recuerdo recién guardado: se animan los lugares que encendió. */
+  readonly saved = input<SavedMemory | null>(null);
+  /** El aviso ya se mostró. */
+  readonly savedShown = output<void>();
 
   protected readonly summaries = inject(CountrySummaries);
   private readonly destroyRef = inject(DestroyRef);
@@ -103,7 +119,49 @@ export class WorldMap {
     });
 
     afterNextRender(() => this.setUpZoom());
-    this.destroyRef.onDestroy(() => this.cancelHide());
+    this.destroyRef.onDestroy(() => {
+      this.cancelHide();
+      this.clearLitTimer();
+    });
+
+    // El aviso de "se encendió" se va solo.
+    effect(() => {
+      if (!this.saved()) return;
+      untracked(() => {
+        this.clearLitTimer();
+        this.litTimer = setTimeout(() => this.savedShown.emit(), LIT_NOTICE_MS);
+      });
+    });
+  }
+
+  // --- Recién encendido ------------------------------------------------------------------
+
+  private litTimer: ReturnType<typeof setTimeout> | null = null;
+
+  protected readonly litCountries = computed(() => new Set(this.saved()?.lit.countries ?? []));
+  protected readonly litCities = computed(() => new Set(this.saved()?.lit.cities ?? []));
+
+  protected readonly litNotice = computed(() => {
+    const saved = this.saved();
+    if (!saved) return null;
+    const countries = saved.lit.countries.map((iso3) => this.anchors().get(iso3)?.name ?? iso3);
+    const cityNames = new Map(this.userMap().cities.map((c) => [c.id, c.name_es]));
+    const cities = saved.lit.cities.flatMap((id) => cityNames.get(id) ?? []);
+    const names = [...countries, ...cities];
+    const text = names.length
+      ? `${listNames(names)} ${names.length === 1 ? 'se encendió' : 'se encendieron'} en tu mapa`
+      : 'Recuerdo guardado';
+    return { text, tripId: saved.tripId };
+  });
+
+  protected dismissLit(): void {
+    this.clearLitTimer();
+    this.savedShown.emit();
+  }
+
+  private clearLitTimer(): void {
+    if (this.litTimer !== null) clearTimeout(this.litTimer);
+    this.litTimer = null;
   }
 
   // --- Estado de los países ------------------------------------------------------------
@@ -174,7 +232,7 @@ export class WorldMap {
       const p = project(city.location);
       if (!p) return [];
       const [x, y] = this.toView(p);
-      return [{ id: city.id, name: city.name_es, x, y }];
+      return [{ id: city.id, name: city.name_es, x, y, lit: this.litCities().has(city.id) }];
     });
   });
 

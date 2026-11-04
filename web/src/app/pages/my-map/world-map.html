@@ -100,6 +100,7 @@
           @for (shape of groups().visited; track shape.id) {
             <path
               class="country country--open"
+              [class.country--lit]="litCountries().has(shape.id)"
               [class.is-active]="open()?.iso3 === shape.id"
               [attr.d]="shape.d"
               [attr.data-id]="shape.id"
@@ -120,6 +121,7 @@
           @for (shape of groups().stopover; track shape.id) {
             <path
               class="country country--open"
+              [class.country--lit]="litCountries().has(shape.id)"
               [class.is-active]="open()?.iso3 === shape.id"
               [attr.d]="shape.d"
               [attr.data-id]="shape.id"
@@ -146,6 +148,7 @@
             <circle
               class="small"
               [class]="'small--' + dotPaint"
+              [class.small--lit]="litCountries().has(dot.id)"
               [attr.cx]="dot.x"
               [attr.cy]="dot.y"
               r="3.5"
@@ -179,7 +182,13 @@
 
       <g class="cities" aria-hidden="true">
         @for (city of cityLights(); track city.id) {
-          <circle class="city__halo" [attr.cx]="city.x" [attr.cy]="city.y" r="7" />
+          <circle
+            class="city__halo"
+            [class.city__halo--lit]="city.lit"
+            [attr.cx]="city.x"
+            [attr.cy]="city.y"
+            r="7"
+          />
         }
         @for (city of cityLights(); track city.id) {
           <circle class="city__light" [attr.cx]="city.x" [attr.cy]="city.y" r="2.2">
@@ -235,6 +244,17 @@
         (pointerenter)="keepCard()"
         (pointerleave)="leave()"
       />
+    }
+
+    @if (litNotice(); as notice) {
+      <div class="lit" role="status">
+        <span class="lit__dot" aria-hidden="true"></span>
+        <span>{{ notice.text }}</span>
+        <a class="lit__link" [routerLink]="['/viajes', notice.tripId]">Ver viaje</a>
+        <button type="button" class="lit__close" aria-label="Cerrar aviso" (click)="dismissLit()">
+          <svg lucideX [size]="14" [strokeWidth]="2.4" aria-hidden="true"></svg>
+        </button>
+      </div>
     }
 
     @if (tooltip(); as tip) {

@@ -5,8 +5,21 @@ import { PlaceholderPage } from './pages/placeholder-page';
 import { MAP_VIEWS } from './views';
 
 export const routes: Routes = [
-  // Mundo: pantalla 1 (fase 3).
-  { path: '', title: 'Mi mapa · Huella', component: MyMapPage },
+  // Mundo: pantalla 1 (fase 3). "Nuevo recuerdo" (pantalla 4) se abre encima, sin desmontar
+  // el mapa.
+  {
+    path: '',
+    title: 'Mi mapa · Huella',
+    component: MyMapPage,
+    children: [
+      {
+        path: 'nuevo-recuerdo',
+        title: 'Nuevo recuerdo · Huella',
+        loadComponent: () =>
+          import('./pages/new-memory/new-memory-dialog').then((m) => m.NewMemoryDialog),
+      },
+    ],
+  },
   // Las demás vistas del encabezado llegan en su fase.
   ...MAP_VIEWS.filter((view) => view.path !== '').map((view) => ({
     path: view.path,

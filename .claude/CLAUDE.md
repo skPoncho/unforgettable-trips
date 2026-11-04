@@ -56,8 +56,17 @@ App web para registrar viajes **centrada en mapas**: cada país, estado de Méxi
 - Fotos: `GET /api/photos/{id}/{display|thumb}` con verificación de dueño (se adelantó la lectura de la 4.6). El original con EXIF nunca se sirve.
 - Tipos del web generados con `make gen-api` en `web/src/app/core/api/` (`openapi.json` y `schema.d.ts`, en git; alias en `types.ts`). CI falla si no están al día. `openapi-typescript` aún no acepta TypeScript 6: corre con `npx` y versión fijada, fuera de `package.json`.
 - Zoom del mapa: botones, arrastre y Ctrl/⌘ + rueda (la rueda sola desplaza la página).
-- Controles de fases posteriores (búsqueda, Compartir, Nuevo recuerdo, globo y Reproduce tu historia) se muestran como en la maqueta con `aria-disabled` y el aviso "Próximamente · fase N".
+- Controles de fases posteriores (búsqueda, Compartir, globo y Reproduce tu historia) se muestran como en la maqueta con `aria-disabled` y el aviso "Próximamente · fase N". "Nuevo recuerdo" funciona desde la fase 4.
 - `/viajes` (lista) y `/viajes/:id` (versión mínima) existen para que la tarjeta y la tira naveguen; la fase 5 completa el detalle.
+
+### Nuevo recuerdo (fase 4)
+- Subida: `POST /api/photos` (multipart `files`), JPG/PNG/HEIC (`pillow-heif`) decididos por contenido; 30 MB por foto y 50 por petición (`max_photo_bytes`, `max_photos_per_upload`). Cada archivo se valida aparte: los rechazados van en `errors`. Duplicados por sha256 del archivo subido (`duplicate: true`, `INSERT … ON CONFLICT`). Procesamiento en `app/services/images.py`; la semilla usa las mismas variantes.
+- Fecha local de la foto en `photos.taken_on` (migración 0006): `taken_at` en UTC cambia de día (8:10 en Kioto es el día anterior en UTC).
+- Los archivos escritos en una transacción que hace rollback se borran solos (`_save_files` en `app/services/photos.py`). Fotos sin recuerdo de más de 24 h: se borran en cada subida. `DELETE /api/photos/{id}` quita una foto.
+- Sugerencias: `POST /api/memories/suggest` (no guarda). Lugar = mediana del GPS de las fotos → `locate()`; monumentos a **menos de 5 km** (Fushimi Inari queda a ~4.8 km del centro de Kioto); viajes cuyas fechas se cruzan, primero los que tienen parada en la misma ciudad. Con `location` o fechas (al "Cambiar lugar") se ignoran las de las fotos.
+- Guardado: `POST /api/memories` acepta `photo_ids` (en orden; la primera es la portada) y `trip_id` + `place`: reusa la parada del viaje con la misma ciudad y fechas que se cruzan (`trips.matching_stop`) o agrega una en orden cronológico. Responde `lit` (países, estados y ciudades que se encendieron o pasaron de escala a visitado, comparando las vistas de estado antes y después).
+- Web: la ventana es la ruta hija `/nuevo-recuerdo` de Mi mapa (el mapa no se desmonta). Al guardar, `MemoryEvents` avisa a Mi mapa, que recarga y anima `lit` (`country--lit`, aviso "… se encendió en tu mapa"). La ventana no se cierra al hacer clic fuera, para no perder fotos.
+- Fotos de prueba con EXIF real en `api/tests/fixtures/` (`kioto_gps.jpg`, `reikiavik_gps.jpg`, `sin_gps.jpg`), generadas con `docker compose run --rm --no-deps api python -m app.seed.fixtures`; una prueba revisa que estén al día. Sirven para arrastrarlas a la ventana.
 
 ## Decisiones abiertas (pregúntale a Carlos antes de fijarlas)
 
@@ -103,7 +112,7 @@ Notas:
 - En pruebas con `httpResource`, `fixture.whenStable()` espera a que respondan las peticiones: primero `TestBed.tick()` y `flush`, después `whenStable()`.
 - Las descargas geográficas viven en `~/.cache/huella/geo` (fuera del repo; se monta en `/cache` de `api` y `geo`; se cambia con `HOST_GEO_CACHE`). Las pruebas de geo cargan los datos reales en `huella_test` la primera vez (fixture `geo_data`).
 - `localhost:4200/dev/geo` es la página de verificación de los datos geográficos y del progreso del usuario semilla (no aparece en el encabezado). La API documentada está en `localhost:8000/docs`.
-- Las fotos viven en el volumen `photos-data` (`/data/photos` en `api`); las pruebas usan una carpeta temporal (fixture `storage`).
+- Las fotos viven en el volumen `photos-data` (`/data/photos` en `api`); las pruebas usan una carpeta temporal (fixture `storage`). `tests/helpers.py` tiene `upload()` / `upload_ids()` para subir fotos de `tests/fixtures`.
 - Fixtures de pruebas de usuario en `tests/conftest.py`: `db` (vacía los datos de usuario al terminar), `make_user`, `act_as` y `user`.
 
 ## Cómo trabajar en este repo

@@ -14,6 +14,9 @@ class Settings(BaseSettings):
     geo_cache_dir: Path = Path("/cache")
     # Fotos (volumen photos-data). En la fase 8 se podrá apuntar a S3.
     storage_dir: Path = Path("/data/photos")
+    # Límites de la subida de fotos.
+    max_photo_bytes: int = 30 * 1024 * 1024
+    max_photos_per_upload: int = 50
     # Hasta la fase 8 (cuentas) todas las peticiones actúan como este usuario (make seed).
     current_user_handle: str = "carlos"
 

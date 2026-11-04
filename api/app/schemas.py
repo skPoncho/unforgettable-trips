@@ -135,26 +135,67 @@ class TripDetailOut(TripOut):
     stops: list[StopOut]
 
 
+# --- Fotos -----------------------------------------------------------------------------
+
+
+class PhotoOut(BaseModel):
+    id: uuid.UUID
+    memory_id: uuid.UUID | None = Field(description="Nula mientras no se guarda el recuerdo")
+    position: int
+    width: int
+    height: int
+    taken_at: datetime | None
+    taken_on: date | None = Field(description="Fecha local de la toma (reloj de la cámara)")
+    location: LonLat | None
+
+
+class UploadedPhoto(PhotoOut):
+    filename: str
+    duplicate: bool = Field(description="Ya la habías subido: se devuelve la existente")
+
+
+class UploadError(BaseModel):
+    filename: str
+    detail: str
+
+
+class PhotoUploadOut(BaseModel):
+    photos: list[UploadedPhoto]
+    errors: list[UploadError] = Field(description="Archivos rechazados (los demás sí se suben)")
+
+
 # --- Recuerdos -------------------------------------------------------------------------
 
 
 class MemoryIn(BaseModel):
     """Va en una parada existente (`stop_id`) o en un lugar nuevo (`place`).
 
-    Con `place` se crea un viaje automático de una parada ("Kioto · mar 2025").
+    Con `place` y `trip_id` va a la parada del viaje con la misma ciudad y fechas que se
+    cruzan, o a una parada nueva. Con `place` solo, se crea un viaje automático de una
+    parada ("Kioto · mar 2025").
     """
 
     stop_id: uuid.UUID | None = None
     place: PlaceIn | None = None
+    trip_id: uuid.UUID | None = Field(None, description="Solo con `place`")
     monument_id: int | None = None
     body: str = Field("", max_length=20_000)
-    occurred_on: date | None = None
+    occurred_on: date | None = Field(None, description="Por omisión, la de la primera foto")
     visibility: Visibility | None = Field(None, description="Nula = hereda la del viaje")
+    photo_ids: list[uuid.UUID] = Field(
+        default_factory=list,
+        max_length=200,
+        description="Fotos subidas y aún sin recuerdo, en orden (la primera es la portada)",
+    )
 
     @model_validator(mode="after")
     def _one_place(self) -> Self:
         if (self.stop_id is None) == (self.place is None):
             raise ValueError("Indica stop_id o place, uno de los dos")
+        if self.trip_id is not None and self.place is None:
+            raise ValueError("trip_id solo va con place")
+        if len(set(self.photo_ids)) != len(self.photo_ids):
+            raise ValueError("Hay fotos repetidas")
         return self
 
 
@@ -187,6 +228,64 @@ class MemoryOut(BaseModel):
     photo_count: int
     created_at: datetime
     updated_at: datetime
+
+
+class LitPlaces(BaseModel):
+    """Lo que se encendió (o pasó de escala a visitado) con este recuerdo."""
+
+    countries: list[str] = Field(description="ISO3")
+    subdivisions: list[str] = Field(description="Códigos de estado, p. ej. MX-OAX")
+    cities: list[int]
+
+
+class MemoryCreatedOut(MemoryOut):
+    lit: LitPlaces
+
+
+class SuggestIn(BaseModel):
+    """Fotos ya subidas. Con `location` (al cambiar de lugar) se ignora el GPS de las fotos;
+    con `arrived_on` y `departed_on`, sus fechas."""
+
+    photo_ids: list[uuid.UUID] = Field(default_factory=list, max_length=200)
+    location: LonLat | None = None
+    arrived_on: date | None = None
+    departed_on: date | None = None
+
+
+class SuggestedPlace(BaseModel):
+    place_name: str
+    location: LonLat
+    city: CityBrief | None
+    subdivision: SubdivisionBrief | None
+    country: CountryBrief
+
+
+class SuggestedMonument(MonumentBrief):
+    distance_km: float
+
+
+class SuggestedTrip(BaseModel):
+    id: uuid.UUID
+    title: str
+    visibility: Visibility
+    is_auto: bool
+    starts_on: date
+    ends_on: date
+    stop_id: uuid.UUID | None = Field(
+        description="Parada de la misma ciudad en esas fechas: el recuerdo se guardará ahí"
+    )
+
+
+class MemorySuggestion(BaseModel):
+    photo_count: int
+    located_count: int = Field(description="Cuántas fotos traen GPS")
+    place: SuggestedPlace | None = Field(description="Nulo si ninguna foto trae GPS")
+    arrived_on: date | None
+    departed_on: date | None
+    monuments: list[SuggestedMonument] = Field(description="A menos de 5 km, el más cercano antes")
+    trips: list[SuggestedTrip] = Field(
+        description="Tus viajes cuyas fechas se cruzan; primero los que tienen parada en la ciudad"
+    )
 
 
 # --- Yo: perfil, progreso, mapa y deseos -----------------------------------------------

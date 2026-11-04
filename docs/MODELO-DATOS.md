@@ -157,13 +157,14 @@ Fechas, días, ciudades, monumentos, fotos y km de ruta se calculan desde las pa
 | `memory_id` | FK memories, nullable | Nula mientras se sube y el recuerdo no se ha guardado |
 | `position` | int | 0 = portada del recuerdo |
 | `storage_key` | text | Prefijo en el `StorageBackend`; variantes `original`, `display` (2048px) y `thumb` (400px) |
-| `mime`, `width`, `height`, `bytes` | | Del original |
+| `mime`, `width`, `height`, `bytes` | | Del original guardado (siempre JPEG; HEIC y PNG se convierten). Medidas ya enderezadas |
 | `sha256` | text | Evita duplicados; único por (`user_id`, `sha256`) |
-| `taken_at` | timestamptz, nullable | EXIF |
+| `taken_at` | timestamptz, nullable | EXIF (`DateTimeOriginal` con su `OffsetTimeOriginal`; sin zona se toma como UTC) |
+| `taken_on` | date, nullable | Fecha local de la toma (reloj de la cámara). Las sugerencias de fecha la usan porque `taken_at` en UTC puede caer en otro día |
 | `location` | Point, nullable | EXIF GPS |
 | `created_at` | timestamptz | |
 
-Las variantes `display` y `thumb` se guardan **sin metadatos EXIF**; el original solo lo ve su dueño. Las fotos sin recuerdo con más de 24 h se borran.
+Las variantes `display` y `thumb` se guardan **sin metadatos EXIF ni perfil ICC** (convertidas a sRGB); el original conserva su EXIF y la API nunca lo sirve. Las fotos sin recuerdo con más de 24 h se borran en cada subida (índice parcial `ix_photos_orphans`).
 
 ### wishlist_items (lista de deseos)
 | Columna | Tipo | Notas |

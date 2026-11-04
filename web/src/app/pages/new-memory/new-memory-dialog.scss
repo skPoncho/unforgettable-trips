@@ -1,0 +1,641 @@
+// Ventana "Nuevo recuerdo" según design/pantallas/Recuerdo.dc.html. Solo tokens.
+
+:host {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 48px 24px;
+  overflow-y: auto;
+}
+
+.scrim {
+  position: fixed;
+  inset: 0;
+  background: var(--scrim);
+}
+
+.dialog {
+  position: relative;
+  width: 100%;
+  max-width: 1080px;
+  display: flex;
+  flex-direction: column;
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-map);
+  box-shadow: var(--shadow-dialog);
+  animation: rise 220ms ease-out;
+}
+
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+}
+
+.muted {
+  color: var(--text-muted);
+  font-size: 14px;
+}
+
+.small {
+  font-size: 13px;
+}
+
+.mono {
+  font-family: var(--font-mono);
+}
+
+// --- Encabezado y pie -------------------------------------------------------------------
+
+.head,
+.foot {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 20px 24px;
+}
+
+.head {
+  border-bottom: 1px solid var(--line);
+}
+
+.foot {
+  padding: 18px 24px;
+  border-top: 1px solid var(--line);
+}
+
+.head__text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.head__title {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: 26px;
+  font-weight: 700;
+}
+
+.round {
+  display: grid;
+  place-items: center;
+  width: var(--tap-target);
+  height: var(--tap-target);
+  padding: 0;
+  border-radius: 50%;
+  border: 1px solid var(--line);
+  background: var(--panel);
+  color: var(--text);
+  cursor: pointer;
+}
+
+.foot__actions {
+  display: flex;
+  gap: 10px;
+}
+
+.button {
+  display: inline-flex;
+  align-items: center;
+  min-height: 48px;
+  padding: 0 20px;
+  border-radius: 14px;
+  border: 1px solid var(--line);
+  background: transparent;
+  color: var(--text);
+  font: inherit;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.button--primary {
+  padding: 0 22px;
+  border-color: var(--accent);
+  background: var(--accent);
+  color: var(--on-accent);
+  font-weight: 700;
+
+  &[aria-disabled='true'] {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+}
+
+// --- Cuerpo ---------------------------------------------------------------------------------
+
+.body {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 24px;
+  padding: 24px;
+}
+
+.column {
+  flex: 1 1 420px;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.column--details {
+  gap: 18px;
+}
+
+// --- Fotos ----------------------------------------------------------------------------------
+
+.drop {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  min-height: 170px;
+  padding: 20px;
+  border-radius: 20px;
+  border: 2px dashed var(--drop-line);
+  background: var(--drop);
+  text-align: center;
+  cursor: pointer;
+  transition:
+    border-color 150ms,
+    background 150ms;
+
+  &:focus-within {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+  }
+}
+
+.drop--over {
+  border-color: var(--accent);
+  background: var(--accent-soft);
+}
+
+.drop__icon,
+.drop__link {
+  color: var(--accent-text);
+}
+
+.drop__title {
+  font-family: var(--font-display);
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.drop__link {
+  font-weight: 600;
+  text-decoration: underline;
+}
+
+.drop__input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+}
+
+.meta {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  font-size: 13px;
+  color: var(--text-muted);
+  text-transform: none;
+
+  .mono {
+    text-transform: uppercase;
+  }
+}
+
+.grid {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.tile {
+  position: relative;
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  border-radius: 14px;
+  background-color: var(--placeholder);
+  background-image: repeating-linear-gradient(135deg, var(--stripe) 0 10px, transparent 10px 20px);
+  cursor: grab;
+
+  &:hover .tile__action,
+  &:focus-within .tile__action {
+    opacity: 1;
+  }
+}
+
+.tile--cover {
+  outline: 2px solid var(--accent);
+  outline-offset: -2px;
+}
+
+.tile--error {
+  cursor: default;
+}
+
+.tile__img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.tile__name {
+  position: absolute;
+  left: 8px;
+  bottom: 8px;
+  right: 8px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 11px;
+  color: var(--text-muted);
+}
+
+.tile__overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 8px;
+  background: var(--overlay);
+  color: var(--text-sub);
+  font-size: 12px;
+  text-align: center;
+}
+
+.tile__overlay--error {
+  color: var(--danger);
+}
+
+.tile__gps {
+  position: absolute;
+  right: 8px;
+  top: 8px;
+  display: grid;
+  place-items: center;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: var(--accent);
+  color: var(--on-accent);
+}
+
+.tile__badge,
+.tile__action {
+  position: absolute;
+  left: 8px;
+  bottom: 8px;
+  padding: 3px 8px;
+  border-radius: var(--radius-pill);
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.tile__badge {
+  background: var(--accent);
+  color: var(--on-accent);
+}
+
+.tile__action {
+  border: 0;
+  background: var(--overlay);
+  color: var(--text);
+  font-family: inherit;
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity 150ms;
+}
+
+.tile__remove {
+  position: absolute;
+  left: 8px;
+  top: 8px;
+  display: grid;
+  place-items: center;
+  width: 26px;
+  height: 26px;
+  padding: 0;
+  border-radius: 50%;
+  border: 0;
+  background: var(--overlay);
+  color: var(--text);
+  cursor: pointer;
+}
+
+// Mientras se arrastra (CDK).
+.cdk-drag-preview {
+  border-radius: 14px;
+  box-shadow: var(--shadow);
+}
+
+.cdk-drag-placeholder {
+  opacity: 0.35;
+}
+
+.cdk-drag-animating,
+.grid.cdk-drop-list-dragging .tile:not(.cdk-drag-placeholder) {
+  transition: transform 200ms ease;
+}
+
+.hint {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0;
+  font-size: 13px;
+  color: var(--text-muted);
+}
+
+.spin {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+// --- Lugar ----------------------------------------------------------------------------------
+
+.place {
+  border-radius: 20px;
+  border: 1px solid var(--line);
+  overflow: hidden;
+}
+
+.place__empty {
+  display: grid;
+  place-items: center;
+  height: 120px;
+  background: var(--map-ocean);
+  color: var(--text-muted);
+}
+
+.place__row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 12px 16px;
+}
+
+.place__text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.place__kicker {
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  color: var(--wish);
+}
+
+.place__name {
+  font-family: var(--font-display);
+  font-size: 20px;
+  font-weight: 700;
+}
+
+.place__none {
+  font-size: 15px;
+  color: var(--text-sub);
+}
+
+.pill {
+  flex-shrink: 0;
+  min-height: 40px;
+  padding: 0 14px;
+  border-radius: var(--radius-pill);
+  border: 1px solid var(--line);
+  background: transparent;
+  color: var(--text);
+  font: inherit;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+// --- Campos ----------------------------------------------------------------------------------
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  min-width: 0;
+}
+
+.field__label {
+  padding: 0;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.dates {
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 8px 12px;
+
+  .field__label {
+    width: 100%;
+    margin-bottom: 8px;
+  }
+}
+
+.dates__item {
+  flex: 1 1 160px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.input {
+  min-height: 44px;
+  padding: 0 12px;
+  border-radius: 12px;
+  border: 1px solid var(--line-strong);
+  background: var(--field);
+  color: var(--text);
+  font: inherit;
+  font-size: 15px;
+}
+
+.textarea {
+  resize: vertical;
+  padding: 14px;
+  border-radius: 16px;
+  font-size: 16px;
+  line-height: 1.5;
+}
+
+.options {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.option {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2px;
+  padding: 12px 14px;
+  border-radius: 14px;
+  border: 1.5px solid var(--line);
+  background: transparent;
+  color: var(--text);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.option--on {
+  border-color: var(--accent);
+  background: var(--accent-soft);
+}
+
+.option__label {
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.option__hint {
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+.links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 38px;
+  padding: 0 12px;
+  border-radius: var(--radius-pill);
+  border: 1.5px solid transparent;
+  background: transparent;
+  color: var(--text);
+  font: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.chip--on {
+  border-color: var(--inverse);
+  background: var(--inverse);
+  color: var(--on-inverse);
+}
+
+.chip--suggested {
+  border-style: dashed;
+  border-color: var(--accent-text);
+  color: var(--accent-text);
+}
+
+.chip--select {
+  position: relative;
+  padding-right: 4px;
+
+  &:focus-within {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+  }
+}
+
+.chip__select {
+  max-width: 320px;
+  padding: 0 8px 0 0;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+  outline: none;
+
+  option,
+  optgroup {
+    background: var(--panel);
+    color: var(--text);
+  }
+}
+
+.segments {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.segment {
+  min-height: 38px;
+  padding: 0 14px;
+  border-radius: var(--radius-pill);
+  border: 1px solid var(--line);
+  background: transparent;
+  color: var(--text-sub);
+  font: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.segment--on {
+  border-color: var(--inverse);
+  background: var(--inverse);
+  color: var(--on-inverse);
+}
+
+@media (max-width: 600px) {
+  :host {
+    padding: 16px 12px;
+  }
+
+  .grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .foot__actions {
+    width: 100%;
+
+    .button {
+      flex: 1;
+      justify-content: center;
+    }
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .dialog,
+  .spin {
+    animation: none;
+  }
+}

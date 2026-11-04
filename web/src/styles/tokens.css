@@ -64,6 +64,16 @@
   --dot-off: #1f3446;
   --placeholder: #16293a;
   --stripe: rgba(255, 255, 255, 0.035);
+
+  /* Formularios y ventanas (pantalla 4). */
+  --field: #0e1b25;
+  --line-strong: #35506a;
+  --drop: #0e1b25;
+  --drop-line: #4a6478;
+  --accent-soft: rgba(244, 183, 64, 0.1);
+  --accent-ring: rgba(244, 183, 64, 0.3);
+  --danger: #ff8a7a;
+  --shadow-dialog: 0 30px 80px rgba(0, 0, 0, 0.55);
 }
 
 :root[data-theme='light'] {
@@ -110,6 +120,15 @@
   --dot-off: #d5dde3;
   --placeholder: #dce4ea;
   --stripe: rgba(15, 30, 42, 0.045);
+
+  --field: #f8fafb;
+  --line-strong: #b9c7d2;
+  --drop: #f4f7f9;
+  --drop-line: #a9b8c4;
+  --accent-soft: #fff6e3;
+  --accent-ring: rgba(242, 174, 46, 0.35);
+  --danger: #b3261e;
+  --shadow-dialog: 0 30px 80px rgba(15, 30, 42, 0.25);
 }
 
 /* Respaldo sin JavaScript: mismos valores que [data-theme='light']. */
@@ -158,5 +177,14 @@
     --dot-off: #d5dde3;
     --placeholder: #dce4ea;
     --stripe: rgba(15, 30, 42, 0.045);
+
+    --field: #f8fafb;
+    --line-strong: #b9c7d2;
+    --drop: #f4f7f9;
+    --drop-line: #a9b8c4;
+    --accent-soft: #fff6e3;
+    --accent-ring: rgba(242, 174, 46, 0.35);
+    --danger: #b3261e;
+    --shadow-dialog: 0 30px 80px rgba(15, 30, 42, 0.25);
   }
 }

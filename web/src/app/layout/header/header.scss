@@ -119,6 +119,8 @@
   font-size: 14px;
   font-weight: 500;
   white-space: nowrap;
+  text-decoration: none;
+  cursor: pointer;
 
   &[aria-disabled='true'] {
     cursor: not-allowed;

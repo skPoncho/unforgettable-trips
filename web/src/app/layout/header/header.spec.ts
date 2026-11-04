@@ -26,6 +26,14 @@ describe('Header', () => {
     expect(labels).toEqual(['Mundo', 'Mi país', 'Ciudades', 'Monumentos']);
   });
 
+  it('"Nuevo recuerdo" abre la ventana sobre el mapa', async () => {
+    const { element } = await render();
+    const link = element.querySelector<HTMLAnchorElement>('.pill-button--primary')!;
+    expect(link.textContent?.trim()).toBe('Nuevo recuerdo');
+    expect(link.getAttribute('href')).toBe('/nuevo-recuerdo');
+    expect(link.hasAttribute('aria-disabled')).toBe(false);
+  });
+
   it('el botón de tema alterna entre oscuro y claro', async () => {
     const { fixture, element } = await render();
     const button = element.querySelector<HTMLButtonElement>('.theme-toggle')!;

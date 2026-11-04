@@ -169,4 +169,38 @@ describe('WorldMap', () => {
     expect(zoomIn.disabled).toBe(false);
     expect(zoomOut.disabled).toBe(true);
   });
+
+  it('anima y anuncia lo que encendió el recuerdo recién guardado', async () => {
+    const { fixture, el } = await render();
+    const shown = vi.fn();
+    fixture.componentInstance.savedShown.subscribe(shown);
+    fixture.componentRef.setInput('saved', {
+      memoryId: 'm1',
+      tripId: JAPAN_TRIP_ID,
+      lit: { countries: ['JPN'], subdivisions: [], cities: [userMap.cities[0].id] },
+    });
+    await fixture.whenStable();
+
+    expect(el.querySelector('[data-id="JPN"]')?.classList).toContain('country--lit');
+    expect(el.querySelector('.city__halo--lit')).not.toBeNull();
+    expect(el.querySelector('.lit')?.textContent).toContain(
+      `Japón y ${userMap.cities[0].name_es} se encendieron en tu mapa`,
+    );
+    expect(el.querySelector('.lit__link')?.getAttribute('href')).toBe(`/viajes/${JAPAN_TRIP_ID}`);
+
+    el.querySelector<HTMLButtonElement>('.lit__close')!.click();
+    expect(shown).toHaveBeenCalledOnce();
+  });
+
+  it('sin lugares nuevos solo dice que se guardó', async () => {
+    const { fixture, el } = await render();
+    fixture.componentRef.setInput('saved', {
+      memoryId: 'm1',
+      tripId: JAPAN_TRIP_ID,
+      lit: { countries: [], subdivisions: [], cities: [] },
+    });
+    await fixture.whenStable();
+    expect(el.querySelector('.lit')?.textContent).toContain('Recuerdo guardado');
+    expect(el.querySelector('.country--lit')).toBeNull();
+  });
 });
