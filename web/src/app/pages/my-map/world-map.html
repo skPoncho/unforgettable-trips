@@ -1,0 +1,280 @@
+<section class="frame" aria-label="Mapa del mundo">
+  <div class="top">
+    <div class="layers" role="group" aria-label="Capas del mapa">
+      @for (layer of layerOptions; track layer.id) {
+        <button
+          type="button"
+          class="chip"
+          [class.chip--on]="layers().has(layer.id)"
+          [attr.aria-pressed]="layers().has(layer.id)"
+          (click)="toggleLayer(layer.id)"
+        >
+          {{ layer.label }}
+        </button>
+      }
+    </div>
+    <div class="zoom">
+      <button
+        type="button"
+        class="square"
+        aria-label="Acercar"
+        [disabled]="!canZoomIn()"
+        (click)="zoomBy(zoomStep)"
+      >
+        <svg lucidePlus [size]="16" [strokeWidth]="2.2" aria-hidden="true"></svg>
+      </button>
+      <button
+        type="button"
+        class="square"
+        aria-label="Alejar"
+        [disabled]="!canZoomOut()"
+        (click)="zoomBy(1 / zoomStep)"
+      >
+        <svg lucideMinus [size]="16" [strokeWidth]="2.2" aria-hidden="true"></svg>
+      </button>
+      <button
+        type="button"
+        class="square"
+        aria-label="Vista de globo 3D (próximamente)"
+        aria-disabled="true"
+        title="Próximamente · fase 7"
+      >
+        <svg lucideGlobe [size]="18" [strokeWidth]="1.8" aria-hidden="true"></svg>
+      </button>
+    </div>
+  </div>
+
+  @let d = drawing();
+  @let t = transform();
+  <div class="stage">
+    <svg
+      #svg
+      class="map"
+      [attr.viewBox]="'0 0 ' + d.width + ' ' + d.height"
+      role="group"
+      aria-label="Países del mundo. Los visitados se pueden abrir con Tab y Enter."
+    >
+      <defs>
+        <filter id="map-glow" x="-20%" y="-20%" width="140%" height="140%">
+          <feGaussianBlur stdDeviation="6" result="blur" />
+          <feMerge>
+            <feMergeNode in="blur" />
+            <feMergeNode in="SourceGraphic" />
+          </feMerge>
+        </filter>
+        <filter id="map-halo" x="-50%" y="-50%" width="200%" height="200%">
+          <feGaussianBlur stdDeviation="3" />
+        </filter>
+      </defs>
+
+      <g [attr.transform]="'translate(' + t.x + ',' + t.y + ') scale(' + t.k + ')'">
+        <path class="sphere" [attr.d]="d.sphere" />
+        <path class="graticule" [attr.d]="d.graticule" />
+
+        <g class="land">
+          @for (shape of groups().land; track shape.id) {
+            <path
+              class="country"
+              [class.country--territory]="shape.territory"
+              [attr.d]="shape.d"
+              [attr.data-id]="shape.id"
+              (pointerenter)="showTooltip($event, shape.name, shape.territory)"
+              (pointermove)="showTooltip($event, shape.name, shape.territory)"
+              (pointerleave)="hideTooltip()"
+            />
+          }
+        </g>
+        <g class="land land--wish">
+          @for (shape of groups().wish; track shape.id) {
+            <path
+              class="country"
+              [attr.d]="shape.d"
+              [attr.data-id]="shape.id"
+              (pointerenter)="showTooltip($event, shape.name, shape.territory)"
+              (pointermove)="showTooltip($event, shape.name, shape.territory)"
+              (pointerleave)="hideTooltip()"
+            />
+          }
+        </g>
+        <g class="land land--visited">
+          @for (shape of groups().visited; track shape.id) {
+            <path
+              class="country country--open"
+              [class.is-active]="open()?.iso3 === shape.id"
+              [attr.d]="shape.d"
+              [attr.data-id]="shape.id"
+              tabindex="0"
+              role="button"
+              [attr.aria-label]="countryLabel(shape.id, shape.name)"
+              (pointerenter)="enter(shape.id)"
+              (pointerleave)="leave()"
+              (focus)="enter(shape.id)"
+              (blur)="leave()"
+              (click)="pin($event, shape.id)"
+              (keydown.enter)="pin($event, shape.id)"
+              (keydown.space)="pin($event, shape.id)"
+            />
+          }
+        </g>
+        <g class="land land--stopover">
+          @for (shape of groups().stopover; track shape.id) {
+            <path
+              class="country country--open"
+              [class.is-active]="open()?.iso3 === shape.id"
+              [attr.d]="shape.d"
+              [attr.data-id]="shape.id"
+              tabindex="0"
+              role="button"
+              [attr.aria-label]="countryLabel(shape.id, shape.name)"
+              (pointerenter)="enter(shape.id)"
+              (pointerleave)="leave()"
+              (focus)="enter(shape.id)"
+              (blur)="leave()"
+              (click)="pin($event, shape.id)"
+              (keydown.enter)="pin($event, shape.id)"
+              (keydown.space)="pin($event, shape.id)"
+            />
+          }
+        </g>
+      </g>
+
+      <!-- Países chicos sin polígono visible: un punto que no crece con el zoom. -->
+      <g class="small-countries">
+        @for (dot of smallCountries(); track dot.id) {
+          @let dotPaint = paint(dot.id);
+          @if (dotPaint === 'visited' || dotPaint === 'stopover') {
+            <circle
+              class="small"
+              [class]="'small--' + dotPaint"
+              [attr.cx]="dot.x"
+              [attr.cy]="dot.y"
+              r="3.5"
+              [attr.data-id]="dot.id"
+              tabindex="0"
+              role="button"
+              [attr.aria-label]="countryLabel(dot.id, dot.name)"
+              (pointerenter)="enter(dot.id)"
+              (pointerleave)="leave()"
+              (focus)="enter(dot.id)"
+              (blur)="leave()"
+              (click)="pin($event, dot.id)"
+              (keydown.enter)="pin($event, dot.id)"
+              (keydown.space)="pin($event, dot.id)"
+            />
+          } @else {
+            <circle
+              class="small"
+              [class.small--wish]="dotPaint === 'wish'"
+              [attr.cx]="dot.x"
+              [attr.cy]="dot.y"
+              r="3"
+              [attr.data-id]="dot.id"
+              (pointerenter)="showTooltip($event, dot.name, dot.territory)"
+              (pointermove)="showTooltip($event, dot.name, dot.territory)"
+              (pointerleave)="hideTooltip()"
+            />
+          }
+        }
+      </g>
+
+      <g class="cities" aria-hidden="true">
+        @for (city of cityLights(); track city.id) {
+          <circle class="city__halo" [attr.cx]="city.x" [attr.cy]="city.y" r="7" />
+        }
+        @for (city of cityLights(); track city.id) {
+          <circle class="city__light" [attr.cx]="city.x" [attr.cy]="city.y" r="2.2">
+            <title>{{ city.name }}</title>
+          </circle>
+        }
+      </g>
+
+      <g class="monuments">
+        @for (m of monumentPins(); track m.id) {
+          <rect
+            class="monument"
+            [attr.x]="m.x - 3.5"
+            [attr.y]="m.y - 3.5"
+            width="7"
+            height="7"
+            [attr.transform]="'rotate(45 ' + m.x + ' ' + m.y + ')'"
+          >
+            <title>{{ m.name }}</title>
+          </rect>
+        }
+      </g>
+    </svg>
+
+    @for (label of stopoverLabels(); track label.iso3) {
+      <span
+        class="ring"
+        aria-hidden="true"
+        [style.left.px]="label.x"
+        [style.top.px]="label.y"
+      ></span>
+      <div class="badge" [style.left.px]="label.x" [style.top.px]="label.y">
+        <span class="badge__kind">ESCALA</span> {{ label.text }}
+      </div>
+    }
+
+    @if (open(); as o) {
+      <span
+        class="ring ring--open"
+        aria-hidden="true"
+        [style.left.px]="o.x"
+        [style.top.px]="o.y"
+      ></span>
+      <app-country-card
+        #card
+        class="card"
+        role="dialog"
+        [attr.aria-label]="'Tarjeta de ' + o.name"
+        [style.left.px]="o.left"
+        [style.top.px]="o.top"
+        [summary]="openSummary()"
+        [name]="o.name"
+        (pointerenter)="keepCard()"
+        (pointerleave)="leave()"
+      />
+    }
+
+    @if (tooltip(); as tip) {
+      <div class="tooltip" role="status" [style.left.px]="tip.x" [style.top.px]="tip.y">
+        <strong>{{ tip.name }}</strong>
+        <span class="tooltip__detail">{{ tip.detail }}</span>
+      </div>
+    }
+  </div>
+
+  <div class="bottom">
+    <div class="history" title="Próximamente · fase 7">
+      <button
+        type="button"
+        class="play"
+        aria-label="Reproducir historia (próximamente)"
+        aria-disabled="true"
+      >
+        <svg lucidePlay [size]="16" fill="currentColor" aria-hidden="true"></svg>
+      </button>
+      <div class="history__body">
+        <span class="history__text">
+          Reproduce tu historia: mira cómo se encendió tu mapa, año por año
+        </span>
+        <ol class="years" [style.--years]="years().length">
+          @for (year of years(); track year; let last = $last) {
+            <li class="year" [class.year--current]="last">
+              <span class="year__bar"></span>
+              <span class="year__label">{{ year }}</span>
+            </li>
+          }
+        </ol>
+      </div>
+    </div>
+
+    <ul class="legend" aria-label="Leyenda">
+      <li><span class="swatch swatch--visited"></span>Visitado</li>
+      <li><span class="swatch swatch--stopover"></span>Escala</li>
+      <li><span class="swatch swatch--wish"></span>Lista de deseos</li>
+      <li><span class="swatch swatch--off"></span>Por descubrir</li>
+    </ul>
+  </div>
+</section>

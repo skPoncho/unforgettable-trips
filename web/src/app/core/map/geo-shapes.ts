@@ -3,7 +3,7 @@ import type { Feature, FeatureCollection, Geometry } from 'geojson';
 import { feature } from 'topojson-client';
 import type { GeometryCollection, Topology } from 'topojson-specification';
 
-import type { Country, Subdivision } from '../../core/geo-api';
+import type { Country, LonLat, Subdivision } from '../geo-api';
 
 export interface Shape {
   id: string;
@@ -11,7 +11,11 @@ export interface Shape {
   name: string;
   /** Territorio que se pinta pero no suma al progreso. */
   territory: boolean;
+  /** Punto donde se ancla su etiqueta o tarjeta (el punto de etiqueta del catálogo). */
+  anchor: Point;
 }
+
+export type Point = readonly [x: number, y: number];
 
 export interface Dot {
   id: string;
@@ -29,6 +33,8 @@ export interface MapDrawing {
   shapes: Shape[];
   /** Lugares sin polígono visible a esta escala: se dibujan como punto. */
   dots: Dot[];
+  /** Proyecta un punto geográfico a coordenadas del dibujo (null si queda fuera). */
+  project: (location: LonLat) => Point | null;
 }
 
 type Props = Record<string, unknown> | null;
@@ -41,6 +47,13 @@ function features(topology: Topology, objectName?: string): Feature<Geometry, Pr
 
 function round(n: number) {
   return Math.round(n * 10) / 10;
+}
+
+function projector(projection: GeoProjection) {
+  return (location: LonLat): Point | null => {
+    const p = projection([location.lon, location.lat]);
+    return p ? [round(p[0]), round(p[1])] : null;
+  };
 }
 
 /** Mundo en Equal Earth (mismo encuadre que las maquetas), con nombres de la API. */
@@ -56,6 +69,7 @@ export function drawWorld(topology: Topology, countries: Country[], width = 1040
       { type: 'Sphere' },
     );
   const path = geoPath(projection).digits(1);
+  const project = projector(projection);
 
   const shapes: Shape[] = [];
   const drawn = new Set<string>();
@@ -65,11 +79,15 @@ export function drawWorld(topology: Topology, countries: Country[], width = 1040
     if (!d) continue;
     const country = byIso3.get(id);
     drawn.add(id);
+    const [cx, cy] = path.centroid(f);
     shapes.push({
       id,
       d,
       name: country?.name_es ?? id,
       territory: country ? !country.counts_in_progress : true,
+      // El centroide de países con territorios lejanos (Francia, EUA) cae fuera: se prefiere
+      // el punto de etiqueta del catálogo.
+      anchor: (country?.label_point && project(country.label_point)) || [round(cx), round(cy)],
     });
   }
 
@@ -83,6 +101,7 @@ export function drawWorld(topology: Topology, countries: Country[], width = 1040
       countries.filter((c) => !drawn.has(c.iso3)),
       projection,
     ),
+    project,
   } satisfies MapDrawing;
 }
 
@@ -126,8 +145,11 @@ export function drawMexico(topology: Topology, states: Subdivision[], width = 80
     shapes: list.flatMap((f) => {
       const d = path(f);
       const id = String(f.id);
-      return d ? [{ id, d, name: byCode.get(id) ?? id, territory: false }] : [];
+      const [cx, cy] = path.centroid(f);
+      const anchor: Point = [round(cx), round(cy)];
+      return d ? [{ id, d, name: byCode.get(id) ?? id, territory: false, anchor }] : [];
     }),
     dots: [],
+    project: projector(projection),
   } satisfies MapDrawing;
 }

@@ -6,6 +6,8 @@ const angular = require('angular-eslint');
 const prettier = require('eslint-config-prettier');
 
 module.exports = defineConfig([
+  // Generado por make gen-api desde el OpenAPI de la api: no se edita a mano.
+  { ignores: ['src/app/core/api/schema.d.ts'] },
   {
     files: ['**/*.ts'],
     extends: [

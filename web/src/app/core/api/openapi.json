@@ -1,0 +1,3131 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Huella API",
+    "version": "0.3.0"
+  },
+  "paths": {
+    "/health": {
+      "get": {
+        "tags": ["health"],
+        "summary": "Health",
+        "description": "Confirma que la BD responde y que PostGIS está activo.",
+        "operationId": "health_health_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Health"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/geo/countries": {
+      "get": {
+        "tags": ["geo"],
+        "summary": "List Countries",
+        "description": "Países que suman al progreso (195); con `all=true`, también los territorios.",
+        "operationId": "list_countries_api_geo_countries_get",
+        "parameters": [
+          {
+            "name": "all",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "boolean",
+              "description": "Incluye los territorios que no suman",
+              "default": false,
+              "title": "All"
+            },
+            "description": "Incluye los territorios que no suman"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/CountryOut"
+                  },
+                  "title": "Response List Countries Api Geo Countries Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/geo/subdivisions": {
+      "get": {
+        "tags": ["geo"],
+        "summary": "List Subdivisions",
+        "description": "Estados de un país (por ahora solo México tiene).",
+        "operationId": "list_subdivisions_api_geo_subdivisions_get",
+        "parameters": [
+          {
+            "name": "country",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 3,
+              "maxLength": 3,
+              "description": "ISO3, p. ej. MEX",
+              "title": "Country"
+            },
+            "description": "ISO3, p. ej. MEX"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/SubdivisionOut"
+                  },
+                  "title": "Response List Subdivisions Api Geo Subdivisions Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/geo/cities": {
+      "get": {
+        "tags": ["geo"],
+        "summary": "Search Cities",
+        "description": "Autocompletar: sin acentos ni mayúsculas, en español o en el nombre original.\n\nPrimero las que empiezan con el texto y, dentro de cada grupo, las más pobladas.",
+        "operationId": "search_cities_api_geo_cities_get",
+        "parameters": [
+          {
+            "name": "q",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 2,
+              "maxLength": 80,
+              "description": "Texto a buscar",
+              "title": "Q"
+            },
+            "description": "Texto a buscar"
+          },
+          {
+            "name": "country",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "minLength": 3,
+                  "maxLength": 3
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Country"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 50,
+              "minimum": 1,
+              "default": 10,
+              "title": "Limit"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/CityOut"
+                  },
+                  "title": "Response Search Cities Api Geo Cities Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/geo/reverse": {
+      "get": {
+        "tags": ["geo"],
+        "summary": "Reverse",
+        "description": "País, estado y ciudad más cercana de un punto.\n\nSi el punto cae fuera de todo polígono (costa, aeropuerto junto al mar) se toma el\npaís más cercano a menos de 20 km.",
+        "operationId": "reverse_api_geo_reverse_get",
+        "parameters": [
+          {
+            "name": "lat",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "number",
+              "maximum": 90,
+              "minimum": -90,
+              "title": "Lat"
+            }
+          },
+          {
+            "name": "lon",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "number",
+              "maximum": 180,
+              "minimum": -180,
+              "title": "Lon"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ReverseOut"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "El punto no está en ningún país (mar abierto)"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/me": {
+      "get": {
+        "tags": ["me"],
+        "summary": "Get Me",
+        "operationId": "get_me_api_me_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MeOut"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/me/progress": {
+      "get": {
+        "tags": ["me"],
+        "summary": "Get Progress",
+        "description": "Países sobre 195 (las escalas suman), continentes, estados de México y conteos.",
+        "operationId": "get_progress_api_me_progress_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProgressOut"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/me/map": {
+      "get": {
+        "tags": ["me"],
+        "summary": "Get Map",
+        "description": "Estado de cada país, estado y ciudad visitados, monumentos sellados y deseos.",
+        "operationId": "get_map_api_me_map_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MapOut"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/me/countries/{iso3}": {
+      "get": {
+        "tags": ["me"],
+        "summary": "Get Country",
+        "description": "Tarjeta de país: fechas, viajes, conteos, fotos de muestra y escalas.",
+        "operationId": "get_country_api_me_countries__iso3__get",
+        "parameters": [
+          {
+            "name": "iso3",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 3,
+              "maxLength": 3,
+              "description": "ISO3, p. ej. ISL",
+              "title": "Iso3"
+            },
+            "description": "ISO3, p. ej. ISL"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CountrySummaryOut"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "País desconocido o no visitado"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/me/wishlist": {
+      "get": {
+        "tags": ["me"],
+        "summary": "Get Wishlist",
+        "operationId": "get_wishlist_api_me_wishlist_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/WishlistEntry"
+                  },
+                  "type": "array",
+                  "title": "Response Get Wishlist Api Me Wishlist Get"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/me/wishlist/{iso3}": {
+      "put": {
+        "tags": ["me"],
+        "summary": "Add Wish",
+        "operationId": "add_wish_api_me_wishlist__iso3__put",
+        "parameters": [
+          {
+            "name": "iso3",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 3,
+              "maxLength": 3,
+              "description": "ISO3, p. ej. ISL",
+              "title": "Iso3"
+            },
+            "description": "ISO3, p. ej. ISL"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Successful Response"
+          },
+          "404": {
+            "description": "País desconocido"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": ["me"],
+        "summary": "Remove Wish",
+        "operationId": "remove_wish_api_me_wishlist__iso3__delete",
+        "parameters": [
+          {
+            "name": "iso3",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 3,
+              "maxLength": 3,
+              "description": "ISO3, p. ej. ISL",
+              "title": "Iso3"
+            },
+            "description": "ISO3, p. ej. ISL"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Successful Response"
+          },
+          "404": {
+            "description": "País desconocido"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/trips": {
+      "get": {
+        "tags": ["trips"],
+        "summary": "List Trips",
+        "description": "Tus viajes, del más reciente al más antiguo.",
+        "operationId": "list_trips_api_trips_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/TripOut"
+                  },
+                  "type": "array",
+                  "title": "Response List Trips Api Trips Get"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": ["trips"],
+        "summary": "Create Trip",
+        "operationId": "create_trip_api_trips_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TripIn"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TripDetailOut"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/trips/{trip_id}": {
+      "get": {
+        "tags": ["trips"],
+        "summary": "Get Trip",
+        "operationId": "get_trip_api_trips__trip_id__get",
+        "parameters": [
+          {
+            "name": "trip_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Trip Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TripDetailOut"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "No existe o no es tuyo"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "tags": ["trips"],
+        "summary": "Update Trip",
+        "operationId": "update_trip_api_trips__trip_id__patch",
+        "parameters": [
+          {
+            "name": "trip_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Trip Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TripPatch"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TripDetailOut"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "No existe o no es tuyo"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": ["trips"],
+        "summary": "Delete Trip",
+        "description": "Borra el viaje con sus paradas, recuerdos y fotos.",
+        "operationId": "delete_trip_api_trips__trip_id__delete",
+        "parameters": [
+          {
+            "name": "trip_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Trip Id"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Successful Response"
+          },
+          "404": {
+            "description": "No existe o no es tuyo"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/trips/{trip_id}/stops": {
+      "post": {
+        "tags": ["trips"],
+        "summary": "Add Stop",
+        "description": "Agrega una parada; país, estado y ciudad se calculan desde el punto.",
+        "operationId": "add_stop_api_trips__trip_id__stops_post",
+        "parameters": [
+          {
+            "name": "trip_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Trip Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/StopIn"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StopOut"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "No existe o no es tuyo"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/trips/{trip_id}/stops/order": {
+      "put": {
+        "tags": ["trips"],
+        "summary": "Reorder Stops",
+        "description": "Reordena las paradas: `stop_ids` trae todas, en el orden nuevo.",
+        "operationId": "reorder_stops_api_trips__trip_id__stops_order_put",
+        "parameters": [
+          {
+            "name": "trip_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Trip Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/StopOrderIn"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/StopOut"
+                  },
+                  "title": "Response Reorder Stops Api Trips  Trip Id  Stops Order Put"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "No existe o no es tuyo"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/stops/{stop_id}": {
+      "get": {
+        "tags": ["trips"],
+        "summary": "Get Stop",
+        "operationId": "get_stop_api_stops__stop_id__get",
+        "parameters": [
+          {
+            "name": "stop_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Stop Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StopOut"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "No existe o no es tuyo"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "tags": ["trips"],
+        "summary": "Update Stop",
+        "operationId": "update_stop_api_stops__stop_id__patch",
+        "parameters": [
+          {
+            "name": "stop_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Stop Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/StopPatch"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StopOut"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "No existe o no es tuyo"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": ["trips"],
+        "summary": "Delete Stop",
+        "description": "Borra la parada con sus recuerdos y fotos; las demás se renumeran.",
+        "operationId": "delete_stop_api_stops__stop_id__delete",
+        "parameters": [
+          {
+            "name": "stop_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Stop Id"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Successful Response"
+          },
+          "404": {
+            "description": "No existe o no es tuyo"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/memories": {
+      "get": {
+        "tags": ["memories"],
+        "summary": "List Memories",
+        "description": "Tus recuerdos, en el orden del viaje. Se pueden filtrar por viaje o parada.",
+        "operationId": "list_memories_api_memories_get",
+        "parameters": [
+          {
+            "name": "trip_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "format": "uuid"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Trip Id"
+            }
+          },
+          {
+            "name": "stop_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "format": "uuid"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Stop Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/MemoryOut"
+                  },
+                  "title": "Response List Memories Api Memories Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": ["memories"],
+        "summary": "Create Memory",
+        "description": "Crea un recuerdo en una parada o, con `place`, en un viaje automático nuevo.\n\nLa visibilidad puede ser igual o más privada que la del viaje, nunca más abierta (422).",
+        "operationId": "create_memory_api_memories_post",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/MemoryIn"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MemoryOut"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "No existe o no es tuyo"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/memories/{memory_id}": {
+      "get": {
+        "tags": ["memories"],
+        "summary": "Get Memory",
+        "operationId": "get_memory_api_memories__memory_id__get",
+        "parameters": [
+          {
+            "name": "memory_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Memory Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MemoryOut"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "No existe o no es tuyo"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "tags": ["memories"],
+        "summary": "Update Memory",
+        "operationId": "update_memory_api_memories__memory_id__patch",
+        "parameters": [
+          {
+            "name": "memory_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Memory Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/MemoryPatch"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MemoryOut"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "No existe o no es tuyo"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": ["memories"],
+        "summary": "Delete Memory",
+        "description": "Borra el recuerdo y sus fotos.",
+        "operationId": "delete_memory_api_memories__memory_id__delete",
+        "parameters": [
+          {
+            "name": "memory_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Memory Id"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Successful Response"
+          },
+          "404": {
+            "description": "No existe o no es tuyo"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/photos/{photo_id}/{variant}": {
+      "get": {
+        "tags": ["photos"],
+        "summary": "Get Photo",
+        "description": "Variante `display` (para ver) o `thumb` (miniatura) de una foto tuya.",
+        "operationId": "get_photo_api_photos__photo_id___variant__get",
+        "parameters": [
+          {
+            "name": "photo_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Photo Id"
+            }
+          },
+          {
+            "name": "variant",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "enum": ["display", "thumb"],
+              "type": "string",
+              "title": "Variant"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "La imagen",
+            "content": {
+              "image/jpeg": {}
+            }
+          },
+          "404": {
+            "description": "No existe o no es tuya"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "CityBrief": {
+        "properties": {
+          "id": {
+            "type": "integer",
+            "title": "Id"
+          },
+          "name_es": {
+            "type": "string",
+            "title": "Name Es"
+          }
+        },
+        "type": "object",
+        "required": ["id", "name_es"],
+        "title": "CityBrief"
+      },
+      "CityOut": {
+        "properties": {
+          "id": {
+            "type": "integer",
+            "title": "Id"
+          },
+          "name_es": {
+            "type": "string",
+            "title": "Name Es"
+          },
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "country_iso3": {
+            "type": "string",
+            "title": "Country Iso3"
+          },
+          "country_name_es": {
+            "type": "string",
+            "title": "Country Name Es"
+          },
+          "subdivision_code": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Subdivision Code"
+          },
+          "population": {
+            "type": "integer",
+            "title": "Population"
+          },
+          "location": {
+            "$ref": "#/components/schemas/LonLat"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "name_es",
+          "name",
+          "country_iso3",
+          "country_name_es",
+          "subdivision_code",
+          "population",
+          "location"
+        ],
+        "title": "CityOut"
+      },
+      "CityStatus": {
+        "properties": {
+          "id": {
+            "type": "integer",
+            "title": "Id"
+          },
+          "name_es": {
+            "type": "string",
+            "title": "Name Es"
+          },
+          "country_iso3": {
+            "type": "string",
+            "title": "Country Iso3"
+          },
+          "location": {
+            "$ref": "#/components/schemas/LonLat"
+          },
+          "status": {
+            "type": "string",
+            "enum": ["visited", "stopover"],
+            "title": "Status"
+          },
+          "first_visited_on": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "First Visited On"
+          },
+          "is_home": {
+            "type": "boolean",
+            "title": "Is Home"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "name_es",
+          "country_iso3",
+          "location",
+          "status",
+          "first_visited_on",
+          "is_home"
+        ],
+        "title": "CityStatus"
+      },
+      "Continent": {
+        "type": "string",
+        "enum": ["america", "europe", "asia", "africa", "oceania"],
+        "title": "Continent"
+      },
+      "ContinentProgress": {
+        "properties": {
+          "visited": {
+            "type": "integer",
+            "title": "Visited"
+          },
+          "total": {
+            "type": "integer",
+            "title": "Total"
+          },
+          "continent": {
+            "$ref": "#/components/schemas/Continent"
+          }
+        },
+        "type": "object",
+        "required": ["visited", "total", "continent"],
+        "title": "ContinentProgress"
+      },
+      "CountriesProgress": {
+        "properties": {
+          "visited": {
+            "type": "integer",
+            "title": "Visited"
+          },
+          "total": {
+            "type": "integer",
+            "title": "Total"
+          },
+          "stopover_only": {
+            "type": "integer",
+            "title": "Stopover Only",
+            "description": "Cuántos de los visitados son solo escala"
+          }
+        },
+        "type": "object",
+        "required": ["visited", "total", "stopover_only"],
+        "title": "CountriesProgress"
+      },
+      "CountryBrief": {
+        "properties": {
+          "iso3": {
+            "type": "string",
+            "title": "Iso3"
+          },
+          "name_es": {
+            "type": "string",
+            "title": "Name Es"
+          }
+        },
+        "type": "object",
+        "required": ["iso3", "name_es"],
+        "title": "CountryBrief"
+      },
+      "CountryOut": {
+        "properties": {
+          "iso3": {
+            "type": "string",
+            "title": "Iso3"
+          },
+          "iso2": {
+            "type": "string",
+            "title": "Iso2"
+          },
+          "name_es": {
+            "type": "string",
+            "title": "Name Es"
+          },
+          "continent": {
+            "$ref": "#/components/schemas/Continent"
+          },
+          "counts_in_progress": {
+            "type": "boolean",
+            "title": "Counts In Progress"
+          },
+          "sovereign_iso3": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Sovereign Iso3"
+          },
+          "label_point": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/LonLat"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "type": "object",
+        "required": [
+          "iso3",
+          "iso2",
+          "name_es",
+          "continent",
+          "counts_in_progress",
+          "sovereign_iso3",
+          "label_point"
+        ],
+        "title": "CountryOut"
+      },
+      "CountryRef": {
+        "properties": {
+          "iso3": {
+            "type": "string",
+            "title": "Iso3"
+          },
+          "name_es": {
+            "type": "string",
+            "title": "Name Es"
+          },
+          "counts_in_progress": {
+            "type": "boolean",
+            "title": "Counts In Progress"
+          }
+        },
+        "type": "object",
+        "required": ["iso3", "name_es", "counts_in_progress"],
+        "title": "CountryRef"
+      },
+      "CountryStatus": {
+        "properties": {
+          "iso3": {
+            "type": "string",
+            "title": "Iso3"
+          },
+          "status": {
+            "type": "string",
+            "enum": ["visited", "stopover"],
+            "title": "Status"
+          },
+          "first_visited_on": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "First Visited On",
+            "description": "Nula para la casa (cuenta desde siempre)"
+          },
+          "is_home": {
+            "type": "boolean",
+            "title": "Is Home"
+          },
+          "counts_in_progress": {
+            "type": "boolean",
+            "title": "Counts In Progress"
+          }
+        },
+        "type": "object",
+        "required": ["iso3", "status", "first_visited_on", "is_home", "counts_in_progress"],
+        "title": "CountryStatus"
+      },
+      "CountrySummaryOut": {
+        "properties": {
+          "iso3": {
+            "type": "string",
+            "title": "Iso3"
+          },
+          "name_es": {
+            "type": "string",
+            "title": "Name Es"
+          },
+          "status": {
+            "type": "string",
+            "enum": ["visited", "stopover"],
+            "title": "Status"
+          },
+          "is_home": {
+            "type": "boolean",
+            "title": "Is Home"
+          },
+          "counts_in_progress": {
+            "type": "boolean",
+            "title": "Counts In Progress"
+          },
+          "first_visited_on": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "First Visited On"
+          },
+          "last_visited_on": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Last Visited On",
+            "description": "Llegada más reciente; nula si solo es casa"
+          },
+          "days": {
+            "type": "integer",
+            "title": "Days",
+            "description": "Días distintos con estancia en el país"
+          },
+          "cities": {
+            "type": "integer",
+            "title": "Cities"
+          },
+          "monuments": {
+            "type": "integer",
+            "title": "Monuments"
+          },
+          "photos": {
+            "type": "integer",
+            "title": "Photos"
+          },
+          "photo_ids": {
+            "items": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "type": "array",
+            "title": "Photo Ids",
+            "description": "Hasta 3 fotos, del viaje más reciente"
+          },
+          "trips": {
+            "items": {
+              "$ref": "#/components/schemas/CountryTrip"
+            },
+            "type": "array",
+            "title": "Trips",
+            "description": "Del más reciente al más antiguo"
+          },
+          "stopovers": {
+            "items": {
+              "$ref": "#/components/schemas/StopoverBrief"
+            },
+            "type": "array",
+            "title": "Stopovers"
+          }
+        },
+        "type": "object",
+        "required": [
+          "iso3",
+          "name_es",
+          "status",
+          "is_home",
+          "counts_in_progress",
+          "first_visited_on",
+          "last_visited_on",
+          "days",
+          "cities",
+          "monuments",
+          "photos",
+          "photo_ids",
+          "trips",
+          "stopovers"
+        ],
+        "title": "CountrySummaryOut",
+        "description": "Lo que muestra la tarjeta de país en Mi mapa."
+      },
+      "CountryTrip": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "title": {
+            "type": "string",
+            "title": "Title"
+          },
+          "visibility": {
+            "$ref": "#/components/schemas/Visibility"
+          },
+          "visit_type": {
+            "$ref": "#/components/schemas/VisitType",
+            "description": "stay si hubo al menos una estancia en el país"
+          },
+          "starts_on": {
+            "type": "string",
+            "format": "date",
+            "title": "Starts On"
+          },
+          "ends_on": {
+            "type": "string",
+            "format": "date",
+            "title": "Ends On"
+          }
+        },
+        "type": "object",
+        "required": ["id", "title", "visibility", "visit_type", "starts_on", "ends_on"],
+        "title": "CountryTrip",
+        "description": "Un viaje que pasó por el país, con las fechas de lo que estuvo ahí."
+      },
+      "HTTPValidationError": {
+        "properties": {
+          "detail": {
+            "items": {
+              "$ref": "#/components/schemas/ValidationError"
+            },
+            "type": "array",
+            "title": "Detail"
+          }
+        },
+        "type": "object",
+        "title": "HTTPValidationError"
+      },
+      "Health": {
+        "properties": {
+          "status": {
+            "type": "string",
+            "enum": ["ok", "error"],
+            "title": "Status"
+          },
+          "db": {
+            "type": "string",
+            "enum": ["ok", "error"],
+            "title": "Db"
+          },
+          "postgis": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Postgis"
+          }
+        },
+        "type": "object",
+        "required": ["status", "db", "postgis"],
+        "title": "Health"
+      },
+      "HomeCity": {
+        "properties": {
+          "id": {
+            "type": "integer",
+            "title": "Id"
+          },
+          "name_es": {
+            "type": "string",
+            "title": "Name Es"
+          },
+          "country_iso3": {
+            "type": "string",
+            "title": "Country Iso3"
+          },
+          "subdivision_code": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Subdivision Code"
+          }
+        },
+        "type": "object",
+        "required": ["id", "name_es", "country_iso3", "subdivision_code"],
+        "title": "HomeCity"
+      },
+      "LonLat": {
+        "properties": {
+          "lon": {
+            "type": "number",
+            "maximum": 180.0,
+            "minimum": -180.0,
+            "title": "Lon"
+          },
+          "lat": {
+            "type": "number",
+            "maximum": 90.0,
+            "minimum": -90.0,
+            "title": "Lat"
+          }
+        },
+        "type": "object",
+        "required": ["lon", "lat"],
+        "title": "LonLat"
+      },
+      "MapOut": {
+        "properties": {
+          "countries": {
+            "items": {
+              "$ref": "#/components/schemas/CountryStatus"
+            },
+            "type": "array",
+            "title": "Countries"
+          },
+          "subdivisions": {
+            "items": {
+              "$ref": "#/components/schemas/SubdivisionStatus"
+            },
+            "type": "array",
+            "title": "Subdivisions"
+          },
+          "cities": {
+            "items": {
+              "$ref": "#/components/schemas/CityStatus"
+            },
+            "type": "array",
+            "title": "Cities"
+          },
+          "monuments": {
+            "items": {
+              "$ref": "#/components/schemas/MonumentStamp"
+            },
+            "type": "array",
+            "title": "Monuments"
+          },
+          "wishlist": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Wishlist",
+            "description": "ISO3 de la lista de deseos"
+          }
+        },
+        "type": "object",
+        "required": ["countries", "subdivisions", "cities", "monuments", "wishlist"],
+        "title": "MapOut"
+      },
+      "MeOut": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "handle": {
+            "type": "string",
+            "title": "Handle"
+          },
+          "display_name": {
+            "type": "string",
+            "title": "Display Name"
+          },
+          "home_city": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/HomeCity"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "theme": {
+            "$ref": "#/components/schemas/Theme"
+          },
+          "profile_public": {
+            "type": "boolean",
+            "title": "Profile Public"
+          }
+        },
+        "type": "object",
+        "required": ["id", "handle", "display_name", "home_city", "theme", "profile_public"],
+        "title": "MeOut"
+      },
+      "MemoryIn": {
+        "properties": {
+          "stop_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Stop Id"
+          },
+          "place": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/PlaceIn"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "monument_id": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Monument Id"
+          },
+          "body": {
+            "type": "string",
+            "maxLength": 20000,
+            "title": "Body",
+            "default": ""
+          },
+          "occurred_on": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Occurred On"
+          },
+          "visibility": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/Visibility"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Nula = hereda la del viaje"
+          }
+        },
+        "type": "object",
+        "title": "MemoryIn",
+        "description": "Va en una parada existente (`stop_id`) o en un lugar nuevo (`place`).\n\nCon `place` se crea un viaje automático de una parada (\"Kioto · mar 2025\")."
+      },
+      "MemoryOut": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "trip_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Trip Id"
+          },
+          "stop_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Stop Id"
+          },
+          "monument": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/MonumentBrief"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "body": {
+            "type": "string",
+            "title": "Body"
+          },
+          "occurred_on": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Occurred On"
+          },
+          "visibility": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/Visibility"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "effective_visibility": {
+            "$ref": "#/components/schemas/Visibility",
+            "description": "La más restrictiva entre la del recuerdo y la del viaje"
+          },
+          "photo_count": {
+            "type": "integer",
+            "title": "Photo Count"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Created At"
+          },
+          "updated_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Updated At"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "trip_id",
+          "stop_id",
+          "monument",
+          "body",
+          "occurred_on",
+          "visibility",
+          "effective_visibility",
+          "photo_count",
+          "created_at",
+          "updated_at"
+        ],
+        "title": "MemoryOut"
+      },
+      "MemoryPatch": {
+        "properties": {
+          "stop_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Stop Id"
+          },
+          "monument_id": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Monument Id"
+          },
+          "body": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 20000
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Body"
+          },
+          "occurred_on": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Occurred On"
+          },
+          "visibility": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/Visibility"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "type": "object",
+        "title": "MemoryPatch"
+      },
+      "MonumentBrief": {
+        "properties": {
+          "id": {
+            "type": "integer",
+            "title": "Id"
+          },
+          "slug": {
+            "type": "string",
+            "title": "Slug"
+          },
+          "name_es": {
+            "type": "string",
+            "title": "Name Es"
+          },
+          "stamp_code": {
+            "type": "string",
+            "title": "Stamp Code"
+          }
+        },
+        "type": "object",
+        "required": ["id", "slug", "name_es", "stamp_code"],
+        "title": "MonumentBrief"
+      },
+      "MonumentStamp": {
+        "properties": {
+          "id": {
+            "type": "integer",
+            "title": "Id"
+          },
+          "slug": {
+            "type": "string",
+            "title": "Slug"
+          },
+          "name_es": {
+            "type": "string",
+            "title": "Name Es"
+          },
+          "country_iso3": {
+            "type": "string",
+            "title": "Country Iso3"
+          },
+          "location": {
+            "$ref": "#/components/schemas/LonLat"
+          },
+          "first_stamped_on": {
+            "type": "string",
+            "format": "date",
+            "title": "First Stamped On"
+          }
+        },
+        "type": "object",
+        "required": ["id", "slug", "name_es", "country_iso3", "location", "first_stamped_on"],
+        "title": "MonumentStamp",
+        "description": "Monumento sellado: tiene al menos un recuerdo ligado."
+      },
+      "NearestCity": {
+        "properties": {
+          "id": {
+            "type": "integer",
+            "title": "Id"
+          },
+          "name_es": {
+            "type": "string",
+            "title": "Name Es"
+          },
+          "distance_km": {
+            "type": "number",
+            "title": "Distance Km"
+          }
+        },
+        "type": "object",
+        "required": ["id", "name_es", "distance_km"],
+        "title": "NearestCity"
+      },
+      "PlaceIn": {
+        "properties": {
+          "place_name": {
+            "type": "string",
+            "maxLength": 200,
+            "minLength": 1,
+            "title": "Place Name"
+          },
+          "location": {
+            "$ref": "#/components/schemas/LonLat"
+          },
+          "visit_type": {
+            "$ref": "#/components/schemas/VisitType",
+            "default": "stay"
+          },
+          "arrived_on": {
+            "type": "string",
+            "format": "date",
+            "title": "Arrived On"
+          },
+          "departed_on": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Departed On",
+            "description": "Por omisión, el mismo día de llegada"
+          },
+          "city_id": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "City Id"
+          }
+        },
+        "type": "object",
+        "required": ["place_name", "location", "arrived_on"],
+        "title": "PlaceIn",
+        "description": "Un lugar con fechas. País y estado se calculan desde `location`.\n\nSi no se manda `city_id`, una estancia toma la ciudad más cercana y una escala se queda\nsin ciudad (aeropuertos). Mandar `city_id: null` deja la parada sin ciudad."
+      },
+      "PlaceRef": {
+        "properties": {
+          "code": {
+            "type": "string",
+            "title": "Code"
+          },
+          "name_es": {
+            "type": "string",
+            "title": "Name Es"
+          }
+        },
+        "type": "object",
+        "required": ["code", "name_es"],
+        "title": "PlaceRef"
+      },
+      "ProgressOut": {
+        "properties": {
+          "countries": {
+            "$ref": "#/components/schemas/CountriesProgress"
+          },
+          "continents": {
+            "items": {
+              "$ref": "#/components/schemas/ContinentProgress"
+            },
+            "type": "array",
+            "title": "Continents"
+          },
+          "subdivisions": {
+            "$ref": "#/components/schemas/SubdivisionsProgress"
+          },
+          "cities": {
+            "type": "integer",
+            "title": "Cities"
+          },
+          "monuments": {
+            "type": "integer",
+            "title": "Monuments"
+          },
+          "trips": {
+            "type": "integer",
+            "title": "Trips"
+          },
+          "photos": {
+            "type": "integer",
+            "title": "Photos"
+          },
+          "wishlist": {
+            "type": "integer",
+            "title": "Wishlist"
+          }
+        },
+        "type": "object",
+        "required": [
+          "countries",
+          "continents",
+          "subdivisions",
+          "cities",
+          "monuments",
+          "trips",
+          "photos",
+          "wishlist"
+        ],
+        "title": "ProgressOut"
+      },
+      "ReverseOut": {
+        "properties": {
+          "country": {
+            "$ref": "#/components/schemas/CountryRef"
+          },
+          "subdivision": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/PlaceRef"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "city": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/NearestCity"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "type": "object",
+        "required": ["country", "subdivision", "city"],
+        "title": "ReverseOut"
+      },
+      "StopIn": {
+        "properties": {
+          "place_name": {
+            "type": "string",
+            "maxLength": 200,
+            "minLength": 1,
+            "title": "Place Name"
+          },
+          "location": {
+            "$ref": "#/components/schemas/LonLat"
+          },
+          "visit_type": {
+            "$ref": "#/components/schemas/VisitType",
+            "default": "stay"
+          },
+          "arrived_on": {
+            "type": "string",
+            "format": "date",
+            "title": "Arrived On"
+          },
+          "departed_on": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Departed On",
+            "description": "Por omisión, el mismo día de llegada"
+          },
+          "city_id": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "City Id"
+          },
+          "note": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 2000
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Note"
+          },
+          "position": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "minimum": 0.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Position",
+            "description": "Por omisión, al final"
+          }
+        },
+        "type": "object",
+        "required": ["place_name", "location", "arrived_on"],
+        "title": "StopIn"
+      },
+      "StopOrderIn": {
+        "properties": {
+          "stop_ids": {
+            "items": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "type": "array",
+            "title": "Stop Ids"
+          }
+        },
+        "type": "object",
+        "required": ["stop_ids"],
+        "title": "StopOrderIn"
+      },
+      "StopOut": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "trip_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Trip Id"
+          },
+          "position": {
+            "type": "integer",
+            "title": "Position"
+          },
+          "visit_type": {
+            "$ref": "#/components/schemas/VisitType"
+          },
+          "place_name": {
+            "type": "string",
+            "title": "Place Name"
+          },
+          "city": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/CityBrief"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "country": {
+            "$ref": "#/components/schemas/CountryBrief"
+          },
+          "subdivision": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/SubdivisionBrief"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "location": {
+            "$ref": "#/components/schemas/LonLat"
+          },
+          "arrived_on": {
+            "type": "string",
+            "format": "date",
+            "title": "Arrived On"
+          },
+          "departed_on": {
+            "type": "string",
+            "format": "date",
+            "title": "Departed On"
+          },
+          "note": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Note"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "trip_id",
+          "position",
+          "visit_type",
+          "place_name",
+          "city",
+          "country",
+          "subdivision",
+          "location",
+          "arrived_on",
+          "departed_on",
+          "note"
+        ],
+        "title": "StopOut"
+      },
+      "StopPatch": {
+        "properties": {
+          "place_name": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 200,
+                "minLength": 1
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Place Name"
+          },
+          "location": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/LonLat"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "visit_type": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/VisitType"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "arrived_on": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Arrived On"
+          },
+          "departed_on": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Departed On"
+          },
+          "city_id": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "City Id"
+          },
+          "note": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 2000
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Note"
+          }
+        },
+        "type": "object",
+        "title": "StopPatch"
+      },
+      "StopoverBrief": {
+        "properties": {
+          "place_name": {
+            "type": "string",
+            "title": "Place Name"
+          },
+          "note": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Note"
+          },
+          "arrived_on": {
+            "type": "string",
+            "format": "date",
+            "title": "Arrived On"
+          }
+        },
+        "type": "object",
+        "required": ["place_name", "note", "arrived_on"],
+        "title": "StopoverBrief"
+      },
+      "SubdivisionBrief": {
+        "properties": {
+          "code": {
+            "type": "string",
+            "title": "Code"
+          },
+          "name_es": {
+            "type": "string",
+            "title": "Name Es"
+          }
+        },
+        "type": "object",
+        "required": ["code", "name_es"],
+        "title": "SubdivisionBrief"
+      },
+      "SubdivisionOut": {
+        "properties": {
+          "code": {
+            "type": "string",
+            "title": "Code"
+          },
+          "name_es": {
+            "type": "string",
+            "title": "Name Es"
+          },
+          "country_iso3": {
+            "type": "string",
+            "title": "Country Iso3"
+          }
+        },
+        "type": "object",
+        "required": ["code", "name_es", "country_iso3"],
+        "title": "SubdivisionOut"
+      },
+      "SubdivisionStatus": {
+        "properties": {
+          "code": {
+            "type": "string",
+            "title": "Code"
+          },
+          "status": {
+            "type": "string",
+            "enum": ["visited", "stopover"],
+            "title": "Status"
+          },
+          "first_visited_on": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "First Visited On"
+          },
+          "is_home": {
+            "type": "boolean",
+            "title": "Is Home"
+          }
+        },
+        "type": "object",
+        "required": ["code", "status", "first_visited_on", "is_home"],
+        "title": "SubdivisionStatus"
+      },
+      "SubdivisionsProgress": {
+        "properties": {
+          "visited": {
+            "type": "integer",
+            "title": "Visited"
+          },
+          "total": {
+            "type": "integer",
+            "title": "Total"
+          },
+          "country_iso3": {
+            "type": "string",
+            "title": "Country Iso3"
+          }
+        },
+        "type": "object",
+        "required": ["visited", "total", "country_iso3"],
+        "title": "SubdivisionsProgress"
+      },
+      "Theme": {
+        "type": "string",
+        "enum": ["system", "dark", "light"],
+        "title": "Theme"
+      },
+      "TripDetailOut": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "title": {
+            "type": "string",
+            "title": "Title"
+          },
+          "summary": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Summary"
+          },
+          "visibility": {
+            "$ref": "#/components/schemas/Visibility"
+          },
+          "share_token": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Share Token"
+          },
+          "is_auto": {
+            "type": "boolean",
+            "title": "Is Auto"
+          },
+          "cover_photo_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Cover Photo Id",
+            "description": "La elegida o, si no hay, la primera foto del viaje"
+          },
+          "favorite_memory_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Favorite Memory Id"
+          },
+          "starts_on": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Starts On"
+          },
+          "ends_on": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Ends On"
+          },
+          "days": {
+            "type": "integer",
+            "title": "Days"
+          },
+          "stop_count": {
+            "type": "integer",
+            "title": "Stop Count"
+          },
+          "city_count": {
+            "type": "integer",
+            "title": "City Count"
+          },
+          "memory_count": {
+            "type": "integer",
+            "title": "Memory Count"
+          },
+          "photo_count": {
+            "type": "integer",
+            "title": "Photo Count"
+          },
+          "monument_count": {
+            "type": "integer",
+            "title": "Monument Count"
+          },
+          "countries": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Countries",
+            "description": "ISO3 de los países con estancia, en orden"
+          },
+          "stopover_countries": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Stopover Countries",
+            "description": "ISO3 de los países con solo escalas"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Created At"
+          },
+          "updated_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Updated At"
+          },
+          "stops": {
+            "items": {
+              "$ref": "#/components/schemas/StopOut"
+            },
+            "type": "array",
+            "title": "Stops"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "title",
+          "summary",
+          "visibility",
+          "share_token",
+          "is_auto",
+          "cover_photo_id",
+          "favorite_memory_id",
+          "starts_on",
+          "ends_on",
+          "days",
+          "stop_count",
+          "city_count",
+          "memory_count",
+          "photo_count",
+          "monument_count",
+          "countries",
+          "stopover_countries",
+          "created_at",
+          "updated_at",
+          "stops"
+        ],
+        "title": "TripDetailOut"
+      },
+      "TripIn": {
+        "properties": {
+          "title": {
+            "type": "string",
+            "maxLength": 200,
+            "minLength": 1,
+            "title": "Title"
+          },
+          "summary": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 2000
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Summary"
+          },
+          "visibility": {
+            "$ref": "#/components/schemas/Visibility",
+            "default": "private"
+          }
+        },
+        "type": "object",
+        "required": ["title"],
+        "title": "TripIn"
+      },
+      "TripOut": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "title": {
+            "type": "string",
+            "title": "Title"
+          },
+          "summary": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Summary"
+          },
+          "visibility": {
+            "$ref": "#/components/schemas/Visibility"
+          },
+          "share_token": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Share Token"
+          },
+          "is_auto": {
+            "type": "boolean",
+            "title": "Is Auto"
+          },
+          "cover_photo_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Cover Photo Id",
+            "description": "La elegida o, si no hay, la primera foto del viaje"
+          },
+          "favorite_memory_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Favorite Memory Id"
+          },
+          "starts_on": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Starts On"
+          },
+          "ends_on": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Ends On"
+          },
+          "days": {
+            "type": "integer",
+            "title": "Days"
+          },
+          "stop_count": {
+            "type": "integer",
+            "title": "Stop Count"
+          },
+          "city_count": {
+            "type": "integer",
+            "title": "City Count"
+          },
+          "memory_count": {
+            "type": "integer",
+            "title": "Memory Count"
+          },
+          "photo_count": {
+            "type": "integer",
+            "title": "Photo Count"
+          },
+          "monument_count": {
+            "type": "integer",
+            "title": "Monument Count"
+          },
+          "countries": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Countries",
+            "description": "ISO3 de los países con estancia, en orden"
+          },
+          "stopover_countries": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Stopover Countries",
+            "description": "ISO3 de los países con solo escalas"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Created At"
+          },
+          "updated_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Updated At"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "title",
+          "summary",
+          "visibility",
+          "share_token",
+          "is_auto",
+          "cover_photo_id",
+          "favorite_memory_id",
+          "starts_on",
+          "ends_on",
+          "days",
+          "stop_count",
+          "city_count",
+          "memory_count",
+          "photo_count",
+          "monument_count",
+          "countries",
+          "stopover_countries",
+          "created_at",
+          "updated_at"
+        ],
+        "title": "TripOut",
+        "description": "Fechas, días y conteos se calculan desde las paradas; no se guardan."
+      },
+      "TripPatch": {
+        "properties": {
+          "title": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 200,
+                "minLength": 1
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Title"
+          },
+          "summary": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 2000
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Summary"
+          },
+          "visibility": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/Visibility"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "cover_photo_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Cover Photo Id"
+          },
+          "favorite_memory_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Favorite Memory Id"
+          }
+        },
+        "type": "object",
+        "title": "TripPatch"
+      },
+      "ValidationError": {
+        "properties": {
+          "loc": {
+            "items": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "integer"
+                }
+              ]
+            },
+            "type": "array",
+            "title": "Location"
+          },
+          "msg": {
+            "type": "string",
+            "title": "Message"
+          },
+          "type": {
+            "type": "string",
+            "title": "Error Type"
+          },
+          "input": {
+            "title": "Input"
+          },
+          "ctx": {
+            "type": "object",
+            "title": "Context"
+          }
+        },
+        "type": "object",
+        "required": ["loc", "msg", "type"],
+        "title": "ValidationError"
+      },
+      "Visibility": {
+        "type": "string",
+        "enum": ["private", "link", "public"],
+        "title": "Visibility",
+        "description": "El orden importa: de más privada a más abierta (igual que el enum de Postgres)."
+      },
+      "VisitType": {
+        "type": "string",
+        "enum": ["stay", "stopover"],
+        "title": "VisitType"
+      },
+      "WishlistEntry": {
+        "properties": {
+          "iso3": {
+            "type": "string",
+            "title": "Iso3"
+          },
+          "name_es": {
+            "type": "string",
+            "title": "Name Es"
+          },
+          "continent": {
+            "$ref": "#/components/schemas/Continent"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Created At"
+          }
+        },
+        "type": "object",
+        "required": ["iso3", "name_es", "continent", "created_at"],
+        "title": "WishlistEntry"
+      }
+    }
+  }
+}

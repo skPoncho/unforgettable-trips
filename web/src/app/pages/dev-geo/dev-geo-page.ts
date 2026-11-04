@@ -4,7 +4,7 @@ import { catchError, forkJoin, map, of } from 'rxjs';
 
 import { type Continent, GeoApi } from '../../core/geo-api';
 import { MeApi, type PlaceStatus } from '../../core/me-api';
-import { drawMexico, drawWorld, type Shape } from './geo-shapes';
+import { drawMexico, drawWorld, type Shape } from '../../core/map/geo-shapes';
 
 /** Cómo se pinta un lugar: lo que diga la API para el usuario actual. */
 type Paint = PlaceStatus | 'wish' | null;

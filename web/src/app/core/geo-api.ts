@@ -2,29 +2,9 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 import type { Topology } from 'topojson-specification';
 
-// Tipos a mano por ahora; en la fase 3 se generan desde el OpenAPI (openapi-typescript).
-export type Continent = 'america' | 'europe' | 'asia' | 'africa' | 'oceania';
+import type { Country, Subdivision } from './api/types';
 
-export interface LonLat {
-  lon: number;
-  lat: number;
-}
-
-export interface Country {
-  iso3: string;
-  iso2: string;
-  name_es: string;
-  continent: Continent;
-  counts_in_progress: boolean;
-  sovereign_iso3: string | null;
-  label_point: LonLat | null;
-}
-
-export interface Subdivision {
-  code: string;
-  name_es: string;
-  country_iso3: string;
-}
+export type { Continent, Country, LonLat, Subdivision } from './api/types';
 
 /** Catálogos geográficos (/api/geo) y geometrías del mapa (/geo/*.topo.json, de make build-geo). */
 @Injectable({ providedIn: 'root' })

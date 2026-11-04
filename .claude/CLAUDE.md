@@ -50,6 +50,15 @@ App web para registrar viajes **centrada en mapas**: cada país, estado de Méxi
 - Las reglas de "visitado" viven en las vistas `user_country_status` / `user_subdivision_status` y la visibilidad efectiva en la función SQL `effective_visibility()` (migración 0004). La casa tiene `first_visited_on` nulo: cuenta desde siempre.
 - Los archivos de fotos se borran después del commit (`app/services/photos.py`); claves `users/{user_id}/photos/{photo_id}/{original|display|thumb}.jpg`.
 
+### Mi mapa (fase 3)
+- Ciudades visitadas en la vista `user_city_status` (migración 0005), con la misma regla que países y estados; `/api/me/progress` cuenta ciudades desde ahí.
+- `/api/me/map` trae también `cities` (puntos de luz) y `monuments` (sellados). La tarjeta de país sale de `GET /api/me/countries/{iso3}` (404 si no lo visitaste); los días son días distintos con estancia.
+- Fotos: `GET /api/photos/{id}/{display|thumb}` con verificación de dueño (se adelantó la lectura de la 4.6). El original con EXIF nunca se sirve.
+- Tipos del web generados con `make gen-api` en `web/src/app/core/api/` (`openapi.json` y `schema.d.ts`, en git; alias en `types.ts`). CI falla si no están al día. `openapi-typescript` aún no acepta TypeScript 6: corre con `npx` y versión fijada, fuera de `package.json`.
+- Zoom del mapa: botones, arrastre y Ctrl/⌘ + rueda (la rueda sola desplaza la página).
+- Controles de fases posteriores (búsqueda, Compartir, Nuevo recuerdo, globo y Reproduce tu historia) se muestran como en la maqueta con `aria-disabled` y el aviso "Próximamente · fase N".
+- `/viajes` (lista) y `/viajes/:id` (versión mínima) existen para que la tarjeta y la tira naveguen; la fase 5 completa el detalle.
+
 ## Decisiones abiertas (pregúntale a Carlos antes de fijarlas)
 
 - **Autenticación** (fase 8). Dirección tentativa: correo + contraseña (argon2) con sesión en cookie httpOnly; Google opcional después.
@@ -83,13 +92,15 @@ Solo se necesita Docker Desktop encendido. `make help` lista todo.
 - `make seed`: recrea al usuario semilla (Carlos, casa en Ciudad de México) con los viajes, monumentos y 412 fotos de relleno de las maquetas (`app/seed/data.py`). Idempotente; necesita `make load-geo` antes y tarda ~20 s.
 - `make load-geo`: carga países, estados de México y ciudades (GeoNames `cities5000`) en PostGIS. Idempotente; la primera vez descarga ~250 MB y tarda ~1 min.
 - `make build-geo`: regenera `web/public/geo/world.topo.json` y `mexico.topo.json` (contenedor `geo`, perfil `tools`). Los TopoJSON se guardan en git.
+- `make gen-api`: regenera los tipos de TypeScript desde el OpenAPI de la api. Córrelo después de cambiar un esquema o endpoint.
 - `make shell-api` / `make shell-web`: terminal dentro del contenedor.
 
 Notas:
 - Las pruebas de api usan la BD `huella_test`, que `tests/conftest.py` crea y migra sola.
 - `node_modules` vive en un volumen de Docker; `web/docker-entrypoint.sh` reinstala si cambió `package-lock.json`. Para agregar paquetes: `make shell-web` y `npm install …`.
 - Las dependencias de Python viven en `/opt/venv` dentro de la imagen; tras cambiar `pyproject.toml`, corre `uv lock` en `make shell-api` y vuelve a `make dev` (reconstruye).
-- `src/testing/` del web tiene utilidades solo para pruebas (p. ej. `mockSystemTheme`, porque jsdom no trae `matchMedia`).
+- `src/testing/` del web tiene utilidades solo para pruebas (p. ej. `mockSystemTheme`, porque jsdom no trae `matchMedia`, y `fixtures.ts` con datos tipados como la API).
+- En pruebas con `httpResource`, `fixture.whenStable()` espera a que respondan las peticiones: primero `TestBed.tick()` y `flush`, después `whenStable()`.
 - Las descargas geográficas viven en `~/.cache/huella/geo` (fuera del repo; se monta en `/cache` de `api` y `geo`; se cambia con `HOST_GEO_CACHE`). Las pruebas de geo cargan los datos reales en `huella_test` la primera vez (fixture `geo_data`).
 - `localhost:4200/dev/geo` es la página de verificación de los datos geográficos y del progreso del usuario semilla (no aparece en el encabezado). La API documentada está en `localhost:8000/docs`.
 - Las fotos viven en el volumen `photos-data` (`/data/photos` en `api`); las pruebas usan una carpeta temporal (fixture `storage`).

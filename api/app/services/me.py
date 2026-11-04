@@ -1,8 +1,11 @@
 """Perfil, progreso, mapa y lista de deseos del usuario.
 
 Las reglas (qué cuenta como visitado, la casa, las escalas) viven en las vistas
-user_country_status y user_subdivision_status (migración 0004); aquí solo se cuenta.
+user_country_status, user_subdivision_status (migración 0004) y user_city_status (0005);
+aquí solo se cuenta.
 """
+
+from typing import Any
 
 from sqlalchemy import delete, select, text
 from sqlalchemy.dialects.postgresql import insert
@@ -11,13 +14,19 @@ from sqlalchemy.orm import Session
 from app.errors import NotFoundError
 from app.models import Continent, Country, User, WishlistItem
 from app.schemas import (
+    CityStatus,
     ContinentProgress,
     CountriesProgress,
     CountryStatus,
+    CountrySummaryOut,
+    CountryTrip,
     HomeCity,
+    LonLat,
     MapOut,
     MeOut,
+    MonumentStamp,
     ProgressOut,
+    StopoverBrief,
     SubdivisionsProgress,
     SubdivisionStatus,
     WishlistEntry,
@@ -92,11 +101,7 @@ def progress(session: Session, user: User) -> ProgressOut:
                   (SELECT count(*) FROM user_subdivision_status uss
                     JOIN countries c ON c.id = uss.country_id
                     WHERE uss.user_id = :uid AND c.iso3 = :sub_country) AS sub_visited,
-                  (SELECT count(DISTINCT city_id) FROM (
-                      SELECT city_id FROM stops WHERE user_id = :uid AND city_id IS NOT NULL
-                      UNION ALL
-                      SELECT home_city_id FROM users WHERE id = :uid AND home_city_id IS NOT NULL
-                   ) c) AS cities,
+                  (SELECT count(*) FROM user_city_status WHERE user_id = :uid) AS cities,
                   (SELECT count(*) FROM user_stamps WHERE user_id = :uid) AS monuments,
                   (SELECT count(*) FROM trips WHERE user_id = :uid) AS trips,
                   (SELECT count(*) FROM photos
@@ -150,6 +155,34 @@ def world_map(session: Session, user: User) -> MapOut:
         ),
         params,
     ).mappings()
+    cities = session.execute(
+        text(
+            """
+            SELECT ci.id, ci.name_es, c.iso3::text AS country_iso3,
+                   ST_X(ci.location) AS lon, ST_Y(ci.location) AS lat,
+                   ucs.status, ucs.first_visited_on, ucs.is_home
+            FROM user_city_status ucs
+            JOIN cities ci ON ci.id = ucs.city_id
+            JOIN countries c ON c.id = ci.country_id
+            WHERE ucs.user_id = :uid ORDER BY ci.id
+            """
+        ),
+        params,
+    ).mappings()
+    monuments = session.execute(
+        text(
+            """
+            SELECT mo.id, mo.slug, mo.name_es, c.iso3::text AS country_iso3,
+                   ST_X(mo.location) AS lon, ST_Y(mo.location) AS lat,
+                   us.first_stamped_on
+            FROM user_stamps us
+            JOIN monuments mo ON mo.id = us.monument_id
+            JOIN countries c ON c.id = mo.country_id
+            WHERE us.user_id = :uid ORDER BY us.first_stamped_on, mo.id
+            """
+        ),
+        params,
+    ).mappings()
     wishlist = session.scalars(
         select(Country.iso3)
         .join(WishlistItem, WishlistItem.country_id == Country.id)
@@ -159,7 +192,128 @@ def world_map(session: Session, user: User) -> MapOut:
     return MapOut(
         countries=[CountryStatus(**r) for r in countries],
         subdivisions=[SubdivisionStatus(**r) for r in subdivisions],
+        cities=[_with_location(CityStatus, r) for r in cities],
+        monuments=[_with_location(MonumentStamp, r) for r in monuments],
         wishlist=list(wishlist),
+    )
+
+
+def _with_location[T: CityStatus | MonumentStamp](model: type[T], row: Any) -> T:
+    data = dict(row)
+    location = LonLat(lon=data.pop("lon"), lat=data.pop("lat"))
+    return model(**data, location=location)
+
+
+# Paradas del usuario en un país; base de la tarjeta de país.
+_COUNTRY_STOPS = """
+    WITH s AS (
+        SELECT s.* FROM stops s
+        WHERE s.user_id = :uid AND s.country_id = :cid
+    )
+"""
+
+
+def country_summary(session: Session, user: User, iso3: str) -> CountrySummaryOut:
+    """Resumen de un país visitado (o casa) para la tarjeta del mapa; 404 si no."""
+    status = (
+        session.execute(
+            text(
+                """
+                SELECT ucs.country_id AS cid, c.iso3::text AS iso3, c.name_es, ucs.status,
+                       ucs.is_home, ucs.counts_in_progress, ucs.first_visited_on
+                FROM user_country_status ucs JOIN countries c ON c.id = ucs.country_id
+                WHERE ucs.user_id = :uid AND c.iso3 = :iso3
+                """
+            ),
+            {"uid": user.id, "iso3": iso3.upper()},
+        )
+        .mappings()
+        .first()
+    )
+    if status is None:
+        raise NotFoundError(f"No has visitado {iso3.upper()}")
+    params = {"uid": user.id, "cid": status["cid"]}
+
+    counts = (
+        session.execute(
+            text(
+                _COUNTRY_STOPS
+                + """
+                SELECT
+                  (SELECT max(arrived_on) FROM s) AS last_visited_on,
+                  (SELECT count(DISTINCT d) FROM s,
+                     generate_series(s.arrived_on, s.departed_on, interval '1 day') d
+                   WHERE s.visit_type = 'stay') AS days,
+                  (SELECT count(*) FROM user_city_status
+                   WHERE user_id = :uid AND country_id = :cid) AS cities,
+                  (SELECT count(DISTINCT m.monument_id) FROM memories m JOIN s ON s.id = m.stop_id
+                   WHERE m.monument_id IS NOT NULL) AS monuments,
+                  (SELECT count(*) FROM photos p
+                   JOIN memories m ON m.id = p.memory_id JOIN s ON s.id = m.stop_id) AS photos
+                """
+            ),
+            params,
+        )
+        .mappings()
+        .one()
+    )
+    trip_rows = (
+        session.execute(
+            text(
+                _COUNTRY_STOPS
+                + """
+            SELECT t.id, t.title, t.visibility,
+                   CASE WHEN bool_or(s.visit_type = 'stay') THEN 'stay' ELSE 'stopover' END
+                       AS visit_type,
+                   min(s.arrived_on) AS starts_on, max(s.departed_on) AS ends_on
+            FROM s JOIN trips t ON t.id = s.trip_id
+            GROUP BY t.id
+            ORDER BY starts_on DESC, t.created_at DESC
+            """
+            ),
+            params,
+        )
+        .mappings()
+        .all()
+    )
+    # Fotos de muestra: las primeras del viaje más reciente que tenga fotos en el país.
+    photo_ids = session.scalars(
+        text(
+            _COUNTRY_STOPS
+            + """
+            , per_trip AS (SELECT trip_id, min(arrived_on) AS starts_on FROM s GROUP BY trip_id)
+            SELECT p.id FROM photos p
+            JOIN memories m ON m.id = p.memory_id
+            JOIN s ON s.id = m.stop_id
+            JOIN per_trip pt ON pt.trip_id = s.trip_id
+            ORDER BY pt.starts_on DESC, s.trip_id, s.position, m.created_at, m.id,
+                     p.position, p.created_at
+            LIMIT 3
+            """
+        ),
+        params,
+    )
+    stopovers = session.execute(
+        text(
+            _COUNTRY_STOPS
+            + """
+            SELECT place_name, note, arrived_on FROM s
+            WHERE visit_type = 'stopover' ORDER BY arrived_on DESC, position
+            """
+        ),
+        params,
+    ).mappings()
+    return CountrySummaryOut(
+        iso3=status["iso3"],
+        name_es=status["name_es"],
+        status=status["status"],
+        is_home=status["is_home"],
+        counts_in_progress=status["counts_in_progress"],
+        first_visited_on=status["first_visited_on"],
+        **counts,
+        photo_ids=list(photo_ids),
+        trips=[CountryTrip(**r) for r in trip_rows],
+        stopovers=[StopoverBrief(**r) for r in stopovers],
     )
 
 

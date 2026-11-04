@@ -4,7 +4,7 @@ API_RUN := $(COMPOSE) run --rm api
 WEB_RUN := $(COMPOSE) run --rm --no-deps web
 
 .DEFAULT_GOAL := help
-.PHONY: help dev stop down logs test test-api test-web lint lint-api lint-web format migrate seed build-geo load-geo geo-cache shell-api shell-web
+.PHONY: help dev stop down logs test test-api test-web lint lint-api lint-web format migrate seed build-geo load-geo geo-cache gen-api shell-api shell-web
 
 help: ## Muestra esta ayuda
 	@grep -E '^[a-z-]+:.*## ' $(MAKEFILE_LIST) | awk -F':.*## ' '{printf "  make %-11s %s\n", $$1, $$2}'
@@ -62,6 +62,15 @@ build-geo: geo-cache ## Genera web/public/geo/*.topo.json (mundo y México)
 
 load-geo: geo-cache ## Carga países, estados y ciudades en PostGIS (idempotente)
 	$(API_RUN) python -m app.geo.load
+
+# Tipos de TypeScript desde el OpenAPI de la api. openapi-typescript aún no acepta
+# TypeScript 6, así que corre con npx (versión fijada) fuera de las dependencias del web.
+API_TYPES_DIR := src/app/core/api
+OPENAPI_TS := openapi-typescript@7.13.0
+
+gen-api: ## Regenera los tipos de la API para el web (web/src/app/core/api)
+	$(COMPOSE) run --rm --no-deps -T api python -m app.openapi > web/$(API_TYPES_DIR)/openapi.json
+	$(COMPOSE) run --rm --no-deps -T web sh -c "npx --yes $(OPENAPI_TS) $(API_TYPES_DIR)/openapi.json -o $(API_TYPES_DIR)/schema.d.ts && npx prettier --log-level warn --write $(API_TYPES_DIR)"
 
 shell-api: ## Terminal dentro del contenedor api
 	$(COMPOSE) run --rm api bash

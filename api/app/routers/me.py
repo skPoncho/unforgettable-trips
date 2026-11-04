@@ -5,7 +5,7 @@ from typing import Annotated
 from fastapi import APIRouter, Path, Response, status
 
 from app.deps import CurrentUserDep, SessionDep
-from app.schemas import MapOut, MeOut, ProgressOut, WishlistEntry
+from app.schemas import CountrySummaryOut, MapOut, MeOut, ProgressOut, WishlistEntry
 from app.services import me
 
 router = APIRouter(prefix="/api/me", tags=["me"])
@@ -26,8 +26,18 @@ def get_progress(session: SessionDep, user: CurrentUserDep) -> ProgressOut:
 
 @router.get("/map", response_model=MapOut)
 def get_map(session: SessionDep, user: CurrentUserDep) -> MapOut:
-    """Estado de cada país y estado visitado (con el día de la primera visita) y deseos."""
+    """Estado de cada país, estado y ciudad visitados, monumentos sellados y deseos."""
     return me.world_map(session, user)
+
+
+@router.get(
+    "/countries/{iso3}",
+    response_model=CountrySummaryOut,
+    responses={404: {"description": "País desconocido o no visitado"}},
+)
+def get_country(iso3: Iso3, session: SessionDep, user: CurrentUserDep) -> CountrySummaryOut:
+    """Tarjeta de país: fechas, viajes, conteos, fotos de muestra y escalas."""
+    return me.country_summary(session, user, iso3)
 
 
 @router.get("/wishlist", response_model=list[WishlistEntry])

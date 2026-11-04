@@ -1,0 +1,158 @@
+// Tarjeta de país según design/pantallas/Main.dc.html. Solo tokens de src/styles/tokens.css.
+
+:host {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 290px;
+  padding: 14px;
+  background: var(--overlay);
+  border: 1px solid var(--overlay-line);
+  border-radius: 20px;
+  box-shadow: var(--shadow);
+}
+
+.photos {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  grid-template-rows: 54px 54px;
+  gap: 6px;
+}
+
+.photos--single {
+  grid-template-columns: 1fr;
+}
+
+.photo {
+  position: relative;
+  overflow: hidden;
+  border-radius: 10px;
+  background: var(--placeholder);
+
+  img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+}
+
+.photo--cover {
+  grid-row: span 2;
+  border-radius: 12px;
+}
+
+.photo__more {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  background: var(--scrim);
+  color: var(--text);
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 12px;
+}
+
+.name {
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 22px;
+}
+
+.when {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--accent-text);
+  white-space: nowrap;
+}
+
+.tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.tag {
+  padding: 3px 8px;
+  border-radius: 6px;
+  border: 1px solid var(--accent);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--accent-text);
+}
+
+.stats {
+  margin: 0;
+  font-size: 13px;
+  color: var(--text-muted);
+}
+
+.open {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 6px;
+  min-height: var(--tap-target);
+  border-radius: 12px;
+  background: var(--accent);
+  color: var(--on-accent);
+  font-weight: 600;
+  font-size: 14px;
+  text-decoration: none;
+}
+
+.trips {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.trip {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: var(--tap-target);
+  padding: 0 12px;
+  border-radius: 12px;
+  border: 1px solid var(--line);
+  color: var(--text);
+  font-size: 14px;
+  text-decoration: none;
+
+  &:hover {
+    border-color: var(--accent);
+  }
+}
+
+.trip__title {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-weight: 600;
+}
+
+.trip__when {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+.more-trips {
+  font-size: 12px;
+  color: var(--text-muted);
+}

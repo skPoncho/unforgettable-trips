@@ -37,7 +37,13 @@ def test_empty_user_has_zero_of_195(client, user):
         ("oceania", 14),
     ]
     assert body["subdivisions"] == {"country_iso3": "MEX", "visited": 0, "total": 32}
-    assert client.get("/api/me/map").json() == {"countries": [], "subdivisions": [], "wishlist": []}
+    assert client.get("/api/me/map").json() == {
+        "countries": [],
+        "subdivisions": [],
+        "cities": [],
+        "monuments": [],
+        "wishlist": [],
+    }
 
 
 def test_a_stopover_counts_as_a_visit(client, user):

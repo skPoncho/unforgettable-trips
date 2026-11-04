@@ -102,6 +102,8 @@ const userMap: UserMap = {
     },
   ],
   subdivisions: [{ code: 'MX-CMX', status: 'visited', first_visited_on: null, is_home: true }],
+  cities: [],
+  monuments: [],
   wishlist: ['TUV'],
 };
 

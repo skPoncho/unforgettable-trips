@@ -1,0 +1,427 @@
+// Mapa mundial según design/pantallas/Main.dc.html y design/mapas/world-*.svg.
+// Solo tokens de src/styles/tokens.css.
+
+:host {
+  display: flex;
+  min-width: 0;
+}
+
+ul,
+ol {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.frame {
+  position: relative;
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 72px 28px 100px;
+  background: var(--map-sphere);
+  border: 1px solid var(--map-frame);
+  border-radius: var(--radius-map);
+  overflow: hidden;
+}
+
+// --- Controles ---------------------------------------------------------------------------
+
+.top {
+  position: absolute;
+  top: 18px;
+  left: 20px;
+  right: 20px;
+  z-index: 3;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.layers,
+.zoom {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.zoom {
+  gap: 6px;
+}
+
+.chip {
+  min-height: 40px;
+  padding: 0 14px;
+  border-radius: var(--radius-pill);
+  border: 1px solid var(--line);
+  background: var(--panel);
+  color: var(--text-sub);
+  font: inherit;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.chip--on {
+  border-color: var(--inverse);
+  background: var(--inverse);
+  color: var(--on-inverse);
+}
+
+.square {
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  border-radius: 12px;
+  border: 1px solid var(--line);
+  background: var(--panel);
+  color: var(--text);
+  cursor: pointer;
+
+  &:disabled {
+    color: var(--text-muted);
+    cursor: default;
+  }
+
+  &[aria-disabled='true'] {
+    cursor: not-allowed;
+  }
+}
+
+// --- Mapa --------------------------------------------------------------------------------
+
+.stage {
+  position: relative;
+  width: 100%;
+  max-width: 1040px;
+}
+
+.map {
+  display: block;
+  width: 100%;
+  height: auto;
+  overflow: visible;
+  cursor: grab;
+  touch-action: none;
+
+  &:active {
+    cursor: grabbing;
+  }
+}
+
+// Los bordes no engordan con el zoom.
+path,
+.small {
+  vector-effect: non-scaling-stroke;
+}
+
+.sphere {
+  fill: var(--map-sphere);
+  stroke: var(--map-sphere-line);
+  stroke-width: 1;
+}
+
+.graticule {
+  fill: none;
+  stroke: var(--map-graticule);
+  stroke-width: 0.8;
+}
+
+.land {
+  fill: var(--map-land);
+  stroke: var(--map-land-line);
+  stroke-width: 0.6;
+  stroke-linejoin: round;
+}
+
+.country--territory {
+  fill: var(--placeholder);
+}
+
+.land--wish {
+  stroke: var(--wish);
+  stroke-width: 1.1;
+  stroke-dasharray: 3 2.5;
+}
+
+.land--visited {
+  fill: var(--accent);
+  stroke: var(--visited-line);
+}
+
+// Halo de "luces de ciudad" solo en el tema oscuro (en claro basta el borde).
+:host-context([data-theme='dark']) .land--visited {
+  filter: url(#map-glow);
+  opacity: 0.96;
+}
+
+.land--stopover {
+  fill: var(--accent-stopover);
+  stroke: var(--accent);
+  stroke-width: 1.2;
+}
+
+.country--open {
+  cursor: pointer;
+  outline: none;
+
+  &:hover,
+  &:focus-visible,
+  &.is-active {
+    stroke: var(--text);
+    stroke-width: 1.4;
+  }
+}
+
+.small {
+  fill: var(--map-land);
+  stroke: var(--text-muted);
+  stroke-width: 1;
+}
+
+.small--wish {
+  stroke: var(--wish);
+  stroke-dasharray: 2 1.5;
+}
+
+.small--visited {
+  fill: var(--accent);
+  stroke: var(--visited-line);
+  cursor: pointer;
+}
+
+.small--stopover {
+  fill: var(--accent-stopover);
+  stroke: var(--accent);
+  cursor: pointer;
+}
+
+.city__halo {
+  fill: var(--city-halo);
+  opacity: var(--city-halo-opacity);
+  filter: url(#map-halo);
+  pointer-events: none;
+}
+
+.city__light {
+  fill: var(--city-light);
+}
+
+.monument {
+  fill: var(--accent);
+  stroke: var(--map-sphere);
+  stroke-width: 1.5;
+}
+
+// --- Encima del mapa (pixeles de pantalla) ---------------------------------------------
+
+.ring {
+  position: absolute;
+  width: 14px;
+  height: 14px;
+  margin: -7px 0 0 -7px;
+  border-radius: 50%;
+  border: 1.5px solid var(--text);
+  pointer-events: none;
+}
+
+.ring--open {
+  width: 30px;
+  height: 30px;
+  margin: -15px 0 0 -15px;
+  border-width: 2px;
+  box-shadow: 0 0 0 6px var(--accent-stopover);
+}
+
+.badge {
+  position: absolute;
+  z-index: 1;
+  transform: translate(14px, -50%);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 10px;
+  border-radius: var(--radius-pill);
+  background: var(--overlay);
+  border: 1px solid var(--overlay-line);
+  font-size: 12px;
+  color: var(--text);
+  white-space: nowrap;
+  pointer-events: none;
+}
+
+.badge__kind {
+  font-family: var(--font-mono);
+  color: var(--accent-text);
+}
+
+.card {
+  position: absolute;
+  z-index: 2;
+}
+
+.tooltip {
+  position: absolute;
+  z-index: 2;
+  transform: translate(12px, calc(-100% - 10px));
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 8px 12px;
+  border-radius: 12px;
+  background: var(--overlay);
+  border: 1px solid var(--overlay-line);
+  box-shadow: var(--shadow);
+  font-size: 13px;
+  white-space: nowrap;
+  pointer-events: none;
+}
+
+.tooltip__detail {
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+// --- Abajo: historia (fase 7) y leyenda ------------------------------------------------
+
+.bottom {
+  position: absolute;
+  left: 20px;
+  right: 20px;
+  bottom: 18px;
+  z-index: 3;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 14px 24px;
+}
+
+.history {
+  flex: 1 1 420px;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 6px 18px 6px 6px;
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-pill);
+}
+
+.play {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: var(--tap-target);
+  height: var(--tap-target);
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: var(--accent);
+  color: var(--on-accent);
+  cursor: not-allowed;
+}
+
+.history__body {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.history__text {
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+.years {
+  display: grid;
+  grid-template-columns: repeat(var(--years), minmax(0, 1fr));
+  gap: 4px;
+}
+
+.year {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.year__bar {
+  height: 4px;
+  border-radius: 2px;
+  background: var(--accent);
+}
+
+.year__label {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--text-muted);
+}
+
+.year--current .year__label {
+  color: var(--accent-text);
+}
+
+.legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 16px;
+  padding: 8px 14px;
+  border-radius: 14px;
+  background: var(--panel);
+  border: 1px solid var(--line);
+  font-size: 13px;
+  color: var(--text-sub);
+
+  li {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+}
+
+.swatch {
+  width: 12px;
+  height: 12px;
+  border-radius: 3px;
+}
+
+.swatch--visited {
+  background: var(--accent);
+}
+
+.swatch--stopover {
+  background: var(--accent-stopover);
+  border: 1.5px solid var(--accent);
+}
+
+.swatch--wish {
+  border: 1.5px dashed var(--wish);
+}
+
+.swatch--off {
+  background: var(--dot-off);
+  border: 1px solid var(--line);
+}
+
+@media (max-width: 720px) {
+  .frame {
+    padding: 112px 12px 180px;
+  }
+
+  // En pantallas chicas la tarjeta no cabe junto al país: va abajo, a lo ancho del mapa.
+  .card {
+    position: fixed;
+    left: 16px !important;
+    right: 16px;
+    top: auto !important;
+    bottom: 16px;
+    width: auto;
+  }
+}

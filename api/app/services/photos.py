@@ -9,7 +9,8 @@ from sqlalchemy import delete, event, select
 from sqlalchemy.orm import Session
 from sqlalchemy.sql import Select
 
-from app.models import Memory, Photo, Stop
+from app.errors import NotFoundError
+from app.models import Memory, Photo, Stop, User
 from app.storage import StorageBackend
 
 VARIANTS = ("original", "display", "thumb")
@@ -26,6 +27,13 @@ def photo_prefix(user_id: uuid.UUID, photo_id: uuid.UUID) -> str:
 
 def variant_key(storage_key: str, variant: str) -> str:
     return f"{storage_key}/{variant}.jpg"
+
+
+def owned_photo(session: Session, user: User, photo_id: uuid.UUID) -> Photo:
+    photo = session.get(Photo, photo_id)
+    if photo is None or photo.user_id != user.id:
+        raise NotFoundError("Foto no encontrada")
+    return photo
 
 
 def delete_files_after_commit(session: Session, storage: StorageBackend, prefix: str) -> None:

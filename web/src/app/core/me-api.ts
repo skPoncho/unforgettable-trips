@@ -1,48 +1,17 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 
-import type { Continent } from './geo-api';
+import type { CountrySummary, Progress, UserMap } from './api/types';
 
-// Tipos a mano por ahora; en la fase 3 se generan desde el OpenAPI (openapi-typescript).
-export type PlaceStatus = 'visited' | 'stopover';
-
-export interface Count {
-  visited: number;
-  total: number;
-}
-
-export interface Progress {
-  countries: Count & { stopover_only: number };
-  continents: (Count & { continent: Continent })[];
-  subdivisions: Count & { country_iso3: string };
-  cities: number;
-  monuments: number;
-  trips: number;
-  photos: number;
-  wishlist: number;
-}
-
-export interface CountryStatus {
-  iso3: string;
-  status: PlaceStatus;
-  /** Nula para la casa: cuenta desde siempre. */
-  first_visited_on: string | null;
-  is_home: boolean;
-  counts_in_progress: boolean;
-}
-
-export interface SubdivisionStatus {
-  code: string;
-  status: PlaceStatus;
-  first_visited_on: string | null;
-  is_home: boolean;
-}
-
-export interface UserMap {
-  countries: CountryStatus[];
-  subdivisions: SubdivisionStatus[];
-  wishlist: string[];
-}
+export type {
+  CityStatus,
+  CountryStatus,
+  CountrySummary,
+  MonumentStamp,
+  PlaceStatus,
+  Progress,
+  UserMap,
+} from './api/types';
 
 /** Datos del usuario actual (/api/me). Las reglas de qué cuenta viven en la API. */
 @Injectable({ providedIn: 'root' })
@@ -55,5 +24,10 @@ export class MeApi {
 
   map() {
     return this.http.get<UserMap>('/api/me/map');
+  }
+
+  /** Tarjeta de país; 404 si no lo has visitado. */
+  country(iso3: string) {
+    return this.http.get<CountrySummary>(`/api/me/countries/${iso3}`);
   }
 }

@@ -34,6 +34,13 @@
   --map-ocean: #0e1b25;
   --map-land: #1c2b38;
   --map-land-line: #2c4052;
+  --map-frame: #1b2b37;
+  --map-sphere: #0e1b25;
+  --map-sphere-line: #1b2b37;
+  --map-graticule: #16242f;
+  --city-light: #fff4d6;
+  --city-halo: #ffffff;
+  --city-halo-opacity: 0.55;
 
   --accent: #f4b740;
   --on-accent: #1a1204;
@@ -73,6 +80,13 @@
   --map-ocean: #e2e9ee;
   --map-land: #ffffff;
   --map-land-line: #c3cfd9;
+  --map-frame: #d3dce3;
+  --map-sphere: #dce5eb;
+  --map-sphere-line: #c9d5de;
+  --map-graticule: #d2dde5;
+  --city-light: #7a4e00;
+  --city-halo: #f2ae2e;
+  --city-halo-opacity: 0.5;
 
   --accent: #f2ae2e;
   --on-accent: #1a1204;
@@ -114,6 +128,13 @@
     --map-ocean: #e2e9ee;
     --map-land: #ffffff;
     --map-land-line: #c3cfd9;
+    --map-frame: #d3dce3;
+    --map-sphere: #dce5eb;
+    --map-sphere-line: #c9d5de;
+    --map-graticule: #d2dde5;
+    --city-light: #7a4e00;
+    --city-halo: #f2ae2e;
+    --city-halo-opacity: 0.5;
 
     --accent: #f2ae2e;
     --on-accent: #1a1204;

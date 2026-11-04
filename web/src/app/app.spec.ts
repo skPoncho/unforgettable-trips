@@ -24,7 +24,8 @@ describe('App', () => {
     expect(document.title).toBe('Mi país · Huella');
     expect(harness.routeNativeElement?.querySelector('h1')?.textContent).toBe('Mi país');
 
+    // Una ruta desconocida lleva a Mundo, que es la pantalla Mi mapa.
     await harness.navigateByUrl('/no-existe');
-    expect(document.title).toBe('Mundo · Huella');
+    expect(document.title).toBe('Mi mapa · Huella');
   });
 });

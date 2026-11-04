@@ -1,13 +1,21 @@
 import { Component, computed, inject } from '@angular/core';
 import { RouterLink, RouterLinkActive } from '@angular/router';
-import { LucideMoon, LucideSun } from '@lucide/angular';
+import { LucideMoon, LucidePlus, LucideSearch, LucideShare2, LucideSun } from '@lucide/angular';
 
 import { ThemeService } from '../../core/theme.service';
 import { MAP_VIEWS } from '../../views';
 
 @Component({
   selector: 'app-header',
-  imports: [RouterLink, RouterLinkActive, LucideSun, LucideMoon],
+  imports: [
+    RouterLink,
+    RouterLinkActive,
+    LucideSun,
+    LucideMoon,
+    LucideSearch,
+    LucideShare2,
+    LucidePlus,
+  ],
   templateUrl: './header.html',
   styleUrl: './header.scss',
 })

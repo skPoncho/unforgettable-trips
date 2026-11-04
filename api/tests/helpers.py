@@ -1,8 +1,14 @@
 """Puntos y atajos para las pruebas de la API del usuario."""
 
+import uuid
 from typing import Any
 
 from fastapi.testclient import TestClient
+from sqlalchemy.orm import Session
+
+from app.models import Photo, User
+from app.services.photos import VARIANTS, photo_prefix, variant_key
+from app.storage import StorageBackend
 
 # (lon, lat)
 KYOTO = (135.7681, 35.0116)
@@ -36,3 +42,25 @@ def create_memory(client: TestClient, **data: Any) -> dict[str, Any]:
     response = client.post("/api/memories", json=data)
     assert response.status_code == 201, response.text
     return response.json()
+
+
+def add_photo(db: Session, storage: StorageBackend, user: User, memory_id: str) -> Photo:
+    """Foto mínima (hasta que exista la subida, fase 4): cada variante guarda su nombre."""
+    photo_id = uuid.uuid4()
+    key = photo_prefix(user.id, photo_id)
+    for variant in VARIANTS:
+        storage.save(variant_key(key, variant), variant.encode(), "image/jpeg")
+    photo = Photo(
+        id=photo_id,
+        user_id=user.id,
+        memory_id=uuid.UUID(memory_id),
+        storage_key=key,
+        mime="image/jpeg",
+        width=1,
+        height=1,
+        bytes=4,
+        sha256=photo_id.hex,
+    )
+    db.add(photo)
+    db.commit()
+    return photo

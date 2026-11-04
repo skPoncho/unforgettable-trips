@@ -254,10 +254,69 @@ class SubdivisionStatus(BaseModel):
     is_home: bool
 
 
+class CityStatus(BaseModel):
+    id: int
+    name_es: str
+    country_iso3: str
+    location: LonLat
+    status: PlaceStatus
+    first_visited_on: date | None
+    is_home: bool
+
+
+class MonumentStamp(BaseModel):
+    """Monumento sellado: tiene al menos un recuerdo ligado."""
+
+    id: int
+    slug: str
+    name_es: str
+    country_iso3: str
+    location: LonLat
+    first_stamped_on: date
+
+
 class MapOut(BaseModel):
     countries: list[CountryStatus]
     subdivisions: list[SubdivisionStatus]
+    cities: list[CityStatus]
+    monuments: list[MonumentStamp]
     wishlist: list[str] = Field(description="ISO3 de la lista de deseos")
+
+
+class CountryTrip(BaseModel):
+    """Un viaje que pasó por el país, con las fechas de lo que estuvo ahí."""
+
+    id: uuid.UUID
+    title: str
+    visibility: Visibility
+    visit_type: VisitType = Field(description="stay si hubo al menos una estancia en el país")
+    starts_on: date
+    ends_on: date
+
+
+class StopoverBrief(BaseModel):
+    place_name: str
+    note: str | None
+    arrived_on: date
+
+
+class CountrySummaryOut(BaseModel):
+    """Lo que muestra la tarjeta de país en Mi mapa."""
+
+    iso3: str
+    name_es: str
+    status: PlaceStatus
+    is_home: bool
+    counts_in_progress: bool
+    first_visited_on: date | None
+    last_visited_on: date | None = Field(description="Llegada más reciente; nula si solo es casa")
+    days: int = Field(description="Días distintos con estancia en el país")
+    cities: int
+    monuments: int
+    photos: int
+    photo_ids: list[uuid.UUID] = Field(description="Hasta 3 fotos, del viaje más reciente")
+    trips: list[CountryTrip] = Field(description="Del más reciente al más antiguo")
+    stopovers: list[StopoverBrief]
 
 
 class WishlistEntry(BaseModel):

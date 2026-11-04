@@ -1,0 +1,44 @@
+/** Formatos de la interfaz (español de México). Solo presentación: los datos vienen de la API. */
+
+import type { Continent, Visibility } from './api/types';
+
+const MONTH_YEAR = new Intl.DateTimeFormat('es-MX', {
+  month: 'short',
+  year: 'numeric',
+  timeZone: 'UTC',
+});
+
+/** Fecha ISO (`2025-03-08`) → `mar 2025`. */
+export function monthYear(isoDate: string): string {
+  const parts = MONTH_YEAR.formatToParts(new Date(`${isoDate}T00:00:00Z`));
+  const month = parts.find((p) => p.type === 'month')?.value.replace('.', '') ?? '';
+  const year = parts.find((p) => p.type === 'year')?.value ?? '';
+  return `${month} ${year}`;
+}
+
+/** `14 días`, `1 ciudad`, `3 ciudades`. */
+export function count(n: number, singular: string, plural: string): string {
+  return `${n.toLocaleString('es-MX')} ${n === 1 ? singular : plural}`;
+}
+
+export const CONTINENT_NAMES: Record<Continent, string> = {
+  america: 'América',
+  europe: 'Europa',
+  asia: 'Asia',
+  africa: 'África',
+  oceania: 'Oceanía',
+};
+
+export const VISIBILITY_LABELS: Record<Visibility, string> = {
+  private: 'Privado',
+  link: 'Con enlace',
+  public: 'Público',
+};
+
+/** Hitos de países: de 5 en 5 al principio, después más espaciados, hasta los 195. */
+const MILESTONES = [5, 10, 15, 20, 25, 30, 40, 50, 60, 75, 100, 125, 150, 175, 195];
+
+/** Próximo hito por encima de `visited`, o null si ya están todos. */
+export function nextMilestone(visited: number): number | null {
+  return MILESTONES.find((m) => m > visited) ?? null;
+}

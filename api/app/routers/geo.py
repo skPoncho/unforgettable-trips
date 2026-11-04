@@ -10,15 +10,11 @@ from sqlalchemy.orm import Session
 from app.db import get_session
 from app.geo.locate import locate
 from app.models import Continent
+from app.schemas import LonLat
 
 router = APIRouter(prefix="/api/geo", tags=["geo"])
 
 SessionDep = Annotated[Session, Depends(get_session)]
-
-
-class LonLat(BaseModel):
-    lon: float
-    lat: float
 
 
 class CountryOut(BaseModel):

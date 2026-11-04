@@ -12,6 +12,7 @@ from tests.helpers import (
     TOCUMEN,
     TOKYO,
     ZOCALO,
+    add_photo,
     add_stop,
     create_memory,
     create_trip,
@@ -166,32 +167,12 @@ def test_favorite_memory_must_belong_to_the_trip(client, user):
     assert ok.json()["favorite_memory_id"] == memory["id"]
 
 
-def _add_photo(db, storage, user, memory_id: str) -> Photo:
-    photo_id = uuid.uuid4()
-    key = f"users/{user.id}/photos/{photo_id}"
-    storage.save(f"{key}/original.jpg", b"jpeg", "image/jpeg")
-    photo = Photo(
-        id=photo_id,
-        user_id=user.id,
-        memory_id=uuid.UUID(memory_id),
-        storage_key=key,
-        mime="image/jpeg",
-        width=1,
-        height=1,
-        bytes=4,
-        sha256=photo_id.hex,
-    )
-    db.add(photo)
-    db.commit()
-    return photo
-
-
 def test_first_photo_is_the_cover_until_one_is_chosen(client, user, db, storage):
     trip = create_trip(client)
     stop = add_stop(client, trip["id"], place("Kioto", KYOTO, "2025-03-13"))
     memory = create_memory(client, stop_id=stop["id"])
-    first = _add_photo(db, storage, user, memory["id"])
-    second = _add_photo(db, storage, user, memory["id"])
+    first = add_photo(db, storage, user, memory["id"])
+    second = add_photo(db, storage, user, memory["id"])
     db.execute(Photo.__table__.update().where(Photo.id == second.id).values(position=1))
     db.commit()
 
@@ -205,7 +186,7 @@ def test_delete_trip_removes_stops_memories_and_photo_files(client, user, db, st
     trip = create_trip(client)
     stop = add_stop(client, trip["id"], place("Kioto", KYOTO, "2025-03-13"))
     memory = create_memory(client, stop_id=stop["id"])
-    photo = _add_photo(db, storage, user, memory["id"])
+    photo = add_photo(db, storage, user, memory["id"])
     photo_dir = storage.root / photo.storage_key
     assert photo_dir.exists()
 

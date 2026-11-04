@@ -25,7 +25,7 @@ def test_second_user_sees_nothing_from_the_first(client, make_user, act_as):
     assert body["countries"]["visited"] == 0
     assert body["subdivisions"]["visited"] == 0
     assert body["trips"] == body["cities"] == body["wishlist"] == 0
-    assert client.get("/api/me/map").json() == {"countries": [], "subdivisions": [], "wishlist": []}
+    assert all(v == [] for v in client.get("/api/me/map").json().values())
 
 
 def test_second_user_cannot_change_the_first_users_data(client, make_user, act_as):
