@@ -1,0 +1,281 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Huella · Mi mapa</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&amp;family=Instrument+Sans:wght@400..700&amp;family=IBM+Plex+Mono:wght@400;500&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+</style>
+</helmet>
+<div style="min-height: 1120px; box-sizing: border-box; background: {{t.bg}}; color: {{t.text}}; font-family: 'Instrument Sans', system-ui, sans-serif; padding: 20px 24px 32px; display: flex; flex-direction: column; gap: 20px">
+
+  <header style="display: flex; flex-wrap: wrap; align-items: center; gap: 16px 20px">
+    <a href="Main.dc.html" style="display: flex; align-items: center; gap: 10px; text-decoration: none; color: {{t.text}}">
+      <svg width="34" height="34" viewBox="0 0 34 34" aria-hidden="true"><circle cx="17" cy="17" r="16" fill="#F4B740"></circle><path d="M17 8c-4 0-7 3-7 7 0 5 7 11 7 11s7-6 7-11c0-4-3-7-7-7z" fill="#0B1620"></path><circle cx="17" cy="15" r="2.6" fill="#F4B740"></circle></svg>
+      <span style="font-family: 'Bricolage Grotesque', sans-serif; font-weight: 700; font-size: 26px; letter-spacing: -0.02em">huella</span>
+    </a>
+    <nav aria-label="Vistas del mapa" style="display: flex; flex-wrap: wrap; gap: 4px; padding: 4px; background: {{t.panel}}; border: 1px solid {{t.line}}; border-radius: 999px">
+      <a href="Main.dc.html" style="padding: 10px 18px; border-radius: 999px; background: {{t.accent}}; color: {{t.onAccent}}; font-weight: 600; font-size: 14px; text-decoration: none">Mundo</a>
+      <a href="Mexico.dc.html" style="padding: 10px 18px; border-radius: 999px; color: {{t.sub}}; font-weight: 500; font-size: 14px; text-decoration: none">Mi país</a>
+      <a href="Mexico.dc.html" style="padding: 10px 18px; border-radius: 999px; color: {{t.sub}}; font-weight: 500; font-size: 14px; text-decoration: none">Ciudades</a>
+      <a href="Mexico.dc.html" style="padding: 10px 18px; border-radius: 999px; color: {{t.sub}}; font-weight: 500; font-size: 14px; text-decoration: none">Monumentos</a>
+    </nav>
+    <label style="flex: 1 1 240px; display: flex; align-items: center; gap: 10px; min-height: 44px; padding: 0 16px; background: {{t.panel}}; border: 1px solid {{t.line}}; border-radius: 999px; color: {{t.muted}}">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="M20 20l-3.5-3.5"></path></svg>
+      <span style="position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0)">Buscar</span>
+      <input type="search" placeholder="Busca un lugar, un viaje o un recuerdo…" style="flex: 1; min-width: 0; background: transparent; border: 0; outline: none; color: {{t.text}}; font: inherit; font-size: 15px">
+    </label>
+    <button type="button" style="display: inline-flex; align-items: center; gap: 8px; min-height: 44px; padding: 0 16px; border-radius: 999px; border: 1px solid {{t.line}}; background: {{t.panel}}; color: {{t.text}}; font: inherit; font-size: 14px; font-weight: 500; cursor: pointer">
+      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="18" cy="5" r="3"></circle><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="19" r="3"></circle><path d="M8.6 13.5l6.8 4M15.4 6.5l-6.8 4"></path></svg>
+      Compartir mi mapa
+    </button>
+    <a href="Recuerdo.dc.html" style="display: inline-flex; align-items: center; gap: 8px; min-height: 44px; padding: 0 20px; border-radius: 999px; background: {{t.accent}}; color: {{t.onAccent}}; font-weight: 600; font-size: 15px; text-decoration: none">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"></path></svg>
+      Nuevo recuerdo
+    </a>
+    <button type="button" onClick="{{toggleTema}}" aria-label="{{temaLabel}}" style="width: 44px; height: 44px; border-radius: 50%; border: 1px solid {{t.line}}; background: {{t.panel}}; color: {{t.text}}; cursor: pointer; display: grid; place-items: center">
+      <sc-if value="{{isDark}}" hint-placeholder-val="{{ true }}">
+        <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"></path></svg>
+      </sc-if>
+      <sc-if value="{{isLight}}" hint-placeholder-val="{{ false }}">
+        <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"></path></svg>
+      </sc-if>
+    </button>
+    <button type="button" aria-label="Mi perfil" style="width: 44px; height: 44px; border-radius: 50%; border: 1px solid {{t.line}}; background: {{t.panel2}}; color: {{t.text}}; font-family: 'Bricolage Grotesque', sans-serif; font-weight: 700; font-size: 16px; cursor: pointer">CB</button>
+  </header>
+
+  <main style="display: flex; flex-wrap: wrap; gap: 20px; align-items: stretch">
+
+    <aside style="flex: 1 1 320px; max-width: 380px; min-width: 0; display: flex; flex-direction: column; gap: 16px">
+      <section style="background: {{t.panel}}; border: 1px solid {{t.line}}; border-radius: 24px; padding: 24px; display: flex; flex-direction: column; gap: 18px">
+        <div style="font-family: 'IBM Plex Mono', monospace; font-size: 12px; letter-spacing: 0.08em; color: {{t.muted}}">TU MUNDO · 2019 — HOY</div>
+        <div style="display: flex; align-items: baseline; gap: 10px">
+          <span style="font-family: 'Bricolage Grotesque', sans-serif; font-weight: 800; font-size: 84px; line-height: 0.85; letter-spacing: -0.04em; color: {{t.accentText}}">12</span>
+          <span style="font-size: 18px; color: {{t.sub}}">de 195 países</span>
+        </div>
+        <div aria-label="12 de 195 países encendidos, uno de ellos por escala" role="img" style="display: grid; grid-template-columns: repeat(20, minmax(0, 1fr)); gap: 5px">
+          <sc-for list="{{dots}}" as="d" hint-placeholder-count="195">
+            <span style="aspect-ratio: 1; box-sizing: border-box; border-radius: 50%; background: {{d.bg}}; border: {{d.border}}; box-shadow: {{d.glow}}"></span>
+          </sc-for>
+        </div>
+        <p style="margin: 0; font-size: 14px; line-height: 1.5; color: {{t.muted}}">Cada punto es un país: se enciende con tu primer recuerdo ahí. Las escalas también cuentan (punto hueco). <span style="color: {{t.text}}">Próximo hito: 15 países.</span></p>
+        <div style="height: 1px; background: {{t.line}}"></div>
+        <div style="display: flex; flex-direction: column; gap: 12px">
+          <sc-for list="{{continents}}" as="c" hint-placeholder-count="5">
+            <div style="display: flex; flex-direction: column; gap: 6px">
+              <div style="display: flex; justify-content: space-between; font-size: 14px">
+                <span>{{c.name}}</span>
+                <span style="font-family: 'IBM Plex Mono', monospace; color: {{t.muted}}">{{c.v}}/{{c.t}}</span>
+              </div>
+              <div style="height: 6px; border-radius: 3px; background: {{t.track}}; overflow: hidden">
+                <div style="height: 100%; width: {{c.w}}; background: {{t.accent}}; border-radius: 3px"></div>
+              </div>
+            </div>
+          </sc-for>
+        </div>
+      </section>
+
+      <section style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px">
+        <div style="background: {{t.panel}}; border: 1px solid {{t.line}}; border-radius: 18px; padding: 16px 18px">
+          <div style="font-family: 'Bricolage Grotesque', sans-serif; font-weight: 700; font-size: 30px">9</div>
+          <div style="font-size: 13px; color: {{t.muted}}">viajes</div>
+        </div>
+        <div style="background: {{t.panel}}; border: 1px solid {{t.line}}; border-radius: 18px; padding: 16px 18px">
+          <div style="font-family: 'Bricolage Grotesque', sans-serif; font-weight: 700; font-size: 30px">20</div>
+          <div style="font-size: 13px; color: {{t.muted}}">ciudades</div>
+        </div>
+        <div style="background: {{t.panel}}; border: 1px solid {{t.line}}; border-radius: 18px; padding: 16px 18px">
+          <div style="font-family: 'Bricolage Grotesque', sans-serif; font-weight: 700; font-size: 30px">18</div>
+          <div style="font-size: 13px; color: {{t.muted}}">monumentos</div>
+        </div>
+        <div style="background: {{t.panel}}; border: 1px solid {{t.line}}; border-radius: 18px; padding: 16px 18px">
+          <div style="font-family: 'Bricolage Grotesque', sans-serif; font-weight: 700; font-size: 30px">412</div>
+          <div style="font-size: 13px; color: {{t.muted}}">fotos</div>
+        </div>
+      </section>
+
+      <section style="background: {{t.panel}}; border: 1px solid {{t.line}}; border-radius: 24px; padding: 20px 22px; display: flex; flex-direction: column; gap: 12px">
+        <div style="display: flex; justify-content: space-between; align-items: center">
+          <h2 style="margin: 0; font-family: 'Bricolage Grotesque', sans-serif; font-size: 18px; font-weight: 700">Lista de deseos</h2>
+          <span style="font-family: 'IBM Plex Mono', monospace; font-size: 12px; color: {{t.wish}}">4</span>
+        </div>
+        <div style="display: flex; flex-wrap: wrap; gap: 8px">
+          <span style="padding: 7px 12px; border-radius: 999px; border: 1.5px dashed {{t.wish}}; color: {{t.wishText}}; font-size: 13px">Argentina</span>
+          <span style="padding: 7px 12px; border-radius: 999px; border: 1.5px dashed {{t.wish}}; color: {{t.wishText}}; font-size: 13px">Marruecos</span>
+          <span style="padding: 7px 12px; border-radius: 999px; border: 1.5px dashed {{t.wish}}; color: {{t.wishText}}; font-size: 13px">Islandia</span>
+          <span style="padding: 7px 12px; border-radius: 999px; border: 1.5px dashed {{t.wish}}; color: {{t.wishText}}; font-size: 13px">Egipto</span>
+        </div>
+      </section>
+    </aside>
+
+    <section aria-label="Mapa del mundo" style="flex: 999 1 640px; min-width: 0; position: relative; background: {{t.mapBg}}; border: 1px solid {{t.mapLine}}; border-radius: 28px; padding: 72px 28px 100px; display: flex; align-items: center; justify-content: center; overflow: hidden">
+
+      <div style="position: absolute; top: 18px; left: 20px; right: 20px; display: flex; flex-wrap: wrap; justify-content: space-between; gap: 12px; z-index: 2">
+        <div role="group" aria-label="Capas del mapa" style="display: flex; flex-wrap: wrap; gap: 8px">
+          <sc-for list="{{layers}}" as="l" hint-placeholder-count="4">
+            <button type="button" onClick="{{l.toggle}}" aria-pressed="{{l.pressed}}" style="min-height: 40px; padding: 0 14px; border-radius: 999px; border: 1px solid {{l.border}}; background: {{l.bg}}; color: {{l.color}}; font: inherit; font-size: 13px; font-weight: 500; cursor: pointer">{{l.label}}</button>
+          </sc-for>
+        </div>
+        <div style="display: flex; gap: 6px">
+          <button type="button" aria-label="Acercar" style="width: 40px; height: 40px; border-radius: 12px; border: 1px solid {{t.line}}; background: {{t.panel}}; color: {{t.text}}; cursor: pointer; display: grid; place-items: center"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"></path></svg></button>
+          <button type="button" aria-label="Alejar" style="width: 40px; height: 40px; border-radius: 12px; border: 1px solid {{t.line}}; background: {{t.panel}}; color: {{t.text}}; cursor: pointer; display: grid; place-items: center"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M5 12h14"></path></svg></button>
+          <button type="button" aria-label="Vista de globo 3D" style="width: 40px; height: 40px; border-radius: 12px; border: 1px solid {{t.line}}; background: {{t.panel}}; color: {{t.text}}; cursor: pointer; display: grid; place-items: center"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><ellipse cx="12" cy="12" rx="4" ry="9"></ellipse><path d="M3 12h18"></path></svg></button>
+        </div>
+      </div>
+
+      <div style="position: relative; width: 100%; max-width: 1040px">
+        <img src="{{t.world}}" alt="Mapa del mundo con 11 países visitados en ámbar, Panamá marcado como escala y 4 países de la lista de deseos con contorno punteado" style="display: block; width: 100%; height: auto">
+
+        <span aria-hidden="true" style="position: absolute; left: 81.7%; top: 25.1%; width: 30px; height: 30px; margin: -15px 0 0 -15px; box-sizing: border-box; border-radius: 50%; border: 2px solid {{t.text}}; box-shadow: 0 0 0 6px rgba(244,183,64,0.3)"></span>
+
+        <div style="position: absolute; left: 25.6%; top: 43.6%; transform: translate(14px, -50%); display: flex; align-items: center; gap: 6px; padding: 5px 10px; border-radius: 999px; background: {{t.overlay}}; border: 1px solid {{t.overlayLine}}; font-size: 12px; color: {{t.text}}; white-space: nowrap">
+          <span style="font-family: 'IBM Plex Mono', monospace; color: {{t.accentText}}">ESCALA</span> Panamá · 3 h en Tocumen
+        </div>
+
+        <div style="position: absolute; left: calc(81.7% - 318px); top: calc(25.1% + 22px); width: 290px; background: {{t.overlay}}; border: 1px solid {{t.overlayLine}}; border-radius: 20px; padding: 14px; display: flex; flex-direction: column; gap: 12px; box-shadow: {{t.shadow}}">
+          <div style="display: grid; grid-template-columns: 2fr 1fr; grid-template-rows: 54px 54px; gap: 6px">
+            <div style="grid-row: span 2; border-radius: 12px; display: flex; align-items: flex-end; padding: 8px; font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: {{t.muted}}; background-color: {{t.ph}}; background-image: repeating-linear-gradient(135deg, {{t.stripe}} 0 10px, transparent 10px 20px)">[foto portada]</div>
+            <div style="border-radius: 10px; background-color: {{t.ph}}; background-image: repeating-linear-gradient(135deg, {{t.stripe}} 0 10px, transparent 10px 20px)"></div>
+            <div style="border-radius: 10px; display: grid; place-items: center; font-size: 13px; font-weight: 600; color: {{t.text}}; background-color: {{t.ph}}">+81</div>
+          </div>
+          <div style="display: flex; justify-content: space-between; align-items: baseline">
+            <span style="font-family: 'Bricolage Grotesque', sans-serif; font-weight: 700; font-size: 22px">Japón</span>
+            <span style="font-family: 'IBM Plex Mono', monospace; font-size: 12px; color: {{t.accentText}}">MAR 2025</span>
+          </div>
+          <div style="font-size: 13px; color: {{t.muted}}">14 días · 6 ciudades · 4 monumentos · 84 fotos</div>
+          <a href="Viaje.dc.html" style="display: flex; justify-content: center; align-items: center; gap: 6px; min-height: 44px; border-radius: 12px; background: {{t.accent}}; color: {{t.onAccent}}; font-weight: 600; font-size: 14px; text-decoration: none">Abrir viaje
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"></path></svg>
+          </a>
+        </div>
+      </div>
+
+      <div style="position: absolute; left: 20px; right: 20px; bottom: 18px; display: flex; flex-wrap: wrap; align-items: center; gap: 14px 24px; z-index: 2">
+        <div style="flex: 1 1 420px; display: flex; align-items: center; gap: 14px; min-width: 0; background: {{t.panel}}; border: 1px solid {{t.line}}; border-radius: 999px; padding: 6px 18px 6px 6px">
+          <button type="button" onClick="{{togglePlay}}" aria-label="{{playLabel}}" style="flex: none; width: 44px; height: 44px; border-radius: 50%; border: 0; background: {{t.accent}}; color: {{t.onAccent}}; cursor: pointer; display: grid; place-items: center">
+            <sc-if value="{{playing}}" hint-placeholder-val="{{ false }}">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><rect x="6" y="5" width="4" height="14" rx="1"></rect><rect x="14" y="5" width="4" height="14" rx="1"></rect></svg>
+            </sc-if>
+            <sc-if value="{{paused}}" hint-placeholder-val="{{ true }}">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7z"></path></svg>
+            </sc-if>
+          </button>
+          <div style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 6px">
+            <div style="font-size: 12px; color: {{t.muted}}">Reproduce tu historia: mira cómo se encendió tu mapa, año por año</div>
+            <div style="display: grid; grid-template-columns: repeat(8, minmax(0, 1fr)); gap: 4px">
+              <sc-for list="{{years}}" as="y" hint-placeholder-count="8">
+                <button type="button" onClick="{{y.pick}}" aria-pressed="{{y.pressed}}" style="border: 0; background: transparent; padding: 0; cursor: pointer; display: flex; flex-direction: column; gap: 4px; align-items: stretch">
+                  <span style="height: 4px; border-radius: 2px; background: {{y.bar}}"></span>
+                  <span style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: {{y.color}}; text-align: left">{{y.label}}</span>
+                </button>
+              </sc-for>
+            </div>
+          </div>
+        </div>
+        <div style="display: flex; flex-wrap: wrap; gap: 8px 16px; font-size: 13px; color: {{t.sub}}; padding: 8px 14px; border-radius: 14px; background: {{t.panel}}; border: 1px solid {{t.line}}">
+          <span style="display: flex; align-items: center; gap: 8px"><span style="width: 12px; height: 12px; border-radius: 3px; background: {{t.accent}}"></span>Visitado</span>
+          <span style="display: flex; align-items: center; gap: 8px"><span style="width: 12px; height: 12px; box-sizing: border-box; border-radius: 3px; background: rgba(244,183,64,0.4); border: 1.5px solid {{t.accent}}"></span>Escala</span>
+          <span style="display: flex; align-items: center; gap: 8px"><span style="width: 12px; height: 12px; box-sizing: border-box; border-radius: 3px; border: 1.5px dashed {{t.wish}}"></span>Lista de deseos</span>
+          <span style="display: flex; align-items: center; gap: 8px"><span style="width: 12px; height: 12px; box-sizing: border-box; border-radius: 3px; background: {{t.off}}; border: 1px solid {{t.line}}"></span>Por descubrir</span>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <section style="display: flex; flex-direction: column; gap: 14px">
+    <div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; gap: 8px">
+      <h2 style="margin: 0; font-family: 'Bricolage Grotesque', sans-serif; font-size: 26px; font-weight: 700; letter-spacing: -0.01em">Tus viajes</h2>
+      <a href="Viaje.dc.html" style="font-size: 14px; font-weight: 600; color: {{t.accentText}}">Ver los 9 viajes</a>
+    </div>
+    <div style="display: flex; gap: 14px; overflow-x: auto; padding-bottom: 6px">
+      <sc-for list="{{trips}}" as="v" hint-placeholder-count="6">
+        <a href="Viaje.dc.html" style="flex: 0 0 236px; display: flex; flex-direction: column; gap: 10px; padding: 10px 10px 14px; border-radius: 20px; background: {{t.panel}}; border: 1px solid {{t.line}}; color: {{t.text}}; text-decoration: none">
+          <div style="height: 130px; border-radius: 14px; display: flex; justify-content: space-between; align-items: flex-end; padding: 10px; box-sizing: border-box; background-color: {{t.ph}}; background-image: repeating-linear-gradient(135deg, {{t.stripe}} 0 10px, transparent 10px 20px)">
+            <span style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; padding: 4px 8px; border-radius: 6px; background: {{t.inv}}; color: {{t.onInv}}">{{v.code}}</span>
+            <span style="display: inline-flex; align-items: center; gap: 4px; font-size: 11px; padding: 4px 8px; border-radius: 6px; background: {{t.panel}}; color: {{t.sub}}">
+              <sc-if value="{{v.isPublic}}" hint-placeholder-val="{{ false }}">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18"></path></svg>
+              </sc-if>
+              <sc-if value="{{v.isPrivate}}" hint-placeholder-val="{{ true }}">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2"></rect><path d="M8 11V8a4 4 0 0 1 8 0v3"></path></svg>
+              </sc-if>
+              {{v.vis}}
+            </span>
+          </div>
+          <div style="padding: 0 4px; display: flex; flex-direction: column; gap: 4px">
+            <span style="font-family: 'Bricolage Grotesque', sans-serif; font-weight: 700; font-size: 17px">{{v.name}}</span>
+            <span style="font-size: 13px; color: {{t.muted}}">{{v.when}} · {{v.stats}}</span>
+          </div>
+        </a>
+      </sc-for>
+    </div>
+  </section>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"tema":{"editor":"enum","options":["oscuro","claro"],"default":"oscuro"},"$preview":{"width":1440,"height":1120}}'>
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.state = { tema: null, layers: { paises: true, ciudades: true, monumentos: false, deseos: true }, playing: false, year: 2026 };
+  }
+  palette(name) {
+    const P = {
+      oscuro: { bg: '#0B1620', panel: '#122230', panel2: '#182B3A', line: '#24394A', mapBg: '#0E1B25', mapLine: '#1B2B37', text: '#EEF2F4', sub: '#B5C4CF', muted: '#9DB0BE', accent: '#F4B740', onAccent: '#1A1204', accentText: '#F4B740', wish: '#7FD8CE', wishText: '#CFF3EE', track: '#1D3243', off: '#1F3446', ph: '#16293A', stripe: 'rgba(255,255,255,0.035)', inv: '#EEF2F4', onInv: '#0B1620', overlay: 'rgba(18,34,48,0.95)', overlayLine: '#35506A', shadow: '0 20px 50px rgba(0,0,0,0.45)', glow: '0 0 6px rgba(244,183,64,0.7)', world: '/_blob/139cebdbbea527404e89b5a65b51596e' },
+      claro: { bg: '#EEF1F4', panel: '#FFFFFF', panel2: '#F4F6F8', line: '#D6DEE5', mapBg: '#E6ECF0', mapLine: '#D3DCE3', text: '#0F1E2A', sub: '#3E5263', muted: '#556A7B', accent: '#F2AE2E', onAccent: '#1A1204', accentText: '#8A5A00', wish: '#167468', wishText: '#0F5C53', track: '#E1E7EC', off: '#D5DDE3', ph: '#DCE4EA', stripe: 'rgba(15,30,42,0.045)', inv: '#0F1E2A', onInv: '#FFFFFF', overlay: 'rgba(255,255,255,0.97)', overlayLine: '#D6DEE5', shadow: '0 20px 50px rgba(15,30,42,0.16)', glow: 'none', world: '/_blob/65f417fdfcbac080a4709b572aa7d532' }
+    };
+    return P[name] || P.oscuro;
+  }
+  renderVals() {
+    const s = this.state;
+    const tema = s.tema || this.props.tema || 'oscuro';
+    const t = this.palette(tema);
+    const dots = [];
+    for (let i = 0; i < 195; i++) {
+      if (i < 11) dots.push({ bg: t.accent, border: '0', glow: t.glow });
+      else if (i === 11) dots.push({ bg: 'transparent', border: '2px solid ' + t.accent, glow: 'none' });
+      else dots.push({ bg: t.off, border: '0', glow: 'none' });
+    }
+    const continents = [
+      ['América', 7, 35], ['Europa', 4, 44], ['Asia', 1, 48], ['África', 0, 54], ['Oceanía', 0, 14]
+    ].map(([name, v, n]) => ({ name, v, t: n, w: ((v / n) * 100).toFixed(1) + '%' }));
+    const defs = [['paises', 'Países'], ['ciudades', 'Ciudades'], ['monumentos', 'Monumentos'], ['deseos', 'Lista de deseos']];
+    const layers = defs.map(([k, label]) => {
+      const on = !!s.layers[k];
+      return {
+        label, pressed: on ? 'true' : 'false',
+        bg: on ? t.inv : t.panel, color: on ? t.onInv : t.sub, border: on ? t.inv : t.line,
+        toggle: () => this.setState({ layers: { ...s.layers, [k]: !on } })
+      };
+    });
+    const years = [2019, 2020, 2021, 2022, 2023, 2024, 2025, 2026].map((y) => ({
+      label: String(y), pressed: y === s.year ? 'true' : 'false',
+      bar: y <= s.year ? t.accent : t.line, color: y === s.year ? t.accentText : t.muted,
+      pick: () => this.setState({ year: y })
+    }));
+    const trips = [
+      { code: 'JPN', name: 'Japón', when: 'mar 2025', stats: '14 días · 84 fotos', vis: 'Público' },
+      { code: 'MEX', name: 'Oaxaca y Chiapas', when: 'dic 2024', stats: '9 días · 61 fotos', vis: 'Con enlace' },
+      { code: 'PER', name: 'Cusco y Valle Sagrado', when: 'jul 2024', stats: '8 días · 57 fotos', vis: 'Público' },
+      { code: 'ITA', name: 'Roma y Florencia', when: 'oct 2023', stats: '10 días · 73 fotos', vis: 'Privado' },
+      { code: 'USA', name: 'Nueva York', when: 'abr 2022', stats: '6 días · 40 fotos', vis: 'Privado' },
+      { code: 'MEX', name: 'Yucatán', when: 'nov 2021', stats: '5 días · 38 fotos', vis: 'Público' }
+    ].map((v) => ({ ...v, isPublic: v.vis !== 'Privado', isPrivate: v.vis === 'Privado' }));
+    const isDark = tema === 'oscuro';
+    return {
+      t, dots, continents, layers, years, trips, isDark, isLight: !isDark,
+      temaLabel: isDark ? 'Cambiar a tema claro' : 'Cambiar a tema oscuro',
+      toggleTema: () => this.setState({ tema: isDark ? 'claro' : 'oscuro' }),
+      playing: s.playing, paused: !s.playing,
+      playLabel: s.playing ? 'Pausar historia' : 'Reproducir historia',
+      togglePlay: () => this.setState({ playing: !s.playing })
+    };
+  }
+}
+</script>
+</body>
+</html>

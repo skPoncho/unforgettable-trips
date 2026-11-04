@@ -1,0 +1,74 @@
+/* Huella · tokens de color. Tema oscuro por defecto; claro con [data-theme="light"]
+   o, si el usuario no eligió, según la preferencia del sistema. */
+:root,
+:root[data-theme="dark"] {
+  --bg: #0B1620;
+  --panel: #122230;
+  --line: #24394A;
+  --text: #EEF2F4;
+  --text-sub: #B5C4CF;
+  --text-muted: #9DB0BE;
+  --map-ocean: #0E1B25;
+  --map-land: #1C2B38;
+  --map-land-line: #2C4052;
+  --accent: #F4B740;
+  --on-accent: #1A1204;
+  --accent-text: #F4B740;
+  --accent-stopover: rgba(244, 183, 64, 0.38);
+  --visited-line: #FFE2A3;
+  --wish: #7FD8CE;
+  --inverse: #EEF2F4;
+  --on-inverse: #0B1620;
+  --visited-glow: 6px;
+
+  --font-display: 'Bricolage Grotesque', sans-serif;
+  --font-body: 'Instrument Sans', system-ui, sans-serif;
+  --font-mono: 'IBM Plex Mono', monospace;
+  --radius-map: 28px;
+  --radius-card: 22px;
+  --radius-pill: 999px;
+}
+
+:root[data-theme="light"] {
+  --bg: #EEF1F4;
+  --panel: #FFFFFF;
+  --line: #D6DEE5;
+  --text: #0F1E2A;
+  --text-sub: #3E5263;
+  --text-muted: #556A7B;
+  --map-ocean: #E2E9EE;
+  --map-land: #FFFFFF;
+  --map-land-line: #C3CFD9;
+  --accent: #F2AE2E;
+  --on-accent: #1A1204;
+  --accent-text: #8A5A00;
+  --accent-stopover: rgba(242, 174, 46, 0.42);
+  --visited-line: #B87A06;
+  --wish: #167468;
+  --inverse: #0F1E2A;
+  --on-inverse: #FFFFFF;
+  --visited-glow: 0px;
+}
+
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme]) {
+    --bg: #EEF1F4;
+    --panel: #FFFFFF;
+    --line: #D6DEE5;
+    --text: #0F1E2A;
+    --text-sub: #3E5263;
+    --text-muted: #556A7B;
+    --map-ocean: #E2E9EE;
+    --map-land: #FFFFFF;
+    --map-land-line: #C3CFD9;
+    --accent: #F2AE2E;
+    --on-accent: #1A1204;
+    --accent-text: #8A5A00;
+    --accent-stopover: rgba(242, 174, 46, 0.42);
+    --visited-line: #B87A06;
+    --wish: #167468;
+    --inverse: #0F1E2A;
+    --on-inverse: #FFFFFF;
+    --visited-glow: 0px;
+  }
+}

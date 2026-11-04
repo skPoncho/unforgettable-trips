@@ -1,0 +1,225 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Huella · Viaje a Japón</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&amp;family=Instrument+Sans:wght@400..700&amp;family=IBM+Plex+Mono:wght@400;500&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+</style>
+</helmet>
+<div style="min-height: 1780px; box-sizing: border-box; background: {{t.bg}}; color: {{t.text}}; font-family: 'Instrument Sans', system-ui, sans-serif; padding: 20px 24px 48px; display: flex; flex-direction: column; gap: 24px">
+
+  <header style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px 20px">
+    <div style="display: flex; flex-wrap: wrap; align-items: center; gap: 12px 18px">
+      <a href="Main.dc.html" style="display: inline-flex; align-items: center; gap: 8px; min-height: 44px; padding: 0 16px 0 12px; border-radius: 999px; border: 1px solid {{t.line}}; background: {{t.panel}}; color: {{t.text}}; text-decoration: none; font-size: 14px; font-weight: 500; box-sizing: border-box">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M19 12H5M11 6l-6 6 6 6"></path></svg>
+        Mi mapa
+      </a>
+      <nav aria-label="Ruta de navegación" style="font-family: 'IBM Plex Mono', monospace; font-size: 13px; color: {{t.muted}}; display: flex; gap: 8px">
+        <span>Mundo</span><span aria-hidden="true">/</span><span>Asia</span><span aria-hidden="true">/</span><span style="color: {{t.text}}">Japón · primavera 2025</span>
+      </nav>
+    </div>
+    <div style="display: flex; flex-wrap: wrap; align-items: center; gap: 8px">
+      <div role="radiogroup" aria-label="Quién puede ver este viaje" style="display: flex; gap: 2px; padding: 4px; border-radius: 999px; background: {{t.panel}}; border: 1px solid {{t.line}}">
+        <sc-for list="{{visOpts}}" as="o" hint-placeholder-count="3">
+          <button type="button" role="radio" aria-checked="{{o.checked}}" onClick="{{o.pick}}" style="display: inline-flex; align-items: center; gap: 6px; min-height: 36px; padding: 0 12px; border-radius: 999px; border: 0; background: {{o.bg}}; color: {{o.color}}; font: inherit; font-size: 13px; font-weight: 600; cursor: pointer">{{o.label}}</button>
+        </sc-for>
+      </div>
+      <button type="button" onClick="{{toggleTema}}" aria-label="{{temaLabel}}" style="width: 44px; height: 44px; border-radius: 50%; border: 1px solid {{t.line}}; background: {{t.panel}}; color: {{t.text}}; cursor: pointer; display: grid; place-items: center">
+        <sc-if value="{{isDark}}" hint-placeholder-val="{{ true }}">
+          <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"></path></svg>
+        </sc-if>
+        <sc-if value="{{isLight}}" hint-placeholder-val="{{ false }}">
+          <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"></path></svg>
+        </sc-if>
+      </button>
+      <a href="Recuerdo.dc.html" style="display: inline-flex; align-items: center; gap: 8px; min-height: 44px; padding: 0 18px; border-radius: 999px; background: {{t.accent}}; color: {{t.onAccent}}; font-weight: 600; font-size: 14px; text-decoration: none">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"></path></svg>
+        Agregar recuerdo
+      </a>
+    </div>
+  </header>
+
+  <div style="display: flex; flex-wrap: wrap; gap: 28px; align-items: flex-start">
+
+    <section aria-label="Mapa de la ruta" style="flex: 1 1 480px; max-width: 640px; min-width: 0; display: flex; flex-direction: column; gap: 14px">
+      <div style="position: relative; aspect-ratio: 720 / 760; border-radius: 28px; overflow: hidden; border: 1px solid {{t.mapLine}}">
+        <img src="{{t.japan}}" alt="Mapa de Japón con la ruta del viaje de Tokio a Hiroshima" style="position: absolute; inset: 0; width: 100%; height: 100%; display: block">
+        <div style="position: absolute; top: 16px; left: 16px; display: flex; flex-wrap: wrap; gap: 8px">
+          <span style="padding: 8px 12px; border-radius: 999px; background: {{t.overlay}}; border: 1px solid {{t.line}}; font-family: 'IBM Plex Mono', monospace; font-size: 12px; color: {{t.accentText}}">RUTA · ≈ 850 KM</span>
+          <span style="padding: 8px 12px; border-radius: 999px; background: {{t.overlay}}; border: 1px solid {{t.line}}; font-family: 'IBM Plex Mono', monospace; font-size: 12px; color: {{t.sub}}">6 PARADAS</span>
+        </div>
+        <sc-for list="{{stops}}" as="s" hint-placeholder-count="6">
+          <div style="position: absolute; left: {{s.x}}; top: {{s.y}}; width: 0; height: 0">
+            <button type="button" onClick="{{s.pick}}" aria-label="{{s.aria}}" aria-pressed="{{s.pressed}}" style="position: absolute; left: -15px; top: -15px; width: 30px; height: 30px; border-radius: 50%; border: 2px solid {{t.bg}}; background: {{s.pinBg}}; color: {{s.pinFg}}; font-family: 'IBM Plex Mono', monospace; font-weight: 500; font-size: 13px; cursor: pointer; box-shadow: {{s.pinGlow}}">{{s.n}}</button>
+            <span style="position: absolute; {{s.labelPos}}; white-space: nowrap; padding: 4px 9px; border-radius: 8px; background: {{t.overlay}}; font-size: 13px; font-weight: 600; color: {{s.labelColor}}; pointer-events: none">{{s.place}}</span>
+          </div>
+        </sc-for>
+      </div>
+      <div style="display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px">
+        <div style="background: {{t.panel}}; border: 1px solid {{t.line}}; border-radius: 16px; padding: 14px 16px">
+          <div style="font-family: 'Bricolage Grotesque', sans-serif; font-weight: 700; font-size: 26px">14</div>
+          <div style="font-size: 13px; color: {{t.muted}}">días</div>
+        </div>
+        <div style="background: {{t.panel}}; border: 1px solid {{t.line}}; border-radius: 16px; padding: 14px 16px">
+          <div style="font-family: 'Bricolage Grotesque', sans-serif; font-weight: 700; font-size: 26px">6</div>
+          <div style="font-size: 13px; color: {{t.muted}}">ciudades</div>
+        </div>
+        <div style="background: {{t.panel}}; border: 1px solid {{t.line}}; border-radius: 16px; padding: 14px 16px">
+          <div style="font-family: 'Bricolage Grotesque', sans-serif; font-weight: 700; font-size: 26px">4</div>
+          <div style="font-size: 13px; color: {{t.muted}}">monumentos</div>
+        </div>
+        <div style="background: {{t.panel}}; border: 1px solid {{t.line}}; border-radius: 16px; padding: 14px 16px">
+          <div style="font-family: 'Bricolage Grotesque', sans-serif; font-weight: 700; font-size: 26px">84</div>
+          <div style="font-size: 13px; color: {{t.muted}}">fotos</div>
+        </div>
+      </div>
+      <div style="display: flex; align-items: center; gap: 10px; padding: 12px 14px; border-radius: 16px; border: 1px dashed {{t.line}}; font-size: 13px; color: {{t.muted}}">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true" style="flex: none"><path d="M2 16l20-6-20-6 4 6z"></path></svg>
+        Ida con escala en Ciudad de Panamá (3 h): ya cuenta como país visitado.
+      </div>
+    </section>
+
+    <article style="flex: 999 1 540px; min-width: 0; display: flex; flex-direction: column; gap: 22px">
+      <div style="display: flex; flex-direction: column; gap: 10px">
+        <span style="font-family: 'IBM Plex Mono', monospace; font-size: 13px; letter-spacing: 0.08em; color: {{t.accentText}}">8 — 21 MAR 2025 · VIAJE 9 DE 9</span>
+        <h1 style="margin: 0; font-family: 'Bricolage Grotesque', sans-serif; font-weight: 800; font-size: 88px; line-height: 0.9; letter-spacing: -0.04em">Japón</h1>
+        <p style="margin: 0; max-width: 560px; font-size: 18px; line-height: 1.5; color: {{t.sub}}">De Tokio a Hiroshima en tren bala, siguiendo el inicio de la temporada de cerezos.</p>
+        <div style="display: flex; align-items: center; gap: 8px; font-size: 13px; color: {{t.muted}}">
+          <sc-if value="{{visPublic}}" hint-placeholder-val="{{ true }}">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18"></path></svg>
+          </sc-if>
+          <sc-if value="{{visPrivate}}" hint-placeholder-val="{{ false }}">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2"></rect><path d="M8 11V8a4 4 0 0 1 8 0v3"></path></svg>
+          </sc-if>
+          {{visText}}
+        </div>
+      </div>
+
+      <figure style="margin: 0; display: flex; gap: 16px; align-items: flex-start; padding: 20px 22px; border-radius: 20px; background: {{t.accent}}; color: {{t.onAccent}}">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" aria-hidden="true" style="flex: none"><path d="M12 3l2.6 5.6 6 .7-4.5 4.1 1.2 6L12 16.4 6.7 19.4l1.2-6L3.4 9.3l6-.7z"></path></svg>
+        <div style="display: flex; flex-direction: column; gap: 6px">
+          <span style="font-family: 'IBM Plex Mono', monospace; font-size: 12px; letter-spacing: 0.06em">MOMENTO FAVORITO</span>
+          <blockquote style="margin: 0; font-family: 'Bricolage Grotesque', sans-serif; font-size: 22px; font-weight: 600; line-height: 1.25">“El Fuji salió diez minutos entre las nubes y todo el barco se fue al mismo lado.”</blockquote>
+        </div>
+      </figure>
+
+      <div style="display: flex; justify-content: space-between; align-items: baseline; gap: 8px">
+        <h2 style="margin: 0; font-family: 'Bricolage Grotesque', sans-serif; font-size: 24px; font-weight: 700">Bitácora por parada</h2>
+        <span style="font-size: 13px; color: {{t.muted}}">Toca una parada para verla en el mapa</span>
+      </div>
+
+      <ol style="list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 14px">
+        <sc-for list="{{stops}}" as="s" hint-placeholder-count="6">
+          <li>
+            <div style="display: flex; gap: 18px; padding: 18px; border-radius: 22px; background: {{s.cardBg}}; border: 1px solid {{s.cardBorder}}">
+              <button type="button" onClick="{{s.pick}}" aria-label="{{s.aria}}" style="flex: none; width: 44px; height: 44px; border-radius: 50%; border: 0; background: {{s.pinBg}}; color: {{s.pinFg}}; font-family: 'IBM Plex Mono', monospace; font-weight: 500; font-size: 16px; cursor: pointer">{{s.n}}</button>
+              <div style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 12px">
+                <div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; gap: 4px 12px">
+                  <h3 style="margin: 0; font-family: 'Bricolage Grotesque', sans-serif; font-size: 24px; font-weight: 700">{{s.place}}</h3>
+                  <span style="font-family: 'IBM Plex Mono', monospace; font-size: 12px; color: {{t.muted}}">{{s.days}} · {{s.date}}</span>
+                </div>
+                <sc-if value="{{s.open}}" hint-placeholder-val="{{ true }}">
+                  <div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px">
+                    <div style="aspect-ratio: 4 / 3; border-radius: 12px; display: flex; align-items: flex-end; padding: 8px; box-sizing: border-box; font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: {{t.muted}}; background-color: {{t.ph}}; background-image: repeating-linear-gradient(135deg, {{t.stripe}} 0 10px, transparent 10px 20px)">[foto]</div>
+                    <div style="aspect-ratio: 4 / 3; border-radius: 12px; background-color: {{t.ph}}; background-image: repeating-linear-gradient(135deg, {{t.stripe}} 0 10px, transparent 10px 20px)"></div>
+                    <div style="aspect-ratio: 4 / 3; border-radius: 12px; display: grid; place-items: center; font-weight: 600; font-size: 15px; background-color: {{t.ph}}">+{{s.more}}</div>
+                  </div>
+                </sc-if>
+                <p style="margin: 0; font-size: 16px; line-height: 1.55; color: {{t.body}}">{{s.text}}</p>
+                <div style="display: flex; flex-wrap: wrap; gap: 8px">
+                  <span style="display: inline-flex; align-items: center; gap: 6px; padding: 6px 10px; border-radius: 999px; background: {{t.chip}}; font-size: 13px; color: {{t.sub}}">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="6" width="18" height="14" rx="2"></rect><circle cx="12" cy="13" r="3.5"></circle><path d="M8 6l1.5-2h5L16 6"></path></svg>
+                    {{s.photos}} fotos
+                  </span>
+                  <sc-if value="{{s.hasMonument}}" hint-placeholder-val="{{ true }}">
+                    <span style="display: inline-flex; align-items: center; gap: 6px; padding: 6px 10px; border-radius: 999px; border: 1px solid {{t.accentText}}; font-size: 13px; color: {{t.accentText}}">
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><path d="M4 21h16M6 21V10M18 21V10M10 21v-7h4v7M3 10l9-6 9 6z"></path></svg>
+                      {{s.monument}}
+                    </span>
+                  </sc-if>
+                </div>
+              </div>
+            </div>
+          </li>
+        </sc-for>
+      </ol>
+    </article>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"tema":{"editor":"enum","options":["oscuro","claro"],"default":"oscuro"},"$preview":{"width":1440,"height":1780}}'>
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.state = { tema: null, active: 3, vis: 'publico' };
+  }
+  palette(name) {
+    const P = {
+      oscuro: { bg: '#0B1620', panel: '#122230', panel2: '#152A3B', line: '#24394A', mapLine: '#1B2B37', text: '#EEF2F4', body: '#D3DDE4', sub: '#B5C4CF', muted: '#9DB0BE', accent: '#F4B740', onAccent: '#1A1204', accentText: '#F4B740', chip: '#1A2E3F', ph: '#16293A', stripe: 'rgba(255,255,255,0.035)', inv: '#EEF2F4', onInv: '#0B1620', overlay: 'rgba(11,22,32,0.88)', pinOff: '#EEF2F4', pinOffFg: '#0B1620', japan: '/_blob/e322ab69d882e58d659c949a25e6d5ca' },
+      claro: { bg: '#EEF1F4', panel: '#FFFFFF', panel2: '#FFF8EA', line: '#D6DEE5', mapLine: '#D3DCE3', text: '#0F1E2A', body: '#22384A', sub: '#3E5263', muted: '#556A7B', accent: '#F2AE2E', onAccent: '#1A1204', accentText: '#8A5A00', chip: '#EDF1F4', ph: '#DCE4EA', stripe: 'rgba(15,30,42,0.045)', inv: '#0F1E2A', onInv: '#FFFFFF', overlay: 'rgba(255,255,255,0.94)', pinOff: '#0F1E2A', pinOffFg: '#FFFFFF', japan: '/_blob/ac8bb4d58501ea445e06f0bd5f55b223' }
+    };
+    return P[name] || P.oscuro;
+  }
+  renderVals() {
+    const s = this.state;
+    const tema = s.tema || this.props.tema || 'oscuro';
+    const t = this.palette(tema);
+    const isDark = tema === 'oscuro';
+    const data = [
+      { n: 1, place: 'Tokio', x: '80.5%', y: '45.9%', label: 'left: 20px; top: -13px', days: 'Días 1–4', date: '8–11 mar', photos: 26, monument: 'Templo Sensō-ji',
+        text: 'Llegamos de noche a Shinjuku y lo primero fue perdernos entre letreros de neón buscando el hotel. Primer ramen a la una de la mañana, pedido en una máquina expendedora.' },
+      { n: 2, place: 'Hakone', x: '74.8%', y: '50.5%', label: 'left: -14px; top: 20px', days: 'Día 5', date: '12 mar', photos: 9, monument: '',
+        text: 'Nublado todo el día. El Fuji apareció diez minutos desde el barco del lago Ashi y todo el barco se fue al mismo lado.' },
+      { n: 3, place: 'Kioto', x: '47.2%', y: '52.6%', label: 'left: 20px; top: -30px', days: 'Días 6–9', date: '13–16 mar', photos: 28, monument: 'Fushimi Inari-taisha',
+        text: 'Subimos Fushimi Inari a las siete de la mañana para evitar a la gente. Arriba sólo había gatos y un señor barriendo hojas entre los toriis.' },
+      { n: 4, place: 'Nara', x: '47.4%', y: '55.8%', label: 'left: 20px; top: 4px', days: 'Día 10', date: '17 mar', photos: 8, monument: 'Tōdai-ji',
+        text: 'Los ciervos te hacen reverencia… y luego te persiguen por la galleta. El Gran Buda del Tōdai-ji no cabe en ninguna foto.' },
+      { n: 5, place: 'Osaka', x: '44.9%', y: '55.8%', label: 'right: 20px; top: 8px', days: 'Días 11–12', date: '18–19 mar', photos: 7, monument: '',
+        text: 'Dōtonbori de noche y takoyaki quemándonos la lengua. Osaka se siente más relajada y ruidosa que Tokio.' },
+      { n: 6, place: 'Hiroshima', x: '19%', y: '58.7%', label: 'left: -40px; top: 22px', days: 'Días 13–14', date: '20–21 mar', photos: 6, monument: 'Cúpula de la Bomba Atómica',
+        text: 'El día más silencioso del viaje. Por la tarde, ferry a Miyajima para ver el torii flotando con la marea alta.' }
+    ];
+    const stops = data.map((d) => {
+      const on = d.n === s.active;
+      return {
+        ...d,
+        labelPos: d.label,
+        aria: 'Parada ' + d.n + ': ' + d.place,
+        pressed: on ? 'true' : 'false',
+        open: on,
+        more: d.photos - 2,
+        hasMonument: !!d.monument,
+        pinBg: on ? t.accent : t.pinOff,
+        pinFg: on ? t.onAccent : t.pinOffFg,
+        pinGlow: on ? '0 0 0 6px rgba(244,183,64,0.3), 0 0 18px rgba(244,183,64,0.6)' : '0 2px 8px rgba(0,0,0,0.35)',
+        labelColor: on ? t.accentText : t.text,
+        cardBg: on ? t.panel2 : t.panel,
+        cardBorder: on ? t.accent : t.line,
+        pick: () => this.setState({ active: d.n })
+      };
+    });
+    const visDefs = [['privado', 'Privado', 'Sólo tú puedes verlo'], ['enlace', 'Con enlace', 'Cualquiera con el enlace puede verlo'], ['publico', 'Público', 'Visible en tu perfil público']];
+    const visOpts = visDefs.map(([k, label]) => ({
+      label, checked: s.vis === k ? 'true' : 'false',
+      bg: s.vis === k ? t.inv : 'transparent', color: s.vis === k ? t.onInv : t.sub,
+      pick: () => this.setState({ vis: k })
+    }));
+    const cur = visDefs.find((v) => v[0] === s.vis) || visDefs[2];
+    return {
+      t, stops, visOpts, isDark, isLight: !isDark,
+      visText: cur[2], visPublic: s.vis !== 'privado', visPrivate: s.vis === 'privado',
+      temaLabel: isDark ? 'Cambiar a tema claro' : 'Cambiar a tema oscuro',
+      toggleTema: () => this.setState({ tema: isDark ? 'claro' : 'oscuro' })
+    };
+  }
+}
+</script>
+</body>
+</html>

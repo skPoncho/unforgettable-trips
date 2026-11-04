@@ -1,0 +1,187 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Huella · Nuevo recuerdo</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&amp;family=Instrument+Sans:wght@400..700&amp;family=IBM+Plex+Mono:wght@400;500&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+</style>
+</helmet>
+<div style="position: relative; min-height: 960px; box-sizing: border-box; background: {{t.bg}}; color: {{t.text}}; font-family: 'Instrument Sans', system-ui, sans-serif; overflow: hidden; padding: 48px 24px; display: flex; justify-content: center; align-items: flex-start">
+  <img src="{{t.world}}" alt="" style="position: absolute; left: 50%; top: 40px; width: 1300px; max-width: none; transform: translateX(-50%); opacity: 0.9">
+  <div style="position: absolute; inset: 0; background: {{t.scrim}}"></div>
+
+  <div role="dialog" aria-modal="true" aria-labelledby="titulo-recuerdo" style="position: relative; width: 100%; max-width: 1080px; box-sizing: border-box; background: {{t.panel}}; border: 1px solid {{t.line}}; border-radius: 28px; box-shadow: {{t.shadow}}; display: flex; flex-direction: column">
+
+    <header style="display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 20px 24px; border-bottom: 1px solid {{t.line}}">
+      <div style="display: flex; flex-direction: column; gap: 2px">
+        <h1 id="titulo-recuerdo" style="margin: 0; font-family: 'Bricolage Grotesque', sans-serif; font-size: 26px; font-weight: 700">Nuevo recuerdo</h1>
+        <span style="font-size: 14px; color: {{t.muted}}">Leemos la fecha y la ubicación de tus fotos para ubicarlas en el mapa.</span>
+      </div>
+      <div style="display: flex; gap: 8px">
+        <button type="button" onClick="{{toggleTema}}" aria-label="{{temaLabel}}" style="width: 44px; height: 44px; border-radius: 50%; border: 1px solid {{t.line}}; background: {{t.panel}}; color: {{t.text}}; cursor: pointer; display: grid; place-items: center">
+          <sc-if value="{{isDark}}" hint-placeholder-val="{{ true }}">
+            <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"></path></svg>
+          </sc-if>
+          <sc-if value="{{isLight}}" hint-placeholder-val="{{ false }}">
+            <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"></path></svg>
+          </sc-if>
+        </button>
+        <a href="Main.dc.html" aria-label="Cerrar" style="width: 44px; height: 44px; box-sizing: border-box; border-radius: 50%; border: 1px solid {{t.line}}; color: {{t.text}}; display: grid; place-items: center">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"></path></svg>
+        </a>
+      </div>
+    </header>
+
+    <div style="display: flex; flex-wrap: wrap; gap: 24px; padding: 24px">
+
+      <section aria-label="Fotos" style="flex: 1 1 420px; min-width: 0; display: flex; flex-direction: column; gap: 14px">
+        <label style="display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px; min-height: 170px; padding: 20px; border-radius: 20px; border: 2px dashed {{t.dash}}; background: {{t.drop}}; text-align: center; cursor: pointer">
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="color: {{t.accentText}}"><path d="M12 16V4M7 9l5-5 5 5"></path><path d="M4 16v3a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-3"></path></svg>
+          <span style="font-family: 'Bricolage Grotesque', sans-serif; font-size: 18px; font-weight: 700">Arrastra tus fotos aquí</span>
+          <span style="font-size: 14px; color: {{t.muted}}">o <span style="color: {{t.accentText}}; font-weight: 600; text-decoration: underline">elígelas desde tu PC</span> · JPG, PNG o HEIC</span>
+          <input type="file" multiple accept="image/*" style="position: absolute; width: 1px; height: 1px; opacity: 0">
+        </label>
+        <div style="display: flex; justify-content: space-between; font-size: 13px; color: {{t.muted}}">
+          <span>6 fotos · 4 con ubicación</span>
+          <span style="font-family: 'IBM Plex Mono', monospace">13 MAR 2025</span>
+        </div>
+        <div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px">
+          <sc-for list="{{photos}}" as="p" hint-placeholder-count="6">
+            <div style="position: relative; aspect-ratio: 4 / 3; border-radius: 14px; background-color: {{t.ph}}; background-image: repeating-linear-gradient(135deg, {{t.stripe}} 0 10px, transparent 10px 20px); outline: {{p.outline}}; outline-offset: -2px">
+              <span style="position: absolute; left: 8px; bottom: 8px; font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: {{t.muted}}">{{p.label}}</span>
+              <sc-if value="{{p.gps}}" hint-placeholder-val="{{ true }}">
+                <span title="Tiene ubicación" style="position: absolute; right: 8px; top: 8px; width: 22px; height: 22px; border-radius: 50%; background: {{t.accent}}; color: {{t.onAccent}}; display: grid; place-items: center">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2C8 2 5 5 5 9c0 5 7 13 7 13s7-8 7-13c0-4-3-7-7-7zm0 9.5A2.5 2.5 0 1 1 12 6.5a2.5 2.5 0 0 1 0 5z"></path></svg>
+                </span>
+              </sc-if>
+            </div>
+          </sc-for>
+        </div>
+        <div style="display: flex; align-items: center; gap: 8px; font-size: 13px; color: {{t.muted}}">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M12 8v5M12 16h.01"></path></svg>
+          La primera foto será la portada. Arrastra para reordenar.
+        </div>
+      </section>
+
+      <section aria-label="Detalles" style="flex: 1 1 420px; min-width: 0; display: flex; flex-direction: column; gap: 18px">
+        <div style="border-radius: 20px; border: 1px solid {{t.line}}; overflow: hidden">
+          <div style="position: relative; height: 120px; overflow: hidden; background: {{t.mapBg}}">
+            <img src="{{t.japan}}" alt="" style="position: absolute; width: 700px; max-width: none; height: auto; left: calc(50% - 330px); top: -329px">
+            <span aria-hidden="true" style="position: absolute; left: 50%; top: 60px; width: 22px; height: 22px; margin: -11px 0 0 -11px; box-sizing: border-box; border-radius: 50%; background: {{t.accent}}; border: 3px solid {{t.panel}}; box-shadow: 0 0 0 6px rgba(244,183,64,0.3)"></span>
+          </div>
+          <div style="display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 12px 16px">
+            <div style="display: flex; flex-direction: column; gap: 2px">
+              <span style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: 0.06em; color: {{t.wish}}">DETECTADO EN TUS FOTOS</span>
+              <span style="font-family: 'Bricolage Grotesque', sans-serif; font-size: 20px; font-weight: 700">Kioto, Japón</span>
+            </div>
+            <button type="button" style="min-height: 40px; padding: 0 14px; border-radius: 999px; border: 1px solid {{t.line}}; background: transparent; color: {{t.text}}; font: inherit; font-size: 13px; cursor: pointer">Cambiar lugar</button>
+          </div>
+        </div>
+
+        <div style="display: flex; flex-direction: column; gap: 8px">
+          <span id="tipo-visita" style="font-size: 14px; font-weight: 600">Tipo de visita</span>
+          <div role="radiogroup" aria-labelledby="tipo-visita" style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px">
+            <sc-for list="{{tipos}}" as="o" hint-placeholder-count="2">
+              <button type="button" role="radio" aria-checked="{{o.checked}}" onClick="{{o.pick}}" style="display: flex; flex-direction: column; align-items: flex-start; gap: 2px; padding: 12px 14px; border-radius: 14px; border: 1.5px solid {{o.border}}; background: {{o.bg}}; color: {{t.text}}; font: inherit; text-align: left; cursor: pointer">
+                <span style="font-size: 15px; font-weight: 600">{{o.label}}</span>
+                <span style="font-size: 12px; color: {{t.muted}}">{{o.hint}}</span>
+              </button>
+            </sc-for>
+          </div>
+        </div>
+
+        <div style="display: flex; flex-direction: column; gap: 8px">
+          <span style="font-size: 14px; font-weight: 600">Vincular a</span>
+          <div style="display: flex; flex-wrap: wrap; gap: 8px">
+            <button type="button" aria-pressed="true" style="display: inline-flex; align-items: center; gap: 6px; min-height: 38px; padding: 0 12px; border-radius: 999px; border: 0; background: {{t.inv}}; color: {{t.onInv}}; font: inherit; font-size: 13px; font-weight: 600; cursor: pointer">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" aria-hidden="true"><path d="M5 12l5 5 9-10"></path></svg>
+              Viaje: Japón 2025
+            </button>
+            <button type="button" aria-pressed="false" style="display: inline-flex; align-items: center; gap: 6px; min-height: 38px; padding: 0 12px; border-radius: 999px; border: 1.5px dashed {{t.accentText}}; background: transparent; color: {{t.accentText}}; font: inherit; font-size: 13px; font-weight: 600; cursor: pointer">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"></path></svg>
+              Monumento sugerido: Fushimi Inari-taisha
+            </button>
+          </div>
+        </div>
+
+        <div style="display: flex; flex-direction: column; gap: 8px">
+          <label for="anecdota" style="font-size: 14px; font-weight: 600">¿Qué pasó aquí?</label>
+          <textarea id="anecdota" rows="4" placeholder="Cuenta la historia detrás de estas fotos…" style="resize: vertical; box-sizing: border-box; padding: 14px; border-radius: 16px; border: 1px solid {{t.lineStrong}}; background: {{t.field}}; color: {{t.text}}; font: inherit; font-size: 16px; line-height: 1.5; outline: none">Subimos Fushimi Inari a las siete de la mañana para evitar a la gente. Arriba sólo había gatos y</textarea>
+        </div>
+
+        <div style="display: flex; flex-direction: column; gap: 8px">
+          <span id="quien-ve" style="font-size: 14px; font-weight: 600">¿Quién puede verlo?</span>
+          <div role="radiogroup" aria-labelledby="quien-ve" style="display: flex; flex-wrap: wrap; gap: 6px">
+            <sc-for list="{{visOpts}}" as="v" hint-placeholder-count="3">
+              <button type="button" role="radio" aria-checked="{{v.checked}}" onClick="{{v.pick}}" style="min-height: 38px; padding: 0 14px; border-radius: 999px; border: 1px solid {{v.border}}; background: {{v.bg}}; color: {{v.color}}; font: inherit; font-size: 13px; font-weight: 600; cursor: pointer">{{v.label}}</button>
+            </sc-for>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <footer style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px; padding: 18px 24px; border-top: 1px solid {{t.line}}">
+      <span style="font-size: 13px; color: {{t.muted}}">{{footNote}}</span>
+      <div style="display: flex; gap: 10px">
+        <a href="Main.dc.html" style="display: inline-flex; align-items: center; min-height: 48px; padding: 0 20px; border-radius: 14px; border: 1px solid {{t.line}}; color: {{t.text}}; font-weight: 600; font-size: 15px; text-decoration: none; box-sizing: border-box">Cancelar</a>
+        <a href="Viaje.dc.html" style="display: inline-flex; align-items: center; min-height: 48px; padding: 0 22px; border-radius: 14px; background: {{t.accent}}; color: {{t.onAccent}}; font-weight: 700; font-size: 15px; text-decoration: none">Guardar y encender en el mapa</a>
+      </div>
+    </footer>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"tema":{"editor":"enum","options":["oscuro","claro"],"default":"oscuro"},"$preview":{"width":1440,"height":960}}'>
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.state = { tema: null, tipo: 'estancia', vis: 'enlace' };
+  }
+  palette(name) {
+    const P = {
+      oscuro: { bg: '#0B1620', panel: '#122230', line: '#24394A', lineStrong: '#35506A', field: '#0E1B25', mapBg: '#0B1620', text: '#EEF2F4', sub: '#B5C4CF', muted: '#9DB0BE', accent: '#F4B740', onAccent: '#1A1204', accentText: '#F4B740', accentSoft: 'rgba(244,183,64,0.10)', wish: '#7FD8CE', ph: '#16293A', stripe: 'rgba(255,255,255,0.035)', inv: '#EEF2F4', onInv: '#0B1620', dash: '#4A6478', drop: '#0E1B25', scrim: 'rgba(5,10,15,0.74)', shadow: '0 30px 80px rgba(0,0,0,0.55)', world: '/_blob/139cebdbbea527404e89b5a65b51596e', japan: '/_blob/e322ab69d882e58d659c949a25e6d5ca' },
+      claro: { bg: '#EEF1F4', panel: '#FFFFFF', line: '#D6DEE5', lineStrong: '#B9C7D2', field: '#F8FAFB', mapBg: '#E2E9EE', text: '#0F1E2A', sub: '#3E5263', muted: '#556A7B', accent: '#F2AE2E', onAccent: '#1A1204', accentText: '#8A5A00', accentSoft: '#FFF6E3', wish: '#167468', ph: '#DCE4EA', stripe: 'rgba(15,30,42,0.045)', inv: '#0F1E2A', onInv: '#FFFFFF', dash: '#A9B8C4', drop: '#F4F7F9', scrim: 'rgba(15,30,42,0.42)', shadow: '0 30px 80px rgba(15,30,42,0.25)', world: '/_blob/65f417fdfcbac080a4709b572aa7d532', japan: '/_blob/ac8bb4d58501ea445e06f0bd5f55b223' }
+    };
+    return P[name] || P.oscuro;
+  }
+  renderVals() {
+    const s = this.state;
+    const tema = s.tema || this.props.tema || 'oscuro';
+    const t = this.palette(tema);
+    const isDark = tema === 'oscuro';
+    const photos = [
+      { label: '[foto]', gps: true }, { label: '', gps: true }, { label: '', gps: true },
+      { label: '', gps: true }, { label: '', gps: false }, { label: '', gps: false }
+    ].map((p, i) => ({ ...p, outline: i === 0 ? '2px solid ' + t.accent : 'none' }));
+    const tipos = [
+      ['estancia', 'Estancia', 'Dormiste o pasaste el día ahí'],
+      ['escala', 'Escala', 'De paso: aeropuerto o conexión']
+    ].map(([k, label, hint]) => ({
+      label, hint, checked: s.tipo === k ? 'true' : 'false',
+      border: s.tipo === k ? t.accent : t.line, bg: s.tipo === k ? t.accentSoft : 'transparent',
+      pick: () => this.setState({ tipo: k })
+    }));
+    const visOpts = [['privado', 'Privado'], ['enlace', 'Con enlace'], ['publico', 'Público']].map(([k, label]) => ({
+      label, checked: s.vis === k ? 'true' : 'false',
+      bg: s.vis === k ? t.inv : 'transparent', color: s.vis === k ? t.onInv : t.sub, border: s.vis === k ? t.inv : t.line,
+      pick: () => this.setState({ vis: k })
+    }));
+    const footNote = s.tipo === 'escala'
+      ? 'Las escalas también encienden el país en tu mapa, marcado como “escala”.'
+      : 'Se encenderán Kioto y Japón en tu mapa (si aún no lo estaban).';
+    return {
+      t, photos, tipos, visOpts, footNote, isDark, isLight: !isDark,
+      temaLabel: isDark ? 'Cambiar a tema claro' : 'Cambiar a tema oscuro',
+      toggleTema: () => this.setState({ tema: isDark ? 'claro' : 'oscuro' })
+    };
+  }
+}
+</script>
+</body>
+</html>

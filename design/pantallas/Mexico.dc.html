@@ -1,0 +1,244 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Huella · Mi país</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&amp;family=Instrument+Sans:wght@400..700&amp;family=IBM+Plex+Mono:wght@400;500&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+</style>
+</helmet>
+<div style="min-height: 1420px; box-sizing: border-box; background: {{t.bg}}; color: {{t.text}}; font-family: 'Instrument Sans', system-ui, sans-serif; padding: 20px 24px 48px; display: flex; flex-direction: column; gap: 24px">
+
+  <header style="display: flex; flex-wrap: wrap; align-items: center; gap: 16px 24px">
+    <a href="Main.dc.html" style="display: flex; align-items: center; gap: 10px; text-decoration: none; color: {{t.text}}">
+      <svg width="34" height="34" viewBox="0 0 34 34" aria-hidden="true"><circle cx="17" cy="17" r="16" fill="#F4B740"></circle><path d="M17 8c-4 0-7 3-7 7 0 5 7 11 7 11s7-6 7-11c0-4-3-7-7-7z" fill="#0B1620"></path><circle cx="17" cy="15" r="2.6" fill="#F4B740"></circle></svg>
+      <span style="font-family: 'Bricolage Grotesque', sans-serif; font-weight: 700; font-size: 26px; letter-spacing: -0.02em">huella</span>
+    </a>
+    <nav aria-label="Vistas del mapa" style="display: flex; flex-wrap: wrap; gap: 4px; padding: 4px; background: {{t.panel}}; border: 1px solid {{t.line}}; border-radius: 999px">
+      <a href="Main.dc.html" style="padding: 10px 18px; border-radius: 999px; color: {{t.sub}}; font-weight: 500; font-size: 14px; text-decoration: none">Mundo</a>
+      <a href="Mexico.dc.html" style="padding: 10px 18px; border-radius: 999px; background: {{t.accent}}; color: {{t.onAccent}}; font-weight: 600; font-size: 14px; text-decoration: none">Mi país</a>
+    </nav>
+    <span style="flex: 1"></span>
+    <button type="button" onClick="{{toggleTema}}" aria-label="{{temaLabel}}" style="width: 44px; height: 44px; border-radius: 50%; border: 1px solid {{t.line}}; background: {{t.panel}}; color: {{t.text}}; cursor: pointer; display: grid; place-items: center">
+      <sc-if value="{{isDark}}" hint-placeholder-val="{{ true }}">
+        <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"></path></svg>
+      </sc-if>
+      <sc-if value="{{isLight}}" hint-placeholder-val="{{ false }}">
+        <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"></path></svg>
+      </sc-if>
+    </button>
+  </header>
+
+  <section style="display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 20px 40px">
+    <div style="display: flex; flex-direction: column; gap: 8px">
+      <span style="font-family: 'IBM Plex Mono', monospace; font-size: 13px; letter-spacing: 0.08em; color: {{t.muted}}">MI PAÍS · ESTADOS, CIUDADES Y MONUMENTOS</span>
+      <h1 style="margin: 0; font-family: 'Bricolage Grotesque', sans-serif; font-weight: 800; font-size: 88px; line-height: 0.9; letter-spacing: -0.04em">México</h1>
+    </div>
+    <div style="flex: 0 1 520px; min-width: 0; display: flex; flex-direction: column; gap: 10px">
+      <div style="display: flex; align-items: baseline; gap: 10px">
+        <span style="font-family: 'Bricolage Grotesque', sans-serif; font-weight: 800; font-size: 56px; line-height: 1; color: {{t.accentText}}">12</span>
+        <span style="font-size: 18px; color: {{t.sub}}">de 32 estados · 37%</span>
+      </div>
+      <div role="img" aria-label="12 de 32 estados visitados" style="display: grid; grid-template-columns: repeat(32, minmax(0, 1fr)); gap: 3px">
+        <sc-for list="{{segments}}" as="g" hint-placeholder-count="32">
+          <span style="height: 14px; border-radius: 3px; background: {{g.bg}}"></span>
+        </sc-for>
+      </div>
+    </div>
+  </section>
+
+  <div style="display: flex; flex-wrap: wrap; gap: 20px; align-items: stretch">
+    <section aria-label="Mapa de México por estados" style="flex: 999 1 640px; min-width: 0; position: relative; background: {{t.mapBg}}; border: 1px solid {{t.mapLine}}; border-radius: 28px; padding: 64px 28px 28px">
+      <div style="position: absolute; top: 18px; left: 20px; display: flex; flex-wrap: wrap; gap: 14px; font-size: 13px; color: {{t.sub}}">
+        <span style="display: flex; align-items: center; gap: 8px"><span style="width: 12px; height: 12px; border-radius: 3px; background: {{t.accent}}"></span>Estado visitado</span>
+        <span style="display: flex; align-items: center; gap: 8px"><span style="width: 12px; height: 12px; box-sizing: border-box; border-radius: 50%; background: {{t.pin}}; border: 2px solid {{t.mapBg}}; box-shadow: 0 0 0 1px {{t.pin}}"></span>Monumento sellado</span>
+      </div>
+      <div style="position: relative; width: 100%; aspect-ratio: 793 / 498">
+        <img src="{{t.mexico}}" alt="Mapa de México con 12 estados visitados iluminados en ámbar" style="position: absolute; inset: 0; width: 100%; height: 100%; display: block">
+        <sc-for list="{{monuments}}" as="m" hint-placeholder-count="8">
+          <button type="button" onClick="{{m.pick}}" aria-label="{{m.name}}" style="position: absolute; left: {{m.x}}; top: {{m.y}}; width: 18px; height: 18px; margin: -9px 0 0 -9px; padding: 0; box-sizing: border-box; border-radius: 50%; border: 3px solid {{t.pinRing}}; background: {{m.dot}}; box-shadow: {{m.ring}}; cursor: pointer"></button>
+        </sc-for>
+        <div style="position: absolute; right: 2%; top: 14%; width: 270px; background: {{t.overlay}}; border: 1px solid {{t.overlayLine}}; border-radius: 20px; padding: 16px; display: flex; flex-direction: column; gap: 10px; box-shadow: {{t.shadow}}">
+          <div style="display: flex; justify-content: space-between; align-items: baseline">
+            <span style="font-family: 'Bricolage Grotesque', sans-serif; font-weight: 700; font-size: 22px">{{sel.name}}</span>
+            <span style="font-family: 'IBM Plex Mono', monospace; font-size: 12px; color: {{t.accentText}}">{{sel.year}}</span>
+          </div>
+          <div style="font-size: 14px; color: {{t.sub}}">{{sel.state}} · {{sel.trip}}</div>
+          <div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px">
+            <div style="aspect-ratio: 1; border-radius: 10px; background: {{t.ph}}"></div>
+            <div style="aspect-ratio: 1; border-radius: 10px; background: {{t.ph}}"></div>
+            <div style="aspect-ratio: 1; border-radius: 10px; background: {{t.ph}}; display: grid; place-items: center; font-size: 13px; font-weight: 600">+{{sel.more}}</div>
+          </div>
+          <a href="Viaje.dc.html" style="font-size: 14px; font-weight: 600; color: {{t.accentText}}">Ver recuerdos de este lugar</a>
+        </div>
+      </div>
+    </section>
+
+    <aside style="flex: 1 1 320px; max-width: 400px; min-width: 0; background: {{t.panel}}; border: 1px solid {{t.line}}; border-radius: 28px; padding: 20px; display: flex; flex-direction: column; gap: 16px">
+      <div role="tablist" aria-label="Detalle del país" style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 4px; padding: 4px; background: {{t.bg}}; border-radius: 14px">
+        <sc-for list="{{tabs}}" as="b" hint-placeholder-count="3">
+          <button type="button" role="tab" aria-selected="{{b.selected}}" onClick="{{b.pick}}" style="min-height: 40px; border-radius: 10px; border: 0; background: {{b.bg}}; color: {{b.color}}; font: inherit; font-size: 14px; font-weight: 600; cursor: pointer">{{b.label}}</button>
+        </sc-for>
+      </div>
+
+      <sc-if value="{{tabEstados}}" hint-placeholder-val="{{ true }}">
+        <div style="display: flex; flex-direction: column; gap: 14px">
+          <div style="font-family: 'IBM Plex Mono', monospace; font-size: 12px; letter-spacing: 0.06em; color: {{t.accentText}}">VISITADOS · 12</div>
+          <div style="display: flex; flex-wrap: wrap; gap: 6px">
+            <sc-for list="{{visited}}" as="v" hint-placeholder-count="12">
+              <span style="padding: 7px 11px; border-radius: 999px; background: {{t.accent}}; color: {{t.onAccent}}; font-size: 13px; font-weight: 600">{{v}}</span>
+            </sc-for>
+          </div>
+          <div style="font-family: 'IBM Plex Mono', monospace; font-size: 12px; letter-spacing: 0.06em; color: {{t.muted}}">POR DESCUBRIR · 20</div>
+          <div style="display: flex; flex-wrap: wrap; gap: 6px">
+            <sc-for list="{{pending}}" as="p" hint-placeholder-count="20">
+              <span style="padding: 6px 10px; border-radius: 999px; border: 1px solid {{t.line}}; color: {{t.sub}}; font-size: 13px">{{p}}</span>
+            </sc-for>
+          </div>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{tabCiudades}}" hint-placeholder-val="{{ false }}">
+        <ul style="list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column">
+          <sc-for list="{{cities}}" as="c" hint-placeholder-count="10">
+            <li style="display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 11px 4px; border-bottom: 1px solid {{t.line}}">
+              <span style="display: flex; flex-direction: column; gap: 2px">
+                <span style="font-size: 15px; font-weight: 600">{{c.name}}</span>
+                <span style="font-size: 13px; color: {{t.muted}}">{{c.state}}</span>
+              </span>
+              <span style="font-family: 'IBM Plex Mono', monospace; font-size: 12px; color: {{t.accentText}}">{{c.visits}}</span>
+            </li>
+          </sc-for>
+        </ul>
+      </sc-if>
+
+      <sc-if value="{{tabMonumentos}}" hint-placeholder-val="{{ false }}">
+        <ul style="list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column">
+          <sc-for list="{{monuments}}" as="m" hint-placeholder-count="8">
+            <li>
+              <button type="button" onClick="{{m.pick}}" style="width: 100%; display: flex; justify-content: space-between; align-items: center; gap: 12px; min-height: 52px; padding: 8px 10px; border: 0; border-radius: 12px; background: {{m.rowBg}}; color: {{t.text}}; font: inherit; text-align: left; cursor: pointer">
+                <span style="display: flex; flex-direction: column; gap: 2px">
+                  <span style="font-size: 15px; font-weight: 600">{{m.name}}</span>
+                  <span style="font-size: 13px; color: {{t.muted}}">{{m.state}}</span>
+                </span>
+                <span style="font-family: 'IBM Plex Mono', monospace; font-size: 12px; color: {{t.accentText}}">{{m.year}}</span>
+              </button>
+            </li>
+          </sc-for>
+        </ul>
+      </sc-if>
+    </aside>
+  </div>
+
+  <section style="display: flex; flex-direction: column; gap: 18px">
+    <div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; gap: 8px">
+      <div style="display: flex; flex-direction: column; gap: 4px">
+        <h2 style="margin: 0; font-family: 'Bricolage Grotesque', sans-serif; font-size: 28px; font-weight: 700">Pasaporte de monumentos</h2>
+        <p style="margin: 0; font-size: 15px; color: {{t.muted}}">Cada monumento que visitas te deja un sello. Los punteados son los que te faltan cerca de tu ruta.</p>
+      </div>
+      <span style="font-family: 'IBM Plex Mono', monospace; font-size: 13px; color: {{t.accentText}}">8 SELLOS · 4 SUGERIDOS</span>
+    </div>
+    <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 16px">
+      <sc-for list="{{stamps}}" as="s" hint-placeholder-count="12">
+        <div style="display: flex; flex-direction: column; align-items: center; gap: 10px; padding: 18px 10px; border-radius: 20px; background: {{t.panel}}; border: 1px solid {{t.line}}; transform: rotate({{s.rot}})">
+          <div style="width: 96px; height: 96px; border-radius: 50%; border: 2px {{s.lineStyle}} {{s.color}}; box-sizing: border-box; padding: 5px">
+            <div style="width: 100%; height: 100%; border-radius: 50%; border: 1px {{s.lineStyle}} {{s.color}}; box-sizing: border-box; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; color: {{s.color}}">
+              <span style="font-family: 'Bricolage Grotesque', sans-serif; font-weight: 800; font-size: 24px; letter-spacing: -0.02em">{{s.ini}}</span>
+              <span style="font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 0.06em">{{s.year}}</span>
+            </div>
+          </div>
+          <div style="text-align: center; display: flex; flex-direction: column; gap: 2px">
+            <span style="font-size: 14px; font-weight: 600; color: {{s.nameColor}}">{{s.name}}</span>
+            <span style="font-size: 12px; color: {{t.muted}}">{{s.state}}</span>
+          </div>
+        </div>
+      </sc-for>
+    </div>
+  </section>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"tema":{"editor":"enum","options":["oscuro","claro"],"default":"oscuro"},"$preview":{"width":1440,"height":1420}}'>
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.state = { tema: null, tab: 'estados', mon: 'chichen' };
+  }
+  palette(name) {
+    const P = {
+      oscuro: { bg: '#0B1620', panel: '#122230', line: '#24394A', mapBg: '#0E1B25', mapLine: '#1B2B37', text: '#EEF2F4', sub: '#B5C4CF', muted: '#9DB0BE', accent: '#F4B740', onAccent: '#1A1204', accentText: '#F4B740', wish: '#7FD8CE', wishText: '#CFF3EE', off: '#1F3446', ph: '#16293A', inv: '#EEF2F4', onInv: '#0B1620', overlay: 'rgba(18,34,48,0.95)', overlayLine: '#35506A', shadow: '0 20px 50px rgba(0,0,0,0.45)', pin: '#EEF2F4', pinRing: '#0B1620', rowOn: '#1D3446', mexico: '/_blob/c890a78921d148d632946c872ca94159' },
+      claro: { bg: '#EEF1F4', panel: '#FFFFFF', line: '#D6DEE5', mapBg: '#E6ECF0', mapLine: '#D3DCE3', text: '#0F1E2A', sub: '#3E5263', muted: '#556A7B', accent: '#F2AE2E', onAccent: '#1A1204', accentText: '#8A5A00', wish: '#167468', wishText: '#0F5C53', off: '#D5DDE3', ph: '#DCE4EA', inv: '#0F1E2A', onInv: '#FFFFFF', overlay: 'rgba(255,255,255,0.97)', overlayLine: '#D6DEE5', shadow: '0 20px 50px rgba(15,30,42,0.16)', pin: '#0F1E2A', pinRing: '#FFFFFF', rowOn: '#EDF1F4', mexico: '/_blob/d43032be72590a673ec147381084d04b' }
+    };
+    return P[name] || P.oscuro;
+  }
+  renderVals() {
+    const s = this.state;
+    const tema = s.tema || this.props.tema || 'oscuro';
+    const t = this.palette(tema);
+    const isDark = tema === 'oscuro';
+    const segments = [];
+    for (let i = 0; i < 32; i++) segments.push({ bg: i < 12 ? t.accent : t.off });
+    const mons = [
+      { id: 'teo', name: 'Teotihuacán', ini: 'TEO', state: 'Estado de México', year: '2019', x: '62.4%', y: '72.6%', trip: 'Escapada de fin de semana', more: 14 },
+      { id: 'chichen', name: 'Chichén Itzá', ini: 'CHI', state: 'Yucatán', year: '2021', x: '93.6%', y: '68.6%', trip: 'Viaje a Yucatán', more: 11 },
+      { id: 'tulum', name: 'Zona arqueológica de Tulum', ini: 'TUL', state: 'Quintana Roo', year: '2021', x: '97.4%', y: '74.6%', trip: 'Viaje a Yucatán', more: 6 },
+      { id: 'palenque', name: 'Palenque', ini: 'PAL', state: 'Chiapas', year: '2024', x: '84.6%', y: '83.4%', trip: 'Oaxaca y Chiapas', more: 9 },
+      { id: 'albann', name: 'Monte Albán', ini: 'MA', state: 'Oaxaca', year: '2024', x: '69.4%', y: '85.4%', trip: 'Oaxaca y Chiapas', more: 8 },
+      { id: 'puebla', name: 'Centro histórico de Puebla', ini: 'PUE', state: 'Puebla', year: '2022', x: '64.2%', y: '76.6%', trip: 'Puebla y Cholula', more: 5 },
+      { id: 'gto', name: 'Ciudad de Guanajuato', ini: 'GTO', state: 'Guanajuato', year: '2023', x: '54.6%', y: '66.4%', trip: 'Bajío en carretera', more: 7 },
+      { id: 'cabanas', name: 'Hospicio Cabañas', ini: 'HC', state: 'Jalisco', year: '2023', x: '47.6%', y: '68.2%', trip: 'Bajío en carretera', more: 4 }
+    ];
+    const monuments = mons.map((m) => {
+      const on = m.id === s.mon;
+      return {
+        ...m,
+        dot: on ? t.accent : t.pin,
+        ring: on ? '0 0 0 4px rgba(244,183,64,0.35), 0 0 14px rgba(244,183,64,0.7)' : '0 0 0 1px ' + t.pin,
+        rowBg: on ? t.rowOn : 'transparent',
+        pick: () => this.setState({ mon: m.id })
+      };
+    });
+    const sel = monuments.find((m) => m.id === s.mon) || monuments[0];
+    const tabs = [['estados', 'Estados'], ['ciudades', 'Ciudades'], ['monumentos', 'Monumentos']].map(([k, label]) => ({
+      label, selected: k === s.tab ? 'true' : 'false',
+      bg: k === s.tab ? t.inv : 'transparent', color: k === s.tab ? t.onInv : t.sub,
+      pick: () => this.setState({ tab: k })
+    }));
+    const visited = ['Ciudad de México', 'Estado de México', 'Puebla', 'Morelos', 'Querétaro', 'Guanajuato', 'Jalisco', 'Veracruz', 'Oaxaca', 'Chiapas', 'Yucatán', 'Quintana Roo'];
+    const pending = ['Aguascalientes', 'Baja California', 'Baja California Sur', 'Campeche', 'Chihuahua', 'Coahuila', 'Colima', 'Durango', 'Guerrero', 'Hidalgo', 'Michoacán', 'Nayarit', 'Nuevo León', 'San Luis Potosí', 'Sinaloa', 'Sonora', 'Tabasco', 'Tamaulipas', 'Tlaxcala', 'Zacatecas'];
+    const cities = [
+      { name: 'Ciudad de México', state: 'CDMX', visits: 'CASA' },
+      { name: 'Oaxaca de Juárez', state: 'Oaxaca', visits: '2 VIAJES' },
+      { name: 'San Cristóbal de las Casas', state: 'Chiapas', visits: '1 VIAJE' },
+      { name: 'Mérida', state: 'Yucatán', visits: '1 VIAJE' },
+      { name: 'Valladolid', state: 'Yucatán', visits: '1 VIAJE' },
+      { name: 'Puebla', state: 'Puebla', visits: '3 VIAJES' },
+      { name: 'Guanajuato', state: 'Guanajuato', visits: '1 VIAJE' },
+      { name: 'Guadalajara', state: 'Jalisco', visits: '1 VIAJE' },
+      { name: 'Querétaro', state: 'Querétaro', visits: '2 VIAJES' },
+      { name: 'Cuernavaca', state: 'Morelos', visits: '4 VIAJES' }
+    ];
+    const rots = ['-4deg', '3deg', '-2deg', '5deg', '-5deg', '2deg', '-3deg', '4deg', '-1deg', '3deg', '-4deg', '2deg'];
+    const stamps = mons.map((m, i) => ({ name: m.name, state: m.state, ini: m.ini, year: m.year, rot: rots[i], color: t.accentText, lineStyle: 'solid', nameColor: t.text }))
+      .concat([
+        { name: 'El Tajín', state: 'Veracruz', ini: 'TAJ', year: 'SUGERIDO' },
+        { name: 'Calakmul', state: 'Campeche', ini: 'CAL', year: 'SUGERIDO' },
+        { name: 'Paquimé', state: 'Chihuahua', ini: 'PAQ', year: 'SUGERIDO' },
+        { name: 'Misiones de la Sierra Gorda', state: 'Querétaro', ini: 'SG', year: 'SUGERIDO' }
+      ].map((m, i) => ({ ...m, rot: rots[8 + i], color: t.wish, lineStyle: 'dashed', nameColor: t.wishText })));
+    return {
+      t, segments, monuments, sel, tabs, visited, pending, cities, stamps, isDark, isLight: !isDark,
+      temaLabel: isDark ? 'Cambiar a tema claro' : 'Cambiar a tema oscuro',
+      toggleTema: () => this.setState({ tema: isDark ? 'claro' : 'oscuro' }),
+      tabEstados: s.tab === 'estados', tabCiudades: s.tab === 'ciudades', tabMonumentos: s.tab === 'monumentos'
+    };
+  }
+}
+</script>
+</body>
+</html>
