@@ -1,0 +1,738 @@
+// Detalle de viaje según design/pantallas/Viaje.dc.html. Solo tokens de src/styles/tokens.css.
+
+:host {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+ol {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.muted {
+  color: var(--text-muted);
+}
+
+.mono {
+  font-family: var(--font-mono);
+}
+
+// --- Barra del viaje ---------------------------------------------------------------------
+
+.toolbar,
+.toolbar__side {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px 18px;
+}
+
+.toolbar {
+  justify-content: space-between;
+}
+
+.toolbar__side:last-child {
+  gap: 8px;
+}
+
+.back,
+.add {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: var(--tap-target);
+  border-radius: var(--radius-pill);
+  font-size: 14px;
+  text-decoration: none;
+}
+
+.back {
+  padding: 0 16px 0 12px;
+  border: 1px solid var(--line);
+  background: var(--panel);
+  color: var(--text);
+  font-weight: 500;
+}
+
+.add {
+  padding: 0 18px;
+  background: var(--accent);
+  color: var(--on-accent);
+  font-weight: 600;
+}
+
+.crumbs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  font-family: var(--font-mono);
+  font-size: 13px;
+  color: var(--text-muted);
+
+  a {
+    color: inherit;
+    text-decoration: none;
+
+    &:hover {
+      color: var(--text);
+    }
+  }
+}
+
+.crumbs__here {
+  color: var(--text);
+}
+
+.visibility {
+  display: flex;
+  gap: 2px;
+  padding: 4px;
+  border-radius: var(--radius-pill);
+  background: var(--panel);
+  border: 1px solid var(--line);
+}
+
+.visibility__option {
+  min-height: 36px;
+  padding: 0 12px;
+  border-radius: var(--radius-pill);
+  border: 0;
+  background: transparent;
+  color: var(--text-sub);
+  font: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.visibility[aria-busy='true'] .visibility__option {
+  cursor: progress;
+}
+
+.visibility__option--on {
+  background: var(--inverse);
+  color: var(--on-inverse);
+}
+
+.error {
+  margin: 0;
+  padding: 10px 14px;
+  border-radius: 12px;
+  border: 1px solid var(--danger);
+  color: var(--danger);
+}
+
+.missing {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.missing__title {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: 40px;
+}
+
+// --- Dos columnas: mapa y bitácora -------------------------------------------------------
+
+.layout {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 28px;
+  align-items: flex-start;
+}
+
+.route {
+  flex: 1 1 480px;
+  max-width: 640px;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+// En escritorio el mapa se queda a la vista mientras se recorre la bitácora.
+@media (min-width: 1100px) {
+  .route {
+    position: sticky;
+    top: 16px;
+  }
+}
+
+.route__empty {
+  aspect-ratio: 720 / 760;
+  display: grid;
+  place-content: center;
+  justify-items: center;
+  gap: 12px;
+  padding: 24px;
+  border-radius: var(--radius-map);
+  border: 1px solid var(--map-frame);
+  background: var(--route-bg);
+  color: var(--text-muted);
+  text-align: center;
+
+  p {
+    margin: 0;
+  }
+}
+
+.stats {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 10px;
+  margin: 0;
+}
+
+.stat {
+  display: flex;
+  flex-direction: column-reverse;
+  padding: 14px 16px;
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 16px;
+}
+
+.stat__value {
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 26px;
+}
+
+.stat__label {
+  font-size: 13px;
+  color: var(--text-muted);
+}
+
+.notice {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 0;
+  padding: 12px 14px;
+  border-radius: 16px;
+  border: 1px dashed var(--line);
+  font-size: 13px;
+  color: var(--text-muted);
+
+  svg {
+    flex: none;
+  }
+}
+
+.story {
+  flex: 999 1 540px;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+}
+
+// --- Título ------------------------------------------------------------------------------
+
+.head {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+.eyebrow {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--accent-text);
+}
+
+.head__title-row {
+  display: flex;
+  align-items: flex-end;
+  gap: 10px;
+  max-width: 100%;
+}
+
+.title {
+  margin: 0;
+  min-width: 0;
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: clamp(52px, 7vw, 88px);
+  line-height: 0.9;
+  letter-spacing: -0.04em;
+  overflow-wrap: anywhere;
+}
+
+.title--long {
+  font-size: clamp(40px, 5vw, 60px);
+  line-height: 1;
+  letter-spacing: -0.03em;
+}
+
+.summary {
+  margin: 0;
+  max-width: 560px;
+  font-size: 18px;
+  line-height: 1.5;
+  color: var(--text-sub);
+}
+
+.visibility-hint {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  color: var(--text-muted);
+}
+
+.edit {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%;
+  max-width: 560px;
+}
+
+.edit__title,
+.edit__summary {
+  width: 100%;
+  padding: 10px 14px;
+  border-radius: 14px;
+  border: 1px solid var(--line-strong);
+  background: var(--field);
+  color: var(--text);
+  font: inherit;
+}
+
+.edit__title {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 40px;
+  letter-spacing: -0.02em;
+}
+
+.edit__summary {
+  font-size: 17px;
+  line-height: 1.5;
+  resize: vertical;
+}
+
+.edit__actions {
+  display: flex;
+  gap: 8px;
+}
+
+.icon-button {
+  flex: none;
+  display: inline-grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  border-radius: 50%;
+  border: 1px solid var(--line);
+  background: var(--panel);
+  color: var(--text-sub);
+  cursor: pointer;
+
+  &:disabled {
+    opacity: 0.4;
+    cursor: default;
+  }
+}
+
+.icon-button--inline {
+  width: 28px;
+  height: 28px;
+  margin-left: 4px;
+  vertical-align: middle;
+}
+
+.icon-button--danger {
+  color: var(--danger);
+}
+
+.link-button {
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--accent-text);
+  font: inherit;
+  font-size: 15px;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 40px;
+  padding: 0 14px;
+  border-radius: var(--radius-pill);
+  border: 1px solid var(--line);
+  background: var(--panel);
+  color: var(--text);
+  font: inherit;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: default;
+  }
+}
+
+.pill--primary {
+  border-color: var(--accent);
+  background: var(--accent);
+  color: var(--on-accent);
+}
+
+// --- Momento favorito --------------------------------------------------------------------
+
+.favorite {
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
+  margin: 0;
+  padding: 20px 22px;
+  border-radius: 20px;
+  background: var(--accent);
+  color: var(--on-accent);
+
+  > svg {
+    flex: none;
+  }
+}
+
+.favorite__body {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.favorite__label {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.06em;
+}
+
+.favorite__quote {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: 22px;
+  font-weight: 600;
+  line-height: 1.25;
+}
+
+// --- Bitácora ----------------------------------------------------------------------------
+
+.log-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 14px;
+}
+
+.log-head__title {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: 24px;
+  font-weight: 700;
+}
+
+.log-head__hint {
+  flex: 1;
+  font-size: 13px;
+}
+
+.log {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.entry {
+  display: flex;
+  gap: 18px;
+  padding: 18px;
+  border-radius: var(--radius-card);
+  background: var(--panel);
+  border: 1px solid var(--line);
+  scroll-margin: 16px;
+  transition:
+    background 0.15s,
+    border-color 0.15s;
+}
+
+.entry--on {
+  background: var(--entry-active);
+  border-color: var(--accent);
+}
+
+.entry__pin {
+  flex: none;
+  width: var(--tap-target);
+  height: var(--tap-target);
+  padding: 0;
+  border-radius: 50%;
+  border: 0;
+  background: var(--inverse);
+  color: var(--on-inverse);
+  font-family: var(--font-mono);
+  font-weight: 500;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.entry__pin--on {
+  background: var(--accent);
+  color: var(--on-accent);
+}
+
+.entry__body,
+.entry__detail {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.entry__top {
+  margin: 0;
+  font: inherit;
+}
+
+.entry__toggle {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 4px 12px;
+  width: 100%;
+  min-height: var(--tap-target);
+  padding: 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.entry__name {
+  font-family: var(--font-display);
+  font-size: 24px;
+  font-weight: 700;
+}
+
+.entry__dates {
+  font-size: 12px;
+}
+
+.photos {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.photo {
+  position: relative;
+  aspect-ratio: 4 / 3;
+  padding: 0;
+  border: 0;
+  border-radius: 12px;
+  overflow: hidden;
+  background-color: var(--placeholder);
+  background-image: repeating-linear-gradient(135deg, var(--stripe) 0 10px, transparent 10px 20px);
+  cursor: zoom-in;
+
+  img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+}
+
+.photo__more {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  background: var(--scrim);
+  color: var(--text);
+  font-weight: 600;
+  font-size: 15px;
+}
+
+.memory {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.memory__text {
+  margin: 0;
+  font-size: 16px;
+  line-height: 1.55;
+  color: var(--text-body);
+}
+
+.memory__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.mini {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 32px;
+  padding: 0 12px;
+  border-radius: var(--radius-pill);
+  border: 1px solid var(--line);
+  background: transparent;
+  color: var(--text-sub);
+  font: inherit;
+  font-size: 13px;
+  cursor: pointer;
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: default;
+  }
+}
+
+.mini--on {
+  border-color: var(--accent);
+  background: var(--accent);
+  color: var(--on-accent);
+}
+
+.mini--danger {
+  color: var(--danger);
+}
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 10px;
+  border-radius: var(--radius-pill);
+  background: var(--chip);
+  font-size: 13px;
+  color: var(--text-sub);
+}
+
+.chip--monument {
+  background: transparent;
+  border: 1px solid var(--accent-text);
+  color: var(--accent-text);
+}
+
+// --- Modo edición ------------------------------------------------------------------------
+
+.edit-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.edit-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  border-radius: 16px;
+  border: 1px solid var(--line);
+  background: var(--panel);
+}
+
+.edit-row__grip {
+  display: grid;
+  place-items: center;
+  color: var(--text-muted);
+  cursor: grab;
+}
+
+.edit-row__n {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: var(--inverse);
+  color: var(--on-inverse);
+  font-family: var(--font-mono);
+  font-size: 13px;
+}
+
+.edit-row__n--stopover {
+  background: var(--accent-stopover);
+  color: var(--text);
+  border: 1px solid var(--accent);
+}
+
+.edit-row__name {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  font-weight: 600;
+
+  .mono {
+    font-size: 12px;
+    font-weight: 400;
+  }
+}
+
+// Mientras se arrastra (CDK drag-drop).
+.cdk-drag-preview {
+  box-shadow: var(--shadow);
+}
+
+.cdk-drag-placeholder {
+  opacity: 0.3;
+}
+
+.cdk-drag-animating,
+.edit-list.cdk-drop-list-dragging .edit-row:not(.cdk-drag-placeholder) {
+  transition: transform 200ms ease;
+}
+
+@media (max-width: 600px) {
+  .stats {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .entry {
+    gap: 12px;
+    padding: 14px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .entry,
+  .cdk-drag-animating,
+  .edit-list.cdk-drop-list-dragging .edit-row:not(.cdk-drag-placeholder) {
+    transition: none;
+  }
+}

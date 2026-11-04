@@ -57,7 +57,7 @@ App web para registrar viajes **centrada en mapas**: cada país, estado de Méxi
 - Tipos del web generados con `make gen-api` en `web/src/app/core/api/` (`openapi.json` y `schema.d.ts`, en git; alias en `types.ts`). CI falla si no están al día. `openapi-typescript` aún no acepta TypeScript 6: corre con `npx` y versión fijada, fuera de `package.json`.
 - Zoom del mapa: botones, arrastre y Ctrl/⌘ + rueda (la rueda sola desplaza la página).
 - Controles de fases posteriores (búsqueda, Compartir, globo y Reproduce tu historia) se muestran como en la maqueta con `aria-disabled` y el aviso "Próximamente · fase N". "Nuevo recuerdo" funciona desde la fase 4.
-- `/viajes` (lista) y `/viajes/:id` (versión mínima) existen para que la tarjeta y la tira naveguen; la fase 5 completa el detalle.
+- `/viajes` (lista) y `/viajes/:id` existen para que la tarjeta y la tira naveguen; el detalle completo es de la fase 5.
 
 ### Nuevo recuerdo (fase 4)
 - Subida: `POST /api/photos` (multipart `files`), JPG/PNG/HEIC (`pillow-heif`) decididos por contenido; 30 MB por foto y 50 por petición (`max_photo_bytes`, `max_photos_per_upload`). Cada archivo se valida aparte: los rechazados van en `errors`. Duplicados por sha256 del archivo subido (`duplicate: true`, `INSERT … ON CONFLICT`). Procesamiento en `app/services/images.py`; la semilla usa las mismas variantes.
@@ -67,6 +67,14 @@ App web para registrar viajes **centrada en mapas**: cada país, estado de Méxi
 - Guardado: `POST /api/memories` acepta `photo_ids` (en orden; la primera es la portada) y `trip_id` + `place`: reusa la parada del viaje con la misma ciudad y fechas que se cruzan (`trips.matching_stop`) o agrega una en orden cronológico. Responde `lit` (países, estados y ciudades que se encendieron o pasaron de escala a visitado, comparando las vistas de estado antes y después).
 - Web: la ventana es la ruta hija `/nuevo-recuerdo` de Mi mapa (el mapa no se desmonta). Al guardar, `MemoryEvents` avisa a Mi mapa, que recarga y anima `lit` (`country--lit`, aviso "… se encendió en tu mapa"). La ventana no se cierra al hacer clic fuera, para no perder fotos.
 - Fotos de prueba con EXIF real en `api/tests/fixtures/` (`kioto_gps.jpg`, `reikiavik_gps.jpg`, `sin_gps.jpg`), generadas con `docker compose run --rm --no-deps api python -m app.seed.fixtures`; una prueba revisa que estén al día. Sirven para arrastrarlas a la ventana.
+
+### Detalle de viaje (fase 5)
+- `GET /api/trips/{id}` (y las respuestas de `POST`/`PATCH` del viaje) traen cada parada con sus `memories` y sus fotos en orden, más `route_km`, `trip_number`/`trip_total` y `continent` (`app/services/trip_detail.py`). Los viajes automáticos también cuentan en "viaje N de M".
+- `route_km`: línea geodésica (PostGIS) entre las **estancias** en orden; las escalas no cuentan (Japón da ~725 km; la maqueta decía 850, inventado).
+- **Escalas**: no llevan número ni entran en la bitácora; van en el aviso ("Ida con escala en…") y solo se dibujan en el mapa si caen dentro del encuadre. Los pines numeran solo estancias (Kioto es el 3). En "Editar paradas" sí aparecen, para moverlas o borrarlas.
+- Mapa regional: `core/map/trip-route.ts` (Mercator ajustado a las estancias, encuadre mínimo de 1.2°, curvas de `scripts/generar-mapas.mjs`, acomodo de etiquetas por choque). Se dibuja a 540×570, cerca del tamaño real, porque pines y etiquetas miden lo mismo en píxeles a cualquier escala. Con el mapa a menos de 460 px solo se ve la etiqueta de la parada elegida.
+- Se mantiene el encabezado global; la pantalla agrega su barra (Mi mapa, migas, visibilidad, "Agregar recuerdo"). La parada elegida va en `?parada=N`. "Agregar recuerdo" abre `/nuevo-recuerdo?viaje=<id>` con el viaje elegido y, al cerrar o guardar, vuelve al viaje.
+- El momento favorito de la semilla de Japón es el de Hakone (la cita del Fuji de la maqueta).
 
 ## Decisiones abiertas (pregúntale a Carlos antes de fijarlas)
 

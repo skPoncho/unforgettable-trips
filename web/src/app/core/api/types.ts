@@ -26,6 +26,10 @@ export type CountryTrip = Schemas['CountryTrip'];
 export type Trip = Schemas['TripOut'];
 export type TripDetail = Schemas['TripDetailOut'];
 export type Stop = Schemas['StopOut'];
+export type TripStop = Schemas['TripStopOut'];
+export type TripMemory = Schemas['TripMemoryOut'];
+export type TripPhoto = Schemas['TripPhoto'];
+export type TripPatch = Schemas['TripPatch'];
 
 export type City = Schemas['CityOut'];
 

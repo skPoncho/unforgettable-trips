@@ -74,6 +74,23 @@
   --accent-ring: rgba(244, 183, 64, 0.3);
   --danger: #ff8a7a;
   --shadow-dialog: 0 30px 80px rgba(0, 0, 0, 0.55);
+
+  /* Detalle de viaje (pantalla 2): mapa regional, bitácora. */
+  --route-bg: #0b1620;
+  --route-graticule: #14232e;
+  --route-land: #1c2b38;
+  --route-land-line: #2c4052;
+  --route-trip-land: #24384a;
+  --route-trip-line: #3a5266;
+  --route-line: #f4b740;
+  --route-under: #f4b740;
+  --route-under-opacity: 0.18;
+  --route-glow: url(#route-glow);
+  --pin-glow: 0 0 0 6px rgba(244, 183, 64, 0.3), 0 0 18px rgba(244, 183, 64, 0.6);
+  --pin-shadow: 0 2px 8px rgba(0, 0, 0, 0.35);
+  --entry-active: #152a3b;
+  --text-body: #d3dde4;
+  --chip: #1a2e3f;
 }
 
 :root[data-theme='light'] {
@@ -129,6 +146,22 @@
   --accent-ring: rgba(242, 174, 46, 0.35);
   --danger: #b3261e;
   --shadow-dialog: 0 30px 80px rgba(15, 30, 42, 0.25);
+
+  --route-bg: #e2e9ee;
+  --route-graticule: #d3dde4;
+  --route-land: #eef2f5;
+  --route-land-line: #c3cfd9;
+  --route-trip-land: #ffffff;
+  --route-trip-line: #b9c7d2;
+  --route-line: #b87a06;
+  --route-under: #f2ae2e;
+  --route-under-opacity: 0.28;
+  --route-glow: none;
+  --pin-glow: 0 0 0 6px rgba(242, 174, 46, 0.35), 0 0 14px rgba(242, 174, 46, 0.45);
+  --pin-shadow: 0 2px 8px rgba(15, 30, 42, 0.25);
+  --entry-active: #fff8ea;
+  --text-body: #22384a;
+  --chip: #edf1f4;
 }
 
 /* Respaldo sin JavaScript: mismos valores que [data-theme='light']. */
@@ -186,5 +219,21 @@
     --accent-ring: rgba(242, 174, 46, 0.35);
     --danger: #b3261e;
     --shadow-dialog: 0 30px 80px rgba(15, 30, 42, 0.25);
+
+    --route-bg: #e2e9ee;
+    --route-graticule: #d3dde4;
+    --route-land: #eef2f5;
+    --route-land-line: #c3cfd9;
+    --route-trip-land: #ffffff;
+    --route-trip-line: #b9c7d2;
+    --route-line: #b87a06;
+    --route-under: #f2ae2e;
+    --route-under-opacity: 0.28;
+    --route-glow: none;
+    --pin-glow: 0 0 0 6px rgba(242, 174, 46, 0.35), 0 0 14px rgba(242, 174, 46, 0.45);
+    --pin-shadow: 0 2px 8px rgba(15, 30, 42, 0.25);
+    --entry-active: #fff8ea;
+    --text-body: #22384a;
+    --chip: #edf1f4;
   }
 }

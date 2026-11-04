@@ -35,7 +35,7 @@ export const routes: Routes = [
   {
     path: 'viajes/:id',
     title: 'Viaje · Huella',
-    loadComponent: () => import('./pages/trips/trip-page').then((m) => m.TripPage),
+    loadComponent: () => import('./pages/trip/trip-page').then((m) => m.TripPage),
   },
   // Página de verificación de los datos geográficos (fase 1); no aparece en el encabezado.
   {

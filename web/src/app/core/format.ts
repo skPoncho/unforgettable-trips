@@ -39,6 +39,25 @@ export function dateRange(from: string, to: string = from): string {
   return `${a.day}–${b.day} ${a.month} ${a.year}`;
 }
 
+/** Fechas ISO → `12 mar`, `8–11 mar`, `28 feb – 2 mar` (sin año, dentro de un viaje). */
+export function dayMonthRange(from: string, to: string = from): string {
+  const a = dateParts(from);
+  const b = dateParts(to);
+  if (from === to) return `${a.day} ${a.month}`;
+  if (a.month !== b.month || a.year !== b.year) return `${a.day} ${a.month} – ${b.day} ${b.month}`;
+  return `${a.day}–${b.day} ${a.month}`;
+}
+
+/** Días transcurridos desde `start` (el día de inicio es el 1): `Día 5`, `Días 1–4`. */
+export function tripDays(start: string, from: string, to: string = from): string {
+  const day = (iso: string) =>
+    Math.round((Date.parse(`${iso}T00:00:00Z`) - Date.parse(`${start}T00:00:00Z`)) / 86_400_000) +
+    1;
+  const a = day(from);
+  const b = day(to);
+  return a === b ? `Día ${a}` : `Días ${a}–${b}`;
+}
+
 /** `14 días`, `1 ciudad`, `3 ciudades`. */
 export function count(n: number, singular: string, plural: string): string {
   return `${n.toLocaleString('es-MX')} ${n === 1 ? singular : plural}`;
@@ -56,6 +75,13 @@ export const VISIBILITY_LABELS: Record<Visibility, string> = {
   private: 'Privado',
   link: 'Con enlace',
   public: 'Público',
+};
+
+/** Qué significa cada visibilidad, para quien la elige. */
+export const VISIBILITY_HINTS: Record<Visibility, string> = {
+  private: 'Solo tú puedes verlo',
+  link: 'Cualquiera con el enlace puede verlo',
+  public: 'Visible en tu perfil público',
 };
 
 /** Hitos de países: de 5 en 5 al principio, después más espaciados, hasta los 195. */

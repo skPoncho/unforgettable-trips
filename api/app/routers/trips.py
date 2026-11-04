@@ -16,6 +16,7 @@ from app.schemas import (
     TripPatch,
 )
 from app.services import trips
+from app.services.trip_detail import trip_detail
 
 router = APIRouter(prefix="/api", tags=["trips"])
 
@@ -32,12 +33,12 @@ def list_trips(session: SessionDep, user: CurrentUserDep) -> list[TripOut]:
 def create_trip(data: TripIn, session: SessionDep, user: CurrentUserDep) -> TripDetailOut:
     trip = trips.create_trip(session, user, data)
     session.commit()
-    return trips.trip_detail(session, user, trip.id)
+    return trip_detail(session, user, trip.id)
 
 
 @router.get("/trips/{trip_id}", response_model=TripDetailOut, responses=_404)
 def get_trip(trip_id: uuid.UUID, session: SessionDep, user: CurrentUserDep) -> TripDetailOut:
-    return trips.trip_detail(session, user, trip_id)
+    return trip_detail(session, user, trip_id)
 
 
 @router.patch("/trips/{trip_id}", response_model=TripDetailOut, responses=_404)
@@ -46,7 +47,7 @@ def update_trip(
 ) -> TripDetailOut:
     trips.update_trip(session, user, trip_id, patch)
     session.commit()
-    return trips.trip_detail(session, user, trip_id)
+    return trip_detail(session, user, trip_id)
 
 
 @router.delete("/trips/{trip_id}", status_code=status.HTTP_204_NO_CONTENT, responses=_404)

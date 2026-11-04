@@ -11,6 +11,9 @@ import type {
   MemorySuggestion,
   Progress,
   Trip,
+  TripDetail,
+  TripMemory,
+  TripStop,
   UploadedPhoto,
   UserMap,
 } from '../app/core/api/types';
@@ -270,4 +273,110 @@ export const kyotoMemory: MemoryCreated = {
   created_at: '2026-11-04T00:00:00Z',
   updated_at: '2026-11-04T00:00:00Z',
   lit: { countries: [], subdivisions: [], cities: [] },
+};
+
+// --- Detalle de viaje (fase 5) -----------------------------------------------------------
+
+function tripStop(
+  position: number,
+  place_name: string,
+  lon: number,
+  lat: number,
+  arrived_on: string,
+  departed_on: string = arrived_on,
+  extra: Partial<TripStop> = {},
+): TripStop {
+  const id = `stop-${position}`;
+  return {
+    id,
+    trip_id: JAPAN_TRIP_ID,
+    position,
+    visit_type: 'stay',
+    place_name,
+    city: { id: 100 + position, name_es: place_name },
+    country: { iso3: 'JPN', name_es: 'Japón' },
+    subdivision: null,
+    location: { lon, lat },
+    arrived_on,
+    departed_on,
+    note: null,
+    memories: [],
+    ...extra,
+  };
+}
+
+function tripMemory(stopId: string, body: string, photos: number, monument?: string): TripMemory {
+  return {
+    id: `memory-${stopId}`,
+    trip_id: JAPAN_TRIP_ID,
+    stop_id: stopId,
+    monument: monument
+      ? { id: 1, slug: monument.toLowerCase(), name_es: monument, stamp_code: 'JP-1' }
+      : null,
+    body,
+    occurred_on: null,
+    visibility: null,
+    effective_visibility: 'public',
+    photo_count: photos,
+    photos: Array.from({ length: photos }, (_, i) => ({
+      id: `${stopId}-photo-${i + 1}`,
+      width: 1600,
+      height: 1200,
+    })),
+    created_at: '2026-11-03T00:00:00Z',
+    updated_at: '2026-11-03T00:00:00Z',
+  };
+}
+
+function withMemory(stop: TripStop, body: string, photos: number, monument?: string): TripStop {
+  return { ...stop, memories: [tripMemory(stop.id, body, photos, monument)] };
+}
+
+/** El viaje a Japón de las semillas: escala en Tocumen y 6 estancias (Kioto es el pin 3). */
+export const japanTripDetail: TripDetail = {
+  ...japanTrip,
+  summary: 'De Tokio a Hiroshima en tren bala.',
+  favorite_memory_id: 'memory-stop-2',
+  route_km: 725.2,
+  trip_number: 12,
+  trip_total: 13,
+  continent: 'asia',
+  stops: [
+    tripStop(0, 'Aeropuerto de Tocumen', -79.3835, 9.0714, '2025-03-08', '2025-03-08', {
+      visit_type: 'stopover',
+      city: null,
+      country: { iso3: 'PAN', name_es: 'Panamá' },
+      note: '3 h en Tocumen',
+    }),
+    withMemory(
+      tripStop(1, 'Tokio', 139.6917, 35.6895, '2025-03-08', '2025-03-11'),
+      'Primer ramen a la una de la mañana.',
+      26,
+      'Templo Sensō-ji',
+    ),
+    withMemory(
+      tripStop(2, 'Hakone', 139.025, 35.195, '2025-03-12'),
+      'El Fuji apareció diez minutos desde el barco.',
+      9,
+    ),
+    withMemory(
+      tripStop(3, 'Kioto', 135.7681, 35.0116, '2025-03-13', '2025-03-16'),
+      'Subimos Fushimi Inari a las siete de la mañana.',
+      28,
+      'Fushimi Inari-taisha',
+    ),
+    withMemory(
+      tripStop(4, 'Nara', 135.8048, 34.6851, '2025-03-17'),
+      'Los ciervos te hacen reverencia.',
+      8,
+      'Tōdai-ji',
+    ),
+    withMemory(tripStop(5, 'Osaka', 135.5023, 34.6937, '2025-03-18', '2025-03-19'), 'Takoyaki.', 7),
+    withMemory(
+      tripStop(6, 'Hiroshima', 132.4553, 34.3853, '2025-03-20', '2025-03-21'),
+      'El día más silencioso del viaje.',
+      6,
+      'Cúpula de la Bomba Atómica',
+    ),
+  ],
 };

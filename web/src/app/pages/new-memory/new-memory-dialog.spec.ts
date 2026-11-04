@@ -249,4 +249,26 @@ describe('NewMemoryDialog', () => {
     removed.flush(null);
     expect(navigate).toHaveBeenCalledWith(['/']);
   });
+
+  it('abierta desde un viaje (?viaje=…) lo deja elegido y vuelve a él al cerrar', async () => {
+    const fixture = TestBed.createComponent(NewMemoryDialog);
+    fixture.componentRef.setInput('viaje', 'oaxaca');
+    TestBed.tick();
+    http
+      .expectOne('/api/trips')
+      .flush([japanTrip, { ...japanTrip, id: 'oaxaca', title: 'Oaxaca' }]);
+    const el = fixture.nativeElement as HTMLElement;
+    const view = { fixture, el, component: fixture.componentInstance } as ReturnType<typeof render>;
+    await dropKyoto(view);
+
+    const select = el.querySelector<HTMLSelectElement>('.chip__select')!;
+    expect(select.selectedOptions[0].textContent?.trim()).toBe('Viaje: Oaxaca');
+    expect(fixture.componentInstance.buildMemory()?.trip_id).toBe('oaxaca');
+
+    [...el.querySelectorAll<HTMLButtonElement>('button')]
+      .find((b) => b.textContent?.includes('Cancelar'))!
+      .click();
+    http.expectOne((r) => r.method === 'DELETE').flush(null);
+    expect(navigate).toHaveBeenCalledWith(['/viajes', 'oaxaca']);
+  });
 });

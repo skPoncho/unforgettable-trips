@@ -8,6 +8,7 @@ import {
   DestroyRef,
   computed,
   inject,
+  input,
   linkedSignal,
   signal,
 } from '@angular/core';
@@ -331,8 +332,11 @@ export class NewMemoryDialog {
 
   private readonly allTrips = httpResource<Trip[]>(() => '/api/trips');
 
-  /** Viaje elegido a mano; si no, el primero sugerido o un viaje automático. */
-  private readonly tripPick = signal<string | null>(null);
+  /** `?viaje=<id>`: se abrió desde el detalle de ese viaje (fase 5). */
+  readonly viaje = input<string>();
+
+  /** Viaje elegido a mano (o el de `?viaje`); si no, el primero sugerido o uno automático. */
+  private readonly tripPick = linkedSignal<string | null>(() => this.viaje() ?? null);
   protected readonly tripId = computed(
     () => this.tripPick() ?? this.suggestion()?.trips[0]?.id ?? AUTO_TRIP,
   );
@@ -455,7 +459,7 @@ export class NewMemoryDialog {
           tripId: created.trip_id,
           lit: created.lit,
         });
-        void this.router.navigate(['/']);
+        this.leave();
       },
       error: (error: unknown) => {
         this.saving.set(false);
@@ -473,7 +477,13 @@ export class NewMemoryDialog {
       }
     }
     this.items.set([]);
-    void this.router.navigate(['/']);
+    this.leave();
+  }
+
+  /** Vuelve a Mi mapa, o al viaje si la ventana se abrió desde él. */
+  private leave(): void {
+    const trip = this.viaje();
+    void this.router.navigate(trip ? ['/viajes', trip] : ['/']);
   }
 }
 

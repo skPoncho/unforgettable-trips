@@ -131,10 +131,6 @@ class TripOut(BaseModel):
     updated_at: datetime
 
 
-class TripDetailOut(TripOut):
-    stops: list[StopOut]
-
-
 # --- Fotos -----------------------------------------------------------------------------
 
 
@@ -228,6 +224,32 @@ class MemoryOut(BaseModel):
     photo_count: int
     created_at: datetime
     updated_at: datetime
+
+
+class TripPhoto(BaseModel):
+    id: uuid.UUID
+    width: int
+    height: int
+
+
+class TripMemoryOut(MemoryOut):
+    photos: list[TripPhoto] = Field(description="En orden; la primera es la portada")
+
+
+class TripStopOut(StopOut):
+    memories: list[TripMemoryOut]
+
+
+class TripDetailOut(TripOut):
+    """Lo que muestra el detalle de viaje: paradas con sus recuerdos y fotos."""
+
+    stops: list[TripStopOut]
+    route_km: float = Field(
+        description="Línea geodésica entre las estancias, en orden (las escalas no cuentan)"
+    )
+    trip_number: int = Field(description="Lugar del viaje en tu historia: 1 es el más antiguo")
+    trip_total: int
+    continent: Continent | None = Field(description="Del primer país con estancia")
 
 
 class LitPlaces(BaseModel):

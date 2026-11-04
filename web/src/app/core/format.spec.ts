@@ -1,5 +1,5 @@
 import { userMap } from '../../testing/fixtures';
-import { count, dateRange, monthYear, nextMilestone } from './format';
+import { count, dateRange, dayMonthRange, monthYear, nextMilestone, tripDays } from './format';
 import { firstVisitYear } from './user-map';
 
 describe('formatos', () => {
@@ -15,6 +15,19 @@ describe('formatos', () => {
     expect(dateRange('2025-03-13', '2025-03-16')).toBe('13–16 mar 2025');
     expect(dateRange('2025-02-28', '2025-03-02')).toBe('28 feb – 2 mar 2025');
     expect(dateRange('2024-12-30', '2025-01-02')).toBe('30 dic 2024 – 2 ene 2025');
+  });
+
+  it('fechas dentro de un viaje, sin año', () => {
+    expect(dayMonthRange('2025-03-12')).toBe('12 mar');
+    expect(dayMonthRange('2025-03-08', '2025-03-11')).toBe('8–11 mar');
+    expect(dayMonthRange('2025-02-28', '2025-03-02')).toBe('28 feb – 2 mar');
+  });
+
+  it('días del viaje desde el inicio', () => {
+    expect(tripDays('2025-03-08', '2025-03-08', '2025-03-11')).toBe('Días 1–4');
+    expect(tripDays('2025-03-08', '2025-03-12')).toBe('Día 5');
+    // Cruza el cambio de mes (y de horario de verano en otras zonas).
+    expect(tripDays('2025-03-30', '2025-04-02')).toBe('Día 4');
   });
 
   it('singular y plural', () => {

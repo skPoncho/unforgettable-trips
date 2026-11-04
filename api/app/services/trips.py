@@ -21,7 +21,6 @@ from app.schemas import (
     StopOut,
     StopPatch,
     SubdivisionBrief,
-    TripDetailOut,
     TripIn,
     TripOut,
     TripPatch,
@@ -146,12 +145,11 @@ def list_stops(
     return [_stop_out(dict(r)) for r in rows]
 
 
-def trip_detail(session: Session, user: User, trip_id: uuid.UUID) -> TripDetailOut:
+def trip_summary(session: Session, user: User, trip_id: uuid.UUID) -> TripOut:
     row = session.execute(text(_TRIPS_SQL), {"uid": user.id, "trip_id": trip_id}).mappings().first()
     if row is None:
         raise NotFoundError("Viaje no encontrado")
-    summary = _trip_out(dict(row))
-    return TripDetailOut(**summary.model_dump(), stops=list_stops(session, user, trip_id=trip_id))
+    return _trip_out(dict(row))
 
 
 def stop_detail(session: Session, user: User, stop_id: uuid.UUID) -> StopOut:

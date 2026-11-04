@@ -1,0 +1,428 @@
+@if (trip.error()) {
+  <div class="missing">
+    <a class="back" routerLink="/">
+      <svg lucideArrowLeft [size]="18" [strokeWidth]="2.2" aria-hidden="true"></svg>
+      Mi mapa
+    </a>
+    <h1 class="missing__title">Viaje no encontrado</h1>
+    <p class="muted">No existe o no es tuyo.</p>
+  </div>
+} @else if (trip.value(); as t) {
+  <div class="toolbar">
+    <div class="toolbar__side">
+      <a class="back" routerLink="/">
+        <svg lucideArrowLeft [size]="18" [strokeWidth]="2.2" aria-hidden="true"></svg>
+        Mi mapa
+      </a>
+      @if (crumb(); as c) {
+        <nav class="crumbs" aria-label="Migas de pan">
+          <a routerLink="/">Mundo</a>
+          @if (c.continent) {
+            <span aria-hidden="true">/</span><span>{{ c.continent }}</span>
+          }
+          <span aria-hidden="true">/</span>
+          <span class="crumbs__here" aria-current="page">{{ c.title }}</span>
+        </nav>
+      }
+    </div>
+    <div class="toolbar__side">
+      <div
+        class="visibility"
+        role="radiogroup"
+        aria-label="Quién puede ver este viaje"
+        [attr.aria-busy]="saving()"
+      >
+        @for (v of visibilities; track v) {
+          @let on = t.visibility === v;
+          <button
+            type="button"
+            role="radio"
+            class="visibility__option"
+            [class.visibility__option--on]="on"
+            [attr.aria-checked]="on"
+            [attr.tabindex]="on ? 0 : -1"
+            [attr.data-visibility]="v"
+            (click)="setVisibility(v)"
+            (keydown)="onVisibilityKey($event)"
+          >
+            {{ visibilityLabels[v] }}
+          </button>
+        }
+      </div>
+      <a class="add" routerLink="/nuevo-recuerdo" [queryParams]="{ viaje: t.id }">
+        <svg lucidePlus [size]="16" [strokeWidth]="2.4" aria-hidden="true"></svg>
+        Agregar recuerdo
+      </a>
+    </div>
+  </div>
+
+  @if (error(); as message) {
+    <p class="error" role="alert">{{ message }}</p>
+  }
+
+  <div class="layout">
+    <!-- Mapa de la ruta -->
+    <section class="route" aria-label="Mapa de la ruta">
+      @if (drawing(); as d) {
+        <app-trip-map
+          [drawing]="d"
+          [selected]="selected()"
+          [routeKm]="t.route_km"
+          (pick)="select($event, 'map')"
+        />
+      } @else if (t.stops.length === 0) {
+        <div class="route__empty">
+          <p>Este viaje aún no tiene paradas.</p>
+          <a class="add" routerLink="/nuevo-recuerdo" [queryParams]="{ viaje: t.id }">
+            Agregar el primer recuerdo
+          </a>
+        </div>
+      } @else {
+        <div class="route__empty" role="status">Cargando el mapa…</div>
+      }
+
+      <dl class="stats">
+        @for (s of stats(); track s.label) {
+          <div class="stat">
+            <dt class="stat__label">{{ s.label }}</dt>
+            <dd class="stat__value">{{ s.value.toLocaleString('es-MX') }}</dd>
+          </div>
+        }
+      </dl>
+
+      @for (notice of notices(); track $index) {
+        <p class="notice">
+          <svg lucidePlane [size]="16" aria-hidden="true"></svg>
+          {{ notice }}
+        </p>
+      }
+    </section>
+
+    <article class="story">
+      <header class="head">
+        <span class="eyebrow">{{ eyebrow() }}</span>
+
+        @if (editing() === 'title') {
+          <div class="edit">
+            <label class="visually-hidden" for="trip-title">Título del viaje</label>
+            <input
+              id="trip-title"
+              class="edit__title"
+              maxlength="200"
+              [value]="draft()"
+              (input)="onDraft($event)"
+              (keydown)="onEditKey($event)"
+            />
+            <ng-container *ngTemplateOutlet="editActions" />
+          </div>
+        } @else {
+          <div class="head__title-row">
+            <h1 class="title" [class.title--long]="t.title.length > 12">{{ t.title }}</h1>
+            <button
+              type="button"
+              class="icon-button"
+              aria-label="Editar título"
+              title="Editar título"
+              (click)="startEditing('title')"
+            >
+              <svg lucidePencil [size]="16" aria-hidden="true"></svg>
+            </button>
+          </div>
+        }
+
+        @if (editing() === 'summary') {
+          <div class="edit">
+            <label class="visually-hidden" for="trip-summary">Resumen del viaje</label>
+            <textarea
+              id="trip-summary"
+              class="edit__summary"
+              rows="3"
+              maxlength="2000"
+              [value]="draft()"
+              (input)="onDraft($event)"
+              (keydown)="onEditKey($event)"
+            ></textarea>
+            <ng-container *ngTemplateOutlet="editActions" />
+          </div>
+        } @else if (t.summary) {
+          <p class="summary">
+            {{ t.summary }}
+            <button
+              type="button"
+              class="icon-button icon-button--inline"
+              aria-label="Editar resumen"
+              title="Editar resumen"
+              (click)="startEditing('summary')"
+            >
+              <svg lucidePencil [size]="14" aria-hidden="true"></svg>
+            </button>
+          </p>
+        } @else {
+          <button type="button" class="link-button" (click)="startEditing('summary')">
+            Agregar un resumen
+          </button>
+        }
+
+        <span class="visibility-hint">
+          @switch (t.visibility) {
+            @case ('public') {
+              <svg lucideGlobe [size]="14" aria-hidden="true"></svg>
+            }
+            @case ('link') {
+              <svg lucideLink [size]="14" aria-hidden="true"></svg>
+            }
+            @default {
+              <svg lucideLock [size]="14" aria-hidden="true"></svg>
+            }
+          }
+          {{ visibilityHint() }}
+        </span>
+      </header>
+
+      @if (favorite(); as fav) {
+        <figure class="favorite">
+          <svg lucideStar [size]="28" aria-hidden="true"></svg>
+          <div class="favorite__body">
+            <figcaption class="favorite__label">MOMENTO FAVORITO</figcaption>
+            <blockquote class="favorite__quote">“{{ fav.body }}”</blockquote>
+          </div>
+        </figure>
+      }
+
+      <div class="log-head">
+        <h2 class="log-head__title">Bitácora por parada</h2>
+        @if (t.stops.length) {
+          <span class="muted log-head__hint">
+            @if (!editMode()) {
+              Toca una parada para verla en el mapa
+            }
+          </span>
+          <button
+            type="button"
+            class="pill"
+            [attr.aria-pressed]="editMode()"
+            (click)="editMode.set(!editMode())"
+          >
+            @if (editMode()) {
+              <svg lucideCheck [size]="15" aria-hidden="true"></svg>
+              Listo
+            } @else {
+              <svg lucidePencil [size]="15" aria-hidden="true"></svg>
+              Editar paradas
+            }
+          </button>
+        }
+      </div>
+
+      @if (editMode()) {
+        <!-- Todas las paradas, también escalas: arrastrar o flechas para reordenar. -->
+        <ol
+          class="edit-list"
+          cdkDropList
+          [cdkDropListData]="t.stops"
+          (cdkDropListDropped)="drop($event)"
+        >
+          @for (stop of t.stops; track stop.id; let i = $index, first = $first, last = $last) {
+            @let n = stayNumber(stop);
+            <li class="edit-row" cdkDrag [cdkDragDisabled]="saving()">
+              <span class="edit-row__grip" cdkDragHandle aria-hidden="true">
+                <svg lucideGripVertical [size]="18"></svg>
+              </span>
+              <span class="edit-row__n" [class.edit-row__n--stopover]="!n">
+                @if (n) {
+                  {{ n }}
+                } @else {
+                  <svg lucidePlane [size]="14" aria-hidden="true"></svg>
+                }
+              </span>
+              <span class="edit-row__name">
+                {{ stop.place_name }}
+                <span class="muted mono"> {{ n ? '' : 'Escala · ' }}{{ dateLabel(stop) }} </span>
+              </span>
+              <button
+                type="button"
+                class="icon-button"
+                [attr.aria-label]="'Subir ' + stop.place_name"
+                [disabled]="first || saving()"
+                (click)="move(i, i - 1)"
+              >
+                <svg lucideChevronUp [size]="16" aria-hidden="true"></svg>
+              </button>
+              <button
+                type="button"
+                class="icon-button"
+                [attr.aria-label]="'Bajar ' + stop.place_name"
+                [disabled]="last || saving()"
+                (click)="move(i, i + 1)"
+              >
+                <svg lucideChevronDown [size]="16" aria-hidden="true"></svg>
+              </button>
+              <button
+                type="button"
+                class="icon-button icon-button--danger"
+                [attr.aria-label]="'Borrar la parada ' + stop.place_name"
+                [disabled]="saving()"
+                (click)="askDeleteStop(stop)"
+              >
+                <svg lucideTrash [size]="16" aria-hidden="true"></svg>
+              </button>
+            </li>
+          }
+        </ol>
+      } @else {
+        <ol class="log">
+          @for (entry of entries(); track entry.stop.id) {
+            @let on = entry.n === selected();
+            <li [id]="'parada-' + entry.n">
+              <div class="entry" [class.entry--on]="on">
+                <!-- El número repite al botón del nombre: fuera del orden de tabulación. -->
+                <button
+                  type="button"
+                  class="entry__pin"
+                  [class.entry__pin--on]="on"
+                  tabindex="-1"
+                  aria-hidden="true"
+                  (click)="select(entry.n, 'list')"
+                >
+                  {{ entry.n }}
+                </button>
+                <div class="entry__body">
+                  <h3 class="entry__top">
+                    <button
+                      type="button"
+                      class="entry__toggle"
+                      [attr.aria-expanded]="on"
+                      [attr.aria-controls]="'parada-' + entry.n + '-detalle'"
+                      (click)="select(entry.n, 'list')"
+                    >
+                      <span class="visually-hidden">Parada {{ entry.n }}: </span>
+                      <span class="entry__name">{{ entry.stop.place_name }}</span>
+                      <span class="mono muted entry__dates">
+                        {{ dayLabel(entry.stop) }} · {{ dateLabel(entry.stop) }}
+                      </span>
+                    </button>
+                  </h3>
+                  <div class="entry__detail" [id]="'parada-' + entry.n + '-detalle'">
+                    @if (on && entry.photos.length) {
+                      @let extra = entry.photos.length - 3;
+                      <div class="photos">
+                        @for (photo of entry.photos.slice(0, 3); track photo.id; let i = $index) {
+                          <button
+                            type="button"
+                            class="photo"
+                            [attr.aria-label]="
+                              i === 2 && extra > 0
+                                ? 'Ver las ' +
+                                  entry.photos.length +
+                                  ' fotos de ' +
+                                  entry.stop.place_name
+                                : 'Ver foto ' + (i + 1) + ' de ' + entry.stop.place_name
+                            "
+                            (click)="openGallery(entry, i)"
+                          >
+                            <img [src]="photoUrl(photo.id)" alt="" loading="lazy" />
+                            @if (i === 2 && extra > 0) {
+                              <span class="photo__more">+{{ extra }}</span>
+                            }
+                          </button>
+                        }
+                      </div>
+                    }
+
+                    @for (memory of entry.stop.memories; track memory.id) {
+                      <div class="memory">
+                        @if (memory.body) {
+                          <p class="memory__text">{{ memory.body }}</p>
+                        }
+                        @if (on) {
+                          @let isFavorite = t.favorite_memory_id === memory.id;
+                          <div class="memory__actions">
+                            <button
+                              type="button"
+                              class="mini"
+                              [class.mini--on]="isFavorite"
+                              [attr.aria-pressed]="isFavorite"
+                              [disabled]="saving()"
+                              (click)="toggleFavorite(memory)"
+                            >
+                              <svg lucideStar [size]="14" aria-hidden="true"></svg>
+                              {{ isFavorite ? 'Momento favorito' : 'Marcar como favorito' }}
+                            </button>
+                            <button
+                              type="button"
+                              class="mini mini--danger"
+                              [attr.aria-label]="'Borrar el recuerdo de ' + entry.stop.place_name"
+                              [disabled]="saving()"
+                              (click)="askDeleteMemory(memory, entry.stop.place_name)"
+                            >
+                              <svg lucideTrash [size]="14" aria-hidden="true"></svg>
+                              Borrar
+                            </button>
+                          </div>
+                        }
+                      </div>
+                    }
+
+                    <div class="chips">
+                      <span class="chip">
+                        <svg lucideCamera [size]="14" aria-hidden="true"></svg>
+                        {{ photoCount(entry) }}
+                      </span>
+                      @for (monument of entry.monuments; track monument) {
+                        <span class="chip chip--monument">
+                          <svg lucideLandmark [size]="14" aria-hidden="true"></svg>
+                          {{ monument }}
+                        </span>
+                      }
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </li>
+          } @empty {
+            <li class="muted">Este viaje solo tiene escalas.</li>
+          }
+        </ol>
+      }
+    </article>
+  </div>
+
+  <ng-template #editActions>
+    <div class="edit__actions">
+      <button
+        type="button"
+        class="pill pill--primary"
+        [disabled]="saving() || (editing() === 'title' && !draft().trim())"
+        (click)="saveEditing()"
+      >
+        <svg lucideCheck [size]="15" aria-hidden="true"></svg>
+        Guardar
+      </button>
+      <button type="button" class="pill" (click)="editing.set(null)">
+        <svg lucideX [size]="15" aria-hidden="true"></svg>
+        Cancelar
+      </button>
+    </div>
+  </ng-template>
+
+  @if (gallery(); as g) {
+    <app-photo-viewer
+      [photos]="g.photos"
+      [start]="g.start"
+      [title]="g.title"
+      (closed)="gallery.set(null)"
+    />
+  }
+
+  @if (pendingDelete(); as p) {
+    <app-confirm-dialog
+      [title]="p.title"
+      [detail]="p.detail"
+      [busy]="saving()"
+      (confirmed)="confirmDelete()"
+      (cancelled)="pendingDelete.set(null)"
+    />
+  }
+} @else {
+  <p class="muted" role="status">Cargando el viaje…</p>
+}

@@ -1213,7 +1213,10 @@ export interface components {
      * @enum {string}
      */
     Theme: 'system' | 'dark' | 'light';
-    /** TripDetailOut */
+    /**
+     * TripDetailOut
+     * @description Lo que muestra el detalle de viaje: paradas con sus recuerdos y fotos.
+     */
     TripDetailOut: {
       /**
        * Id
@@ -1273,7 +1276,21 @@ export interface components {
        */
       updated_at: string;
       /** Stops */
-      stops: components['schemas']['StopOut'][];
+      stops: components['schemas']['TripStopOut'][];
+      /**
+       * Route Km
+       * @description Línea geodésica entre las estancias, en orden (las escalas no cuentan)
+       */
+      route_km: number;
+      /**
+       * Trip Number
+       * @description Lugar del viaje en tu historia: 1 es el más antiguo
+       */
+      trip_number: number;
+      /** Trip Total */
+      trip_total: number;
+      /** @description Del primer país con estancia */
+      continent: components['schemas']['Continent'] | null;
     };
     /** TripIn */
     TripIn: {
@@ -1283,6 +1300,49 @@ export interface components {
       summary?: string | null;
       /** @default private */
       visibility: components['schemas']['Visibility'];
+    };
+    /** TripMemoryOut */
+    TripMemoryOut: {
+      /**
+       * Id
+       * Format: uuid
+       */
+      id: string;
+      /**
+       * Trip Id
+       * Format: uuid
+       */
+      trip_id: string;
+      /**
+       * Stop Id
+       * Format: uuid
+       */
+      stop_id: string;
+      monument: components['schemas']['MonumentBrief'] | null;
+      /** Body */
+      body: string;
+      /** Occurred On */
+      occurred_on: string | null;
+      visibility: components['schemas']['Visibility'] | null;
+      /** @description La más restrictiva entre la del recuerdo y la del viaje */
+      effective_visibility: components['schemas']['Visibility'];
+      /** Photo Count */
+      photo_count: number;
+      /**
+       * Created At
+       * Format: date-time
+       */
+      created_at: string;
+      /**
+       * Updated At
+       * Format: date-time
+       */
+      updated_at: string;
+      /**
+       * Photos
+       * @description En orden; la primera es la portada
+       */
+      photos: components['schemas']['TripPhoto'][];
     };
     /**
      * TripOut
@@ -1358,6 +1418,54 @@ export interface components {
       cover_photo_id?: string | null;
       /** Favorite Memory Id */
       favorite_memory_id?: string | null;
+    };
+    /** TripPhoto */
+    TripPhoto: {
+      /**
+       * Id
+       * Format: uuid
+       */
+      id: string;
+      /** Width */
+      width: number;
+      /** Height */
+      height: number;
+    };
+    /** TripStopOut */
+    TripStopOut: {
+      /**
+       * Id
+       * Format: uuid
+       */
+      id: string;
+      /**
+       * Trip Id
+       * Format: uuid
+       */
+      trip_id: string;
+      /** Position */
+      position: number;
+      visit_type: components['schemas']['VisitType'];
+      /** Place Name */
+      place_name: string;
+      city: components['schemas']['CityBrief'] | null;
+      country: components['schemas']['CountryBrief'];
+      subdivision: components['schemas']['SubdivisionBrief'] | null;
+      location: components['schemas']['LonLat'];
+      /**
+       * Arrived On
+       * Format: date
+       */
+      arrived_on: string;
+      /**
+       * Departed On
+       * Format: date
+       */
+      departed_on: string;
+      /** Note */
+      note: string | null;
+      /** Memories */
+      memories: components['schemas']['TripMemoryOut'][];
     };
     /** UploadError */
     UploadError: {

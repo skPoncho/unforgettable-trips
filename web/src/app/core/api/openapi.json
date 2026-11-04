@@ -3305,10 +3305,35 @@
           },
           "stops": {
             "items": {
-              "$ref": "#/components/schemas/StopOut"
+              "$ref": "#/components/schemas/TripStopOut"
             },
             "type": "array",
             "title": "Stops"
+          },
+          "route_km": {
+            "type": "number",
+            "title": "Route Km",
+            "description": "Línea geodésica entre las estancias, en orden (las escalas no cuentan)"
+          },
+          "trip_number": {
+            "type": "integer",
+            "title": "Trip Number",
+            "description": "Lugar del viaje en tu historia: 1 es el más antiguo"
+          },
+          "trip_total": {
+            "type": "integer",
+            "title": "Trip Total"
+          },
+          "continent": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/Continent"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Del primer país con estancia"
           }
         },
         "type": "object",
@@ -3333,9 +3358,14 @@
           "stopover_countries",
           "created_at",
           "updated_at",
-          "stops"
+          "stops",
+          "route_km",
+          "trip_number",
+          "trip_total",
+          "continent"
         ],
-        "title": "TripDetailOut"
+        "title": "TripDetailOut",
+        "description": "Lo que muestra el detalle de viaje: paradas con sus recuerdos y fotos."
       },
       "TripIn": {
         "properties": {
@@ -3365,6 +3395,103 @@
         "type": "object",
         "required": ["title"],
         "title": "TripIn"
+      },
+      "TripMemoryOut": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "trip_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Trip Id"
+          },
+          "stop_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Stop Id"
+          },
+          "monument": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/MonumentBrief"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "body": {
+            "type": "string",
+            "title": "Body"
+          },
+          "occurred_on": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Occurred On"
+          },
+          "visibility": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/Visibility"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "effective_visibility": {
+            "$ref": "#/components/schemas/Visibility",
+            "description": "La más restrictiva entre la del recuerdo y la del viaje"
+          },
+          "photo_count": {
+            "type": "integer",
+            "title": "Photo Count"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Created At"
+          },
+          "updated_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Updated At"
+          },
+          "photos": {
+            "items": {
+              "$ref": "#/components/schemas/TripPhoto"
+            },
+            "type": "array",
+            "title": "Photos",
+            "description": "En orden; la primera es la portada"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "trip_id",
+          "stop_id",
+          "monument",
+          "body",
+          "occurred_on",
+          "visibility",
+          "effective_visibility",
+          "photo_count",
+          "created_at",
+          "updated_at",
+          "photos"
+        ],
+        "title": "TripMemoryOut"
       },
       "TripOut": {
         "properties": {
@@ -3596,6 +3723,122 @@
         },
         "type": "object",
         "title": "TripPatch"
+      },
+      "TripPhoto": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "width": {
+            "type": "integer",
+            "title": "Width"
+          },
+          "height": {
+            "type": "integer",
+            "title": "Height"
+          }
+        },
+        "type": "object",
+        "required": ["id", "width", "height"],
+        "title": "TripPhoto"
+      },
+      "TripStopOut": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "trip_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Trip Id"
+          },
+          "position": {
+            "type": "integer",
+            "title": "Position"
+          },
+          "visit_type": {
+            "$ref": "#/components/schemas/VisitType"
+          },
+          "place_name": {
+            "type": "string",
+            "title": "Place Name"
+          },
+          "city": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/CityBrief"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "country": {
+            "$ref": "#/components/schemas/CountryBrief"
+          },
+          "subdivision": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/SubdivisionBrief"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "location": {
+            "$ref": "#/components/schemas/LonLat"
+          },
+          "arrived_on": {
+            "type": "string",
+            "format": "date",
+            "title": "Arrived On"
+          },
+          "departed_on": {
+            "type": "string",
+            "format": "date",
+            "title": "Departed On"
+          },
+          "note": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Note"
+          },
+          "memories": {
+            "items": {
+              "$ref": "#/components/schemas/TripMemoryOut"
+            },
+            "type": "array",
+            "title": "Memories"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "trip_id",
+          "position",
+          "visit_type",
+          "place_name",
+          "city",
+          "country",
+          "subdivision",
+          "location",
+          "arrived_on",
+          "departed_on",
+          "note",
+          "memories"
+        ],
+        "title": "TripStopOut"
       },
       "UploadError": {
         "properties": {

@@ -44,6 +44,14 @@ def test_seed_reproduces_the_mockups_and_is_idempotent(client, db, storage):
     assert detail["stops"][0]["note"] == "3 h en Tocumen"
     stays = [s["place_name"] for s in detail["stops"] if s["visit_type"] == "stay"]
     assert stays[2] == "Kioto"  # el pin 3 de la maqueta
+    # Detalle de viaje (fase 5): ruta solo entre estancias, monumentos y momento favorito.
+    assert 700 < detail["route_km"] < 800
+    assert detail["continent"] == "asia"
+    memories = [m for s in detail["stops"] for m in s["memories"]]
+    assert sum(len(m["photos"]) for m in memories) == 84
+    assert len({m["monument"]["slug"] for m in memories if m["monument"]}) == 4
+    favorite = next(m for m in memories if m["id"] == detail["favorite_memory_id"])
+    assert "Fuji" in favorite["body"]  # Hakone, como en la maqueta
 
     # Solo quedan los archivos de la última corrida, y el original lleva EXIF con GPS.
     photo = db.scalars(select(Photo).limit(1)).one()

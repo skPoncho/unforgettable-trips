@@ -127,7 +127,7 @@ TRIPS = (
         "Japón",
         Visibility.public,
         summary="De Tokio a Hiroshima en tren bala, con templos, ciervos y mucho ramen.",
-        favorite_stop=3,
+        favorite_stop=2,  # Hakone: la cita del Fuji de la maqueta
         stops=(
             StopSeed(
                 "Aeropuerto de Tocumen",
