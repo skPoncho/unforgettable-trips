@@ -1,0 +1,33 @@
+code,country_iso3,name_es,ne_iso_3166_2,geonames_admin1
+MX-AGU,MEX,Aguascalientes,MX-AGU,01
+MX-BCN,MEX,Baja California,MX-BCN,02
+MX-BCS,MEX,Baja California Sur,MX-BCS,03
+MX-CAM,MEX,Campeche,MX-CAM,04
+MX-CHP,MEX,Chiapas,MX-CHP,05
+MX-CHH,MEX,Chihuahua,MX-CHH,06
+MX-COA,MEX,Coahuila,MX-COA,07
+MX-COL,MEX,Colima,MX-COL,08
+MX-CMX,MEX,Ciudad de México,MX-DIF,09
+MX-DUR,MEX,Durango,MX-DUR,10
+MX-GUA,MEX,Guanajuato,MX-GUA,11
+MX-GRO,MEX,Guerrero,MX-GRO,12
+MX-HID,MEX,Hidalgo,MX-HID,13
+MX-JAL,MEX,Jalisco,MX-JAL,14
+MX-MEX,MEX,Estado de México,MX-MEX,15
+MX-MIC,MEX,Michoacán,MX-MIC,16
+MX-MOR,MEX,Morelos,MX-MOR,17
+MX-NAY,MEX,Nayarit,MX-NAY,18
+MX-NLE,MEX,Nuevo León,MX-NLE,19
+MX-OAX,MEX,Oaxaca,MX-OAX,20
+MX-PUE,MEX,Puebla,MX-PUE,21
+MX-QUE,MEX,Querétaro,MX-QUE,22
+MX-ROO,MEX,Quintana Roo,MX-ROO,23
+MX-SLP,MEX,San Luis Potosí,MX-SLP,24
+MX-SIN,MEX,Sinaloa,MX-SIN,25
+MX-SON,MEX,Sonora,MX-SON,26
+MX-TAB,MEX,Tabasco,MX-TAB,27
+MX-TAM,MEX,Tamaulipas,MX-TAM,28
+MX-TLA,MEX,Tlaxcala,MX-TLA,29
+MX-VER,MEX,Veracruz,MX-VER,30
+MX-YUC,MEX,Yucatán,MX-YUC,31
+MX-ZAC,MEX,Zacatecas,MX-ZAC,32

@@ -1,0 +1,38 @@
+{
+  "_doc": "Mapeo de Natural Earth / world-atlas al catálogo. Ver api/data/README.md.",
+  "natural_earth_version": "v5.1.2",
+  "admin0": {
+    "fold": {
+      "ALD": "FIN",
+      "ATC": "AUS",
+      "BRI": "BRA",
+      "CLP": "FRA",
+      "CNM": "CYP",
+      "CSI": "AUS",
+      "CYN": "CYP",
+      "ESB": "CYP",
+      "IOA": "AUS",
+      "KAB": "KAZ",
+      "KAS": "IND",
+      "SOL": "SOM",
+      "USG": "CUB",
+      "WSB": "CYP"
+    },
+    "drop": ["ATA", "BJN", "BRT", "PGA", "SCR", "SER", "SPI"],
+    "rename": { "KOS": "XKX" }
+  },
+  "admin1": {
+    "fold": { "MX-X01~": "MX-YUC" }
+  },
+  "world_atlas": {
+    "by_name": {
+      "Indian Ocean Ter.": "AUS",
+      "Kosovo": "XKX",
+      "N. Cyprus": "CYP",
+      "Siachen Glacier": "IND",
+      "Somaliland": "SOM"
+    },
+    "by_id": { "248": "FIN" },
+    "drop_ids": ["010"]
+  }
+}

@@ -1,0 +1,141 @@
+:host {
+  display: block;
+}
+
+.dev-geo {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.dev-geo__header {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.dev-geo__eyebrow {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.dev-geo__title {
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 36px;
+  letter-spacing: -0.02em;
+}
+
+.dev-geo__summary,
+.dev-geo__error {
+  margin: 0;
+  color: var(--text-sub);
+}
+
+.dev-geo__error {
+  color: var(--accent-text);
+}
+
+.map-card {
+  position: relative;
+  margin: 0;
+  padding: 16px;
+  background: var(--map-ocean);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-map);
+}
+
+.map-card--mexico {
+  max-width: 900px;
+}
+
+.map-card__caption {
+  position: absolute;
+  top: 18px;
+  left: 24px;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+.map {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.map__sphere {
+  fill: var(--map-ocean);
+}
+
+.map__graticule {
+  fill: none;
+  stroke: var(--line);
+  stroke-width: 0.6;
+  opacity: 0.6;
+}
+
+.map__land {
+  fill: var(--map-land);
+  stroke: var(--map-land-line);
+  stroke-width: 0.6;
+  stroke-linejoin: round;
+  transition: fill 120ms ease;
+}
+
+.map__land--territory {
+  fill: var(--placeholder);
+}
+
+.map__land--state {
+  stroke-width: 0.9;
+}
+
+.map__land--active {
+  fill: var(--accent);
+  stroke: var(--visited-line);
+}
+
+.map__dot {
+  fill: var(--map-land);
+  stroke: var(--text-muted);
+  stroke-width: 1;
+}
+
+.map__dot--active {
+  fill: var(--accent);
+  stroke: var(--visited-line);
+}
+
+.tooltip {
+  position: absolute;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 8px 12px;
+  transform: translate(12px, -110%);
+  pointer-events: none;
+  white-space: nowrap;
+  color: var(--text);
+  background: var(--overlay);
+  border: 1px solid var(--overlay-line);
+  border-radius: 12px;
+  box-shadow: var(--shadow);
+  font-size: 14px;
+}
+
+.tooltip__detail {
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .map__land {
+    transition: none;
+  }
+}

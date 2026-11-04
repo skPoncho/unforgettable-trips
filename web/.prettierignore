@@ -3,3 +3,6 @@ dist
 .angular
 coverage
 package-lock.json
+
+# Generados por make build-geo
+public/geo

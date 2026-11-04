@@ -37,7 +37,8 @@ App web para registrar viajes **centrada en mapas**: cada país, estado de Méxi
 - **Tokens**: la fuente única es `web/src/styles/tokens.css` (a partir de la fase 0). `design/tokens.css` queda solo como referencia.
 
 ### Datos geográficos
-- Países: `world-atlas` 50m para el mapa; Natural Earth 10m en PostGIS para punto → país. Progreso sobre 195 países con la convención de continentes 35/44/48/54/14.
+- Países: `world-atlas` 50m para el mapa; Natural Earth 10m (v5.1.2) en PostGIS para punto → país. Progreso sobre 195 países (193 de la ONU, Vaticano y Palestina) con 35/44/48/54/14 por continente: Rusia en Europa; Turquía, Chipre, el Cáucaso y Kazajistán en Asia; Egipto en África. Catálogo en `api/data/countries.csv`.
+- **Territorios** (decidido en la fase 1): Groenlandia, Puerto Rico, Taiwán, Kosovo, Sáhara Occidental, Hong Kong, Macao y demás se pintan en el mapa con su nombre pero **no suman al progreso, ni siquiera a su soberano**. Lo que Natural Earth ya incluye dentro de un país (Guayana Francesa, Canarias, Åland…) cuenta como ese país; Somalilandia y Chipre del Norte se funden con Somalia y Chipre. El mapeo vive en `api/data/natural_earth.json`.
 - Estados de México: **Natural Earth admin-1** (dominio público) para mapa y PostGIS. `@svg-maps/mexico` solo se usó para las maquetas (son trazos ya proyectados, no coordenadas).
 - Ciudades: GeoNames **`cities5000`** con nombres en español (CC BY 4.0: requiere atribución visible).
 - Sellos de monumentos: se derivan de los recuerdos ligados a un monumento; no hay tabla propia.
@@ -46,7 +47,6 @@ App web para registrar viajes **centrada en mapas**: cada país, estado de Méxi
 
 - **Autenticación** (fase 8). Dirección tentativa: correo + contraseña (argon2) con sesión en cookie httpOnly; Google opcional después.
 - **Despliegue** (fase 9). Dirección tentativa: VPS con Docker Compose + Caddy (HTTPS), por las fotos en volumen persistente.
-- **Territorios** fuera de los 195 (Groenlandia, Puerto Rico, Kosovo, Taiwán…): propuesta de pintarlos como tierra sin sumar al progreso; confirmar en la fase 1.
 - **Catálogo de monumentos** (fase 6): sitios UNESCO más zonas arqueológicas de México; revisar licencias de los datos.
 
 ## Glosario (español → código)
@@ -72,7 +72,9 @@ Solo se necesita Docker Desktop encendido. `make help` lista todo.
 - `make dev`: construye y levanta `db`, `api` y `web` (`localhost:4200`, `localhost:8000`; crea `.env` desde `.env.example` si falta). La api migra al arrancar.
 - `make stop` / `make down` / `make logs`.
 - `make test` / `make lint`: pruebas y lint de api y web dentro de los contenedores (lo mismo corre en CI). `make format` aplica ruff y Prettier.
-- `make migrate`: migraciones de Alembic. `make seed` llega en la fase 2; `make load-geo` y `make build-geo` en la fase 1.
+- `make migrate`: migraciones de Alembic. `make seed` llega en la fase 2.
+- `make load-geo`: carga países, estados de México y ciudades (GeoNames `cities5000`) en PostGIS. Idempotente; la primera vez descarga ~250 MB y tarda ~1 min.
+- `make build-geo`: regenera `web/public/geo/world.topo.json` y `mexico.topo.json` (contenedor `geo`, perfil `tools`). Los TopoJSON se guardan en git.
 - `make shell-api` / `make shell-web`: terminal dentro del contenedor.
 
 Notas:
@@ -80,6 +82,8 @@ Notas:
 - `node_modules` vive en un volumen de Docker; `web/docker-entrypoint.sh` reinstala si cambió `package-lock.json`. Para agregar paquetes: `make shell-web` y `npm install …`.
 - Las dependencias de Python viven en `/opt/venv` dentro de la imagen; tras cambiar `pyproject.toml`, corre `uv lock` en `make shell-api` y vuelve a `make dev` (reconstruye).
 - `src/testing/` del web tiene utilidades solo para pruebas (p. ej. `mockSystemTheme`, porque jsdom no trae `matchMedia`).
+- Las descargas geográficas viven en `~/.cache/huella/geo` (fuera del repo; se monta en `/cache` de `api` y `geo`; se cambia con `HOST_GEO_CACHE`). Las pruebas de geo cargan los datos reales en `huella_test` la primera vez (fixture `geo_data`).
+- `localhost:4200/dev/geo` es la página de verificación de los datos geográficos (no aparece en el encabezado).
 
 ## Cómo trabajar en este repo
 

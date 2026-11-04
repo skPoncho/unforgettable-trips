@@ -20,6 +20,14 @@ jobs:
       - name: Preparar .env
         run: cp .env.example .env
 
+      # Descargas de Natural Earth y GeoNames (~250 MB) que usan las pruebas de geo.
+      - name: Caché de datos geográficos
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/huella/geo
+          key: geo-${{ hashFiles('api/data/natural_earth.json') }}
+          restore-keys: geo-
+
       - name: Construir imágenes
         run: docker compose build
 

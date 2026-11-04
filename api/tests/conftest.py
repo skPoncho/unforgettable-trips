@@ -43,3 +43,17 @@ def client() -> Iterator[TestClient]:
     with TestClient(app) as test_client:
         yield test_client
     app.dependency_overrides.clear()
+
+
+@pytest.fixture(scope="session")
+def geo_data(migrated_database: None) -> None:
+    """Carga países, estados y ciudades reales en huella_test (solo la primera vez).
+
+    Usa la caché de descargas (~/.cache/huella/geo); la BD de pruebas conserva los datos
+    entre corridas, así que después de la primera vez esto no tarda nada.
+    """
+    from app.db import get_engine
+    from app.geo.load import is_loaded, load_all
+
+    if not is_loaded(get_engine()):
+        load_all(get_engine())

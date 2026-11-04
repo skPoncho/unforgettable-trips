@@ -30,8 +30,11 @@ services:
       <<: *db-env
       DATABASE_URL: postgresql+psycopg://${POSTGRES_USER:-huella}:${POSTGRES_PASSWORD:-huella}@db:5432/${POSTGRES_DB:-huella}
       TEST_DATABASE_URL: postgresql+psycopg://${POSTGRES_USER:-huella}:${POSTGRES_PASSWORD:-huella}@db:5432/${POSTGRES_DB:-huella}_test
+      GEO_CACHE_DIR: /cache
     volumes:
       - ./api:/app
+      # Descargas de Natural Earth y GeoNames, fuera del repo (make load-geo).
+      - ${HOST_GEO_CACHE:-~/.cache/huella/geo}:/cache
     ports:
       - "${API_PORT:-8000}:8000"
     depends_on:
@@ -43,6 +46,19 @@ services:
       timeout: 3s
       retries: 20
       start_period: 10s
+
+  # Herramienta: genera web/public/geo/*.topo.json. No arranca con make dev (make build-geo).
+  geo:
+    image: node:24.22.2-slim
+    profiles: [tools]
+    working_dir: /geo
+    command: sh -c "npm ci --no-audit --no-fund && node build.mjs"
+    volumes:
+      - ./geo:/geo
+      - geo-node-modules:/geo/node_modules
+      - ./api/data:/data:ro
+      - ./web/public/geo:/out
+      - ${HOST_GEO_CACHE:-~/.cache/huella/geo}:/cache
 
   web:
     build:
@@ -61,3 +77,4 @@ services:
 volumes:
   db-data:
   web-node-modules:
+  geo-node-modules:
