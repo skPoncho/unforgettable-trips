@@ -2,7 +2,6 @@
 
 import pytest
 
-from app.seed import upsert_monuments
 from tests.helpers import (
     KYOTO,
     TOKYO,
@@ -12,13 +11,6 @@ from tests.helpers import (
     place,
     upload_ids,
 )
-
-
-@pytest.fixture
-def monuments(db):
-    found = upsert_monuments(db)
-    db.commit()
-    return found
 
 
 @pytest.fixture

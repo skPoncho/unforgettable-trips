@@ -4,10 +4,10 @@ API_RUN := $(COMPOSE) run --rm api
 WEB_RUN := $(COMPOSE) run --rm --no-deps web
 
 .DEFAULT_GOAL := help
-.PHONY: help dev stop down logs test test-api test-web lint lint-api lint-web format migrate seed build-geo load-geo geo-cache gen-api shell-api shell-web
+.PHONY: help dev stop down logs test test-api test-web lint lint-api lint-web format migrate seed build-geo load-geo build-monuments geo-cache gen-api shell-api shell-web
 
 help: ## Muestra esta ayuda
-	@grep -E '^[a-z-]+:.*## ' $(MAKEFILE_LIST) | awk -F':.*## ' '{printf "  make %-11s %s\n", $$1, $$2}'
+	@grep -E '^[a-z-]+:.*## ' $(MAKEFILE_LIST) | awk -F':.*## ' '{printf "  make %-16s %s\n", $$1, $$2}'
 
 .env:
 	cp .env.example .env
@@ -60,8 +60,11 @@ seed: geo-cache ## Recrea el usuario semilla con viajes, recuerdos y fotos (idem
 build-geo: geo-cache ## Genera web/public/geo/*.topo.json (mundo y México)
 	$(COMPOSE) run --rm geo
 
-load-geo: geo-cache ## Carga países, estados y ciudades en PostGIS (idempotente)
+load-geo: geo-cache ## Carga países, estados, ciudades y monumentos en PostGIS (idempotente)
 	$(API_RUN) python -m app.geo.load
+
+build-monuments: ## Regenera api/data/monuments.csv desde Wikidata y la lista curada
+	$(COMPOSE) run --rm --no-deps api python -m app.geo.build_monuments
 
 # Tipos de TypeScript desde el OpenAPI de la api. openapi-typescript aún no acepta
 # TypeScript 6, así que corre con npx (versión fijada) fuera de las dependencias del web.

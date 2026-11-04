@@ -9,13 +9,13 @@
   </a>
 
   <nav class="views" aria-label="Vistas del mapa">
-    @for (view of views; track view.path) {
+    @for (view of views; track view.label) {
       <a
         class="views__link"
         [routerLink]="'/' + view.path"
-        routerLinkActive="is-active"
-        [routerLinkActiveOptions]="{ exact: true }"
-        ariaCurrentWhenActive="page"
+        [queryParams]="view.tab ? { pestana: view.tab } : null"
+        [class.is-active]="active() === view"
+        [attr.aria-current]="active() === view ? 'page' : null"
         >{{ view.label }}</a
       >
     }
@@ -56,6 +56,6 @@
         <svg lucideMoon [size]="19" aria-hidden="true"></svg>
       }
     </button>
-    <button type="button" class="round-button avatar" aria-label="Mi perfil">{{ initials }}</button>
+    <app-profile-menu />
   </div>
 </header>

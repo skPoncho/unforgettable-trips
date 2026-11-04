@@ -4,4 +4,7 @@
 - `subdivisions.csv`: los 32 estados de México. `ne_iso_3166_2` es el código que usa Natural Earth (Ciudad de México aún aparece como `MX-DIF`) y `geonames_admin1` enlaza las ciudades de GeoNames.
 - `natural_earth.json`: cómo se mapean las piezas de Natural Earth y de `world-atlas` al catálogo (piezas que se funden con otro país o se descartan). Lo usan `make load-geo` y `make build-geo`.
 
+- `monuments_curated.csv`: lista hecha a mano. Todo México (sitios UNESCO partidos y zonas arqueológicas, con el estado esperado en `subdivision_code`, que una prueba revisa contra PostGIS) y lugares del mundo que no son sitio UNESCO por sí solos. `replaces` quita sitios de Wikidata que la lista sustituye (WHC separados por `;`). Coordenadas de Wikidata (CC0) salvo los de `source=curated`.
+- `monuments.csv`: catálogo completo que carga `make load-geo`. Lo genera `make build-monuments` (`app/geo/build_monuments.py`): la lista curada más los sitios del Patrimonio Mundial culturales y mixtos de Wikidata fuera de México. No se edita a mano.
+
 Las geometrías y las ciudades no viven aquí: se descargan a la caché (`~/.cache/huella/geo`) con `make load-geo` / `make build-geo`.

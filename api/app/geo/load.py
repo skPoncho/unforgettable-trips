@@ -4,6 +4,7 @@ Es idempotente: se puede correr las veces que haga falta y deja el mismo resulta
 - Países: api/data/countries.csv + geometrías de Natural Earth 10m admin-0.
 - Estados de México: api/data/subdivisions.csv + Natural Earth 10m admin-1.
 - Ciudades: GeoNames cities5000 con nombres en español (ver app/geo/cities.py).
+- Monumentos: api/data/monuments.csv (ver app/geo/monuments.py); necesitan las ciudades.
 """
 
 import argparse
@@ -14,7 +15,7 @@ from dataclasses import asdict, dataclass, field
 from sqlalchemy import Connection, Engine, text
 
 from app.db import get_engine
-from app.geo import cities
+from app.geo import cities, monuments
 from app.geo.catalog import load_catalog
 from app.geo.sources import DATA_DIR, natural_earth, natural_earth_mapping
 
@@ -26,6 +27,7 @@ class LoadReport:
     subdivisions: int = 0
     cities: int = 0
     cities_skipped: dict[str, int] = field(default_factory=dict)
+    monuments: int = 0
     warnings: list[str] = field(default_factory=list)
 
 
@@ -195,7 +197,15 @@ def load_all(engine: Engine | None = None, *, with_cities: bool = True) -> LoadR
     if with_cities:
         with engine.begin() as conn:
             cities.load_cities(conn, report)
+        load_monuments(engine, report)
     return report
+
+
+def load_monuments(engine: Engine, report: LoadReport) -> None:
+    with engine.begin() as conn:
+        result = monuments.load_monuments(conn)
+    report.monuments = result.loaded
+    report.warnings.extend(result.warnings or [])
 
 
 def is_loaded(engine: Engine) -> bool:
@@ -213,8 +223,23 @@ def is_loaded(engine: Engine) -> bool:
 
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--skip-cities", action="store_true", help="solo países y estados")
+    parser.add_argument(
+        "--skip-cities",
+        action="store_true",
+        help="solo países y estados (sin ciudades ni monumentos)",
+    )
+    parser.add_argument(
+        "--only-monuments", action="store_true", help="solo el catálogo de monumentos"
+    )
     args = parser.parse_args()
+
+    if args.only_monuments:
+        report = LoadReport()
+        load_monuments(get_engine(), report)
+        print(f"Monumentos: {report.monuments}")
+        for warning in report.warnings:
+            print(f"Aviso: {warning}")
+        return
 
     report = load_all(with_cities=not args.skip_cities)
     print(f"Países y territorios: {report.countries}")
@@ -225,6 +250,7 @@ def main() -> None:
         print(f"Ciudades: {report.cities}")
         for reason, count in report.cities_skipped.items():
             print(f"  omitidas ({reason}): {count}")
+        print(f"Monumentos: {report.monuments}")
     for warning in report.warnings:
         print(f"Aviso: {warning}")
 

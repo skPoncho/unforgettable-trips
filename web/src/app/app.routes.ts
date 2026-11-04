@@ -1,8 +1,12 @@
-import { Routes } from '@angular/router';
+import { inject } from '@angular/core';
+import { Router, Routes } from '@angular/router';
 
 import { MyMapPage } from './pages/my-map/my-map-page';
-import { PlaceholderPage } from './pages/placeholder-page';
-import { MAP_VIEWS } from './views';
+
+/** Ciudades y Monumentos son pestañas de Mi país; las rutas viejas llevan ahí. */
+function countryTab(pestana: string) {
+  return () => inject(Router).createUrlTree(['/mi-pais'], { queryParams: { pestana } });
+}
 
 export const routes: Routes = [
   // Mundo: pantalla 1 (fase 3). "Nuevo recuerdo" (pantalla 4) se abre encima, sin desmontar
@@ -20,13 +24,14 @@ export const routes: Routes = [
       },
     ],
   },
-  // Las demás vistas del encabezado llegan en su fase.
-  ...MAP_VIEWS.filter((view) => view.path !== '').map((view) => ({
-    path: view.path,
-    title: `${view.label} · Huella`,
-    component: PlaceholderPage,
-    data: { heading: view.label, phase: view.phase },
-  })),
+  // Mi país: pantalla 3 (fase 6), con las pestañas Estados, Ciudades y Monumentos.
+  {
+    path: 'mi-pais',
+    title: 'Mi país · Huella',
+    loadComponent: () => import('./pages/my-country/my-country-page').then((m) => m.MyCountryPage),
+  },
+  { path: 'ciudades', redirectTo: countryTab('ciudades') },
+  { path: 'monumentos', redirectTo: countryTab('monumentos') },
   {
     path: 'viajes',
     title: 'Viajes · Huella',

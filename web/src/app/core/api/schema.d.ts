@@ -123,7 +123,11 @@ export interface paths {
     delete?: never;
     options?: never;
     head?: never;
-    patch?: never;
+    /**
+     * Patch Me
+     * @description Cambia la ciudad de casa (nula para quitarla). La casa cuenta como visitada.
+     */
+    patch: operations['patch_me_api_me_patch'];
     trace?: never;
   };
   '/api/me/progress': {
@@ -178,6 +182,66 @@ export interface paths {
      * @description Tarjeta de país: fechas, viajes, conteos, fotos de muestra y escalas.
      */
     get: operations['get_country_api_me_countries__iso3__get'];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  '/api/me/subdivisions': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /**
+     * Get Subdivisions
+     * @description Mi país: todos los estados, visitados o por descubrir, en orden alfabético.
+     */
+    get: operations['get_subdivisions_api_me_subdivisions_get'];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  '/api/me/cities': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /**
+     * Get Cities
+     * @description Mi país: ciudades visitadas, la casa primero y después las de más viajes.
+     */
+    get: operations['get_cities_api_me_cities_get'];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  '/api/me/passport': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /**
+     * Get Passport
+     * @description Pasaporte de monumentos: sellos del país y hasta 4 sugeridos cerca de tu ruta.
+     */
+    get: operations['get_passport_api_me_passport_get'];
     put?: never;
     post?: never;
     delete?: never;
@@ -497,6 +561,31 @@ export interface components {
       population: number;
       location: components['schemas']['LonLat'];
     };
+    /** CityOverview */
+    CityOverview: {
+      /** Id */
+      id: number;
+      /** Name Es */
+      name_es: string;
+      /** Subdivision Code */
+      subdivision_code: string | null;
+      /** Subdivision Name */
+      subdivision_name: string | null;
+      /**
+       * Status
+       * @enum {string}
+       */
+      status: 'visited' | 'stopover';
+      /** Is Home */
+      is_home: boolean;
+      /**
+       * Trips
+       * @description Viajes distintos con una parada en la ciudad
+       */
+      trips: number;
+      /** Last Visited On */
+      last_visited_on: string | null;
+    };
     /** CityStatus */
     CityStatus: {
       /** Id */
@@ -754,6 +843,14 @@ export interface components {
       /** Profile Public */
       profile_public: boolean;
     };
+    /**
+     * MePatch
+     * @description Cambios al perfil. `home_city_id` nulo quita la ciudad de casa.
+     */
+    MePatch: {
+      /** Home City Id */
+      home_city_id?: number | null;
+    };
     /** MemoryCreatedOut */
     MemoryCreatedOut: {
       /**
@@ -918,6 +1015,11 @@ export interface components {
       stamp_code: string;
     };
     /**
+     * MonumentKind
+     * @enum {string}
+     */
+    MonumentKind: 'unesco' | 'archaeological' | 'other';
+    /**
      * MonumentStamp
      * @description Monumento sellado: tiene al menos un recuerdo ligado.
      */
@@ -945,6 +1047,53 @@ export interface components {
       name_es: string;
       /** Distance Km */
       distance_km: number;
+    };
+    /** PassportOut */
+    PassportOut: {
+      /** Country Iso3 */
+      country_iso3: string;
+      /**
+       * Stamps
+       * @description Del primero que sellaste al más reciente
+       */
+      stamps: components['schemas']['PassportStamp'][];
+      /**
+       * Suggested
+       * @description Sin sellar, los más cercanos a tus paradas o a tu casa; uno por estado
+       */
+      suggested: components['schemas']['SuggestedStamp'][];
+    };
+    /** PassportStamp */
+    PassportStamp: {
+      /** Id */
+      id: number;
+      /** Slug */
+      slug: string;
+      /** Name Es */
+      name_es: string;
+      /** Stamp Code */
+      stamp_code: string;
+      kind: components['schemas']['MonumentKind'];
+      /** Subdivision Code */
+      subdivision_code: string | null;
+      /** Subdivision Name */
+      subdivision_name: string | null;
+      location: components['schemas']['LonLat'];
+      /**
+       * First Stamped On
+       * Format: date
+       */
+      first_stamped_on: string;
+      /** Memories */
+      memories: number;
+      /** Photo Count */
+      photo_count: number;
+      /**
+       * Photo Ids
+       * @description Hasta 3 fotos de sus recuerdos
+       */
+      photo_ids: string[];
+      trip: components['schemas']['StampTrip'];
     };
     /** PhotoUploadOut */
     PhotoUploadOut: {
@@ -1011,6 +1160,24 @@ export interface components {
       country: components['schemas']['CountryRef'];
       subdivision: components['schemas']['PlaceRef'] | null;
       city: components['schemas']['NearestCity'] | null;
+    };
+    /**
+     * StampTrip
+     * @description Viaje del primer recuerdo del monumento; adonde lleva "Ver recuerdos de este lugar".
+     */
+    StampTrip: {
+      /**
+       * Id
+       * Format: uuid
+       */
+      id: string;
+      /** Title */
+      title: string;
+      /**
+       * Stop Number
+       * @description Número de estancia en el viaje (el ?parada= del detalle); nulo si fue escala
+       */
+      stop_number: number | null;
     };
     /** StopIn */
     StopIn: {
@@ -1121,6 +1288,25 @@ export interface components {
       /** Country Iso3 */
       country_iso3: string;
     };
+    /**
+     * SubdivisionOverview
+     * @description Un estado del país con lo que el usuario lleva en él.
+     */
+    SubdivisionOverview: {
+      /** Code */
+      code: string;
+      /** Name Es */
+      name_es: string;
+      /**
+       * Status
+       * @description Nulo si está por descubrir
+       */
+      status: ('visited' | 'stopover') | null;
+      /** Is Home */
+      is_home: boolean;
+      /** First Visited On */
+      first_visited_on: string | null;
+    };
     /** SubdivisionStatus */
     SubdivisionStatus: {
       /** Code */
@@ -1179,6 +1365,30 @@ export interface components {
       city: components['schemas']['CityBrief'] | null;
       subdivision: components['schemas']['SubdivisionBrief'] | null;
       country: components['schemas']['CountryBrief'];
+    };
+    /** SuggestedStamp */
+    SuggestedStamp: {
+      /** Id */
+      id: number;
+      /** Slug */
+      slug: string;
+      /** Name Es */
+      name_es: string;
+      /** Stamp Code */
+      stamp_code: string;
+      kind: components['schemas']['MonumentKind'];
+      /** Subdivision Code */
+      subdivision_code: string | null;
+      /** Subdivision Name */
+      subdivision_name: string | null;
+      location: components['schemas']['LonLat'];
+      /**
+       * Near
+       * @description Parada o casa más cercana
+       */
+      near: string;
+      /** Distance Km */
+      distance_km: number;
     };
     /** SuggestedTrip */
     SuggestedTrip: {
@@ -1731,6 +1941,37 @@ export interface operations {
       };
     };
   };
+  patch_me_api_me_patch: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['MePatch'];
+      };
+    };
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['MeOut'];
+        };
+      };
+      /** @description Ciudad desconocida */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+    };
+  };
   get_progress_api_me_progress_get: {
     parameters: {
       query?: never;
@@ -1793,6 +2034,123 @@ export interface operations {
         };
       };
       /** @description País desconocido o no visitado */
+      404: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['HTTPValidationError'];
+        };
+      };
+    };
+  };
+  get_subdivisions_api_me_subdivisions_get: {
+    parameters: {
+      query: {
+        /** @description ISO3, p. ej. MEX */
+        country: string;
+      };
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['SubdivisionOverview'][];
+        };
+      };
+      /** @description País desconocido */
+      404: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['HTTPValidationError'];
+        };
+      };
+    };
+  };
+  get_cities_api_me_cities_get: {
+    parameters: {
+      query: {
+        /** @description ISO3, p. ej. MEX */
+        country: string;
+      };
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['CityOverview'][];
+        };
+      };
+      /** @description País desconocido */
+      404: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['HTTPValidationError'];
+        };
+      };
+    };
+  };
+  get_passport_api_me_passport_get: {
+    parameters: {
+      query: {
+        /** @description ISO3, p. ej. MEX */
+        country: string;
+      };
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['PassportOut'];
+        };
+      };
+      /** @description País desconocido */
       404: {
         headers: {
           [name: string]: unknown;

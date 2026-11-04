@@ -1,0 +1,147 @@
+@if (failed()) {
+  <section class="notice" role="alert">
+    <h1 class="notice__title">No se pudo cargar tu país</h1>
+    <p>
+      ¿Corriste <code>make load-geo</code> y <code>make seed</code>? Sin el usuario semilla la API
+      responde 503.
+    </p>
+  </section>
+} @else if (ready(); as r) {
+  <section class="hero">
+    <div class="hero__title">
+      <span class="eyebrow">MI PAÍS · ESTADOS, CIUDADES Y MONUMENTOS</span>
+      <h1 class="title">{{ country.name }}</h1>
+    </div>
+    <div class="progress">
+      <div class="progress__numbers">
+        <span class="progress__count">{{ visited().length }}</span>
+        <span class="progress__of">de {{ total() }} estados · {{ percent() }}%</span>
+      </div>
+      <div class="segments" role="img" [attr.aria-label]="progressLabel()">
+        @for (segment of segments(); track $index) {
+          <span class="segment" [class]="'segment--' + segment"></span>
+        }
+      </div>
+    </div>
+  </section>
+
+  <div class="main">
+    <section #mapSection class="map" aria-label="Mapa de México por estados">
+      <app-mexico-map
+        [drawing]="r.drawing"
+        [states]="r.states"
+        [stamps]="stamps()"
+        [selected]="selected()"
+        (picked)="chooseMonument($event)"
+      />
+    </section>
+
+    <aside class="aside">
+      <div class="tabs" role="tablist" aria-label="Detalle del país">
+        @for (t of tabs; track t.id) {
+          <button
+            type="button"
+            role="tab"
+            class="tab"
+            [id]="'tab-' + t.id"
+            [attr.aria-controls]="'panel-' + t.id"
+            [attr.aria-selected]="tab() === t.id"
+            [attr.tabindex]="tab() === t.id ? 0 : -1"
+            (click)="chooseTab(t.id)"
+            (keydown)="onTabKeydown($event)"
+          >
+            {{ t.label }}
+          </button>
+        }
+      </div>
+
+      @switch (tab()) {
+        @case ('estados') {
+          <div class="panel" role="tabpanel" id="panel-estados" aria-labelledby="tab-estados">
+            <h2 class="group group--on">VISITADOS · {{ visited().length }}</h2>
+            @if (visited().length) {
+              <ul class="chips">
+                @for (s of visited(); track s.code) {
+                  <li
+                    class="chip chip--on"
+                    [class.chip--stopover]="s.status === 'stopover'"
+                    [attr.title]="s.is_home ? 'Casa' : s.status === 'stopover' ? 'Escala' : null"
+                  >
+                    {{ s.name_es }}
+                    @if (s.is_home) {
+                      <span class="visually-hidden">(casa)</span>
+                    } @else if (s.status === 'stopover') {
+                      <span class="visually-hidden">(escala)</span>
+                    }
+                  </li>
+                }
+              </ul>
+            } @else {
+              <p class="empty">Todavía no visitas ningún estado.</p>
+            }
+            <h2 class="group">POR DESCUBRIR · {{ pending().length }}</h2>
+            <ul class="chips">
+              @for (s of pending(); track s.code) {
+                <li class="chip">{{ s.name_es }}</li>
+              }
+            </ul>
+          </div>
+        }
+        @case ('ciudades') {
+          <div class="panel" role="tabpanel" id="panel-ciudades" aria-labelledby="tab-ciudades">
+            @if (r.cities.length) {
+              <ul class="rows">
+                @for (c of r.cities; track c.id) {
+                  <li class="row">
+                    <span class="row__text">
+                      <span class="row__name">{{ c.name_es }}</span>
+                      <span class="row__sub">{{ c.subdivision_name }}</span>
+                    </span>
+                    <span class="row__meta">{{ cityVisits(c) }}</span>
+                  </li>
+                }
+              </ul>
+            } @else {
+              <p class="empty">Todavía no hay ciudades. Elige tu ciudad de casa en tu perfil.</p>
+            }
+          </div>
+        }
+        @case ('monumentos') {
+          <div class="panel" role="tabpanel" id="panel-monumentos" aria-labelledby="tab-monumentos">
+            @if (stamps().length) {
+              <ul class="rows">
+                @for (m of stamps(); track m.id) {
+                  <li>
+                    <button
+                      type="button"
+                      class="row row--button"
+                      [class.row--active]="m.slug === selected()?.slug"
+                      [attr.aria-pressed]="m.slug === selected()?.slug"
+                      (click)="chooseMonument(m.slug)"
+                    >
+                      <span class="row__text">
+                        <span class="row__name">{{ m.name_es }}</span>
+                        <span class="row__sub">{{ m.subdivision_name }}</span>
+                      </span>
+                      <span class="row__meta">{{ m.first_stamped_on.slice(0, 4) }}</span>
+                    </button>
+                  </li>
+                }
+              </ul>
+            } @else {
+              <p class="empty">
+                Todavía no tienes sellos. Liga un recuerdo a un monumento para ganar el primero.
+              </p>
+            }
+          </div>
+        }
+      }
+    </aside>
+  </div>
+
+  <section class="passport" aria-labelledby="passport-title">
+    <app-passport [passport]="r.passport" (picked)="chooseMonument($event, { scroll: true })" />
+  </section>
+} @else {
+  <p class="loading" role="status">Cargando tu país…</p>
+}

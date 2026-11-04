@@ -14,6 +14,10 @@ export type LonLat = Schemas['LonLat'];
 export type Country = Schemas['CountryOut'];
 export type Subdivision = Schemas['SubdivisionOut'];
 
+export type Me = Schemas['MeOut'];
+export type MePatch = Schemas['MePatch'];
+export type HomeCity = Schemas['HomeCity'];
+
 export type Progress = Schemas['ProgressOut'];
 export type UserMap = Schemas['MapOut'];
 export type CountryStatus = Schemas['CountryStatus'];
@@ -22,6 +26,12 @@ export type CityStatus = Schemas['CityStatus'];
 export type MonumentStamp = Schemas['MonumentStamp'];
 export type CountrySummary = Schemas['CountrySummaryOut'];
 export type CountryTrip = Schemas['CountryTrip'];
+
+export type SubdivisionOverview = Schemas['SubdivisionOverview'];
+export type CityOverview = Schemas['CityOverview'];
+export type Passport = Schemas['PassportOut'];
+export type PassportStamp = Schemas['PassportStamp'];
+export type SuggestedStamp = Schemas['SuggestedStamp'];
 
 export type Trip = Schemas['TripOut'];
 export type TripDetail = Schemas['TripDetailOut'];

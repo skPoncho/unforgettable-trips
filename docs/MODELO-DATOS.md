@@ -87,7 +87,9 @@ Solo estados de México por ahora; la tabla es genérica para no migrar después
 | `subdivision_id` | FK subdivisions, nullable | |
 | `city_id` | FK cities, nullable | |
 | `location` | Point | |
-| `source`, `source_ref` | text | Origen del dato (ej. `unesco`, id del sitio) |
+| `source`, `source_ref` | text | Origen del dato: `wikidata` (con `whc:<id>` o el QID) o `curated` |
+
+Catálogo en `api/data/monuments.csv` (ver `api/data/README.md`); país, estado y ciudad se calculan desde el punto al cargarlo.
 
 ## Datos del usuario
 

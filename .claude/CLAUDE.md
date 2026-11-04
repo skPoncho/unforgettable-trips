@@ -42,6 +42,7 @@ App web para registrar viajes **centrada en mapas**: cada país, estado de Méxi
 - Estados de México: **Natural Earth admin-1** (dominio público) para mapa y PostGIS. `@svg-maps/mexico` solo se usó para las maquetas (son trazos ya proyectados, no coordenadas).
 - Ciudades: GeoNames **`cities5000`** con nombres en español (CC BY 4.0: requiere atribución visible). Se descartan los barrios (`PPLX`, p. ej. Castro Pretorio en Roma) para que un punto en el centro dé la ciudad y no el barrio (fase 2).
 - Sellos de monumentos: se derivan de los recuerdos ligados a un monumento; no hay tabla propia.
+- **Catálogo de monumentos** (decidido en la fase 6): sitios del Patrimonio Mundial **culturales y mixtos** de todo el mundo desde **Wikidata (CC0)**, sin los naturales, más una lista curada a mano en `api/data/monuments_curated.csv`: todo México (los sitios UNESCO compuestos se parten, p. ej. Centro histórico de Oaxaca y Monte Albán; se suman 46 zonas arqueológicas con coordenadas de Wikidata) y lugares que no son sitio UNESCO por sí solos (Fushimi Inari, Sensō-ji, Tōdai-ji). No se usa la descarga de UNESCO porque sus términos no aclaran la reutilización; UNESCO va en créditos como referencia. Las rutas (Camino Real de Tierra Adentro, ruta wixárika) no entran porque no se marcan con un pin. `make build-monuments` regenera `api/data/monuments.csv` (en git) y `make load-geo` lo carga; slugs `unesco-<WHC>` para los de Wikidata y legibles para los curados. Código del sello: 3 letras del nombre sin palabras genéricas ("Ciudad vieja de Damasco" → DAM), únicas por país; los curados lo fijan a mano.
 
 ### API del usuario (fase 2)
 - Hasta la fase 8 todas las peticiones actúan como el usuario semilla (`current_user`, handle `carlos`, configurable con `CURRENT_USER_HANDLE`). Sin `make seed`, `/api/me/*` responde 503.
@@ -76,11 +77,19 @@ App web para registrar viajes **centrada en mapas**: cada país, estado de Méxi
 - Se mantiene el encabezado global; la pantalla agrega su barra (Mi mapa, migas, visibilidad, "Agregar recuerdo"). La parada elegida va en `?parada=N`. "Agregar recuerdo" abre `/nuevo-recuerdo?viaje=<id>` con el viaje elegido y, al cerrar o guardar, vuelve al viaje.
 - El momento favorito de la semilla de Japón es el de Hakone (la cita del Fuji de la maqueta).
 
+### Mi país (fase 6)
+- Mi país es **siempre México** por ahora (solo hay estados de México), aunque la casa esté en otro país.
+- `GET /api/me/subdivisions?country=MEX` (los 32, con `status` nulo si está por descubrir), `GET /api/me/cities?country=MEX` (casa primero, luego más viajes) y `GET /api/me/passport?country=MEX` (`app/services/my_country.py`). País desconocido → 404.
+- Sellos: del primero al más reciente; `trip` es el viaje del primer recuerdo y `stop_number` el número de estancia (el `?parada=` del detalle; nulo si fue escala). Hasta 3 fotos más `photo_count`.
+- **Sugeridos**: hasta 4 monumentos sin sellar del país, los más cercanos a cualquier parada **o a la casa**, **uno por estado** para que no salgan todos en la misma ciudad. No coinciden con la maqueta (Paquimé, en Chihuahua, no está cerca de ninguna parada); con las semillas salen Teopanzolco, Centro histórico de CDMX, Cholula y Centro histórico de Oaxaca.
+- `PATCH /api/me` con `home_city_id` (nulo la quita; ciudad desconocida → 422). En las semillas CDMX solo cuenta por ser la casa: mudarla a Monterrey deja 12/32 (sale CDMX, entra Nuevo León).
+- Web: `/mi-pais` con `?pestana=ciudades|monumentos` (Estados no va en la URL) y `?monumento=<slug>`; sin monumento se muestra el sello más reciente. `/ciudades` y `/monumentos` redirigen a esas pestañas y el encabezado marca la pestaña abierta (`activeView` en `views.ts`). El porcentaje se redondea hacia abajo (12/32 = 37 %).
+- Menú de perfil en el avatar (`layout/header/profile-menu.ts`) con la ciudad de casa; usa el buscador de ciudades compartido (`shared/place-search.ts`). Al guardar, `HomeEvents` avisa y Mi mapa y Mi país recargan. `Profile` guarda `/api/me` (iniciales del avatar).
+
 ## Decisiones abiertas (pregúntale a Carlos antes de fijarlas)
 
 - **Autenticación** (fase 8). Dirección tentativa: correo + contraseña (argon2) con sesión en cookie httpOnly; Google opcional después.
 - **Despliegue** (fase 9). Dirección tentativa: VPS con Docker Compose + Caddy (HTTPS), por las fotos en volumen persistente.
-- **Catálogo de monumentos** (fase 6): sitios UNESCO más zonas arqueológicas de México; revisar licencias de los datos.
 
 ## Glosario (español → código)
 
@@ -106,8 +115,9 @@ Solo se necesita Docker Desktop encendido. `make help` lista todo.
 - `make stop` / `make down` / `make logs`.
 - `make test` / `make lint`: pruebas y lint de api y web dentro de los contenedores (lo mismo corre en CI). `make format` aplica ruff y Prettier.
 - `make migrate`: migraciones de Alembic.
-- `make seed`: recrea al usuario semilla (Carlos, casa en Ciudad de México) con los viajes, monumentos y 412 fotos de relleno de las maquetas (`app/seed/data.py`). Idempotente; necesita `make load-geo` antes y tarda ~20 s.
-- `make load-geo`: carga países, estados de México y ciudades (GeoNames `cities5000`) en PostGIS. Idempotente; la primera vez descarga ~250 MB y tarda ~1 min.
+- `make seed`: recrea al usuario semilla (Carlos, casa en Ciudad de México) con los viajes y 412 fotos de relleno de las maquetas (`app/seed/data.py`); los monumentos salen del catálogo. Idempotente; necesita `make load-geo` antes y tarda ~20 s.
+- `make load-geo`: carga países, estados de México, ciudades (GeoNames `cities5000`) y el catálogo de monumentos en PostGIS. Idempotente; la primera vez descarga ~250 MB y tarda ~1 min. `docker compose run --rm api python -m app.geo.load --only-monuments` recarga solo los monumentos (~15 s).
+- `make build-monuments`: regenera `api/data/monuments.csv` desde Wikidata y la lista curada (necesita internet; el CSV se guarda en git).
 - `make build-geo`: regenera `web/public/geo/world.topo.json` y `mexico.topo.json` (contenedor `geo`, perfil `tools`). Los TopoJSON se guardan en git.
 - `make gen-api`: regenera los tipos de TypeScript desde el OpenAPI de la api. Córrelo después de cambiar un esquema o endpoint.
 - `make shell-api` / `make shell-web`: terminal dentro del contenedor.
@@ -121,7 +131,7 @@ Notas:
 - Las descargas geográficas viven en `~/.cache/huella/geo` (fuera del repo; se monta en `/cache` de `api` y `geo`; se cambia con `HOST_GEO_CACHE`). Las pruebas de geo cargan los datos reales en `huella_test` la primera vez (fixture `geo_data`).
 - `localhost:4200/dev/geo` es la página de verificación de los datos geográficos y del progreso del usuario semilla (no aparece en el encabezado). La API documentada está en `localhost:8000/docs`.
 - Las fotos viven en el volumen `photos-data` (`/data/photos` en `api`); las pruebas usan una carpeta temporal (fixture `storage`). `tests/helpers.py` tiene `upload()` / `upload_ids()` para subir fotos de `tests/fixtures`.
-- Fixtures de pruebas de usuario en `tests/conftest.py`: `db` (vacía los datos de usuario al terminar), `make_user`, `act_as` y `user`.
+- Fixtures de pruebas de usuario en `tests/conftest.py`: `db` (vacía los datos de usuario al terminar; los catálogos y monumentos se quedan), `make_user`, `act_as`, `user` y `monuments` (slug → id del catálogo). `geo_data` carga los monumentos en `huella_test` si cambió el catálogo.
 
 ## Cómo trabajar en este repo
 

@@ -6,7 +6,7 @@ from typing import Literal, Self
 
 from pydantic import BaseModel, Field, model_validator
 
-from app.models import Continent, Theme, Visibility, VisitType
+from app.models import Continent, MonumentKind, Theme, Visibility, VisitType
 
 
 class LonLat(BaseModel):
@@ -329,6 +329,12 @@ class MeOut(BaseModel):
     profile_public: bool
 
 
+class MePatch(BaseModel):
+    """Cambios al perfil. `home_city_id` nulo quita la ciudad de casa."""
+
+    home_city_id: int | None = None
+
+
 class Count(BaseModel):
     visited: int
     total: int
@@ -445,3 +451,65 @@ class WishlistEntry(BaseModel):
     name_es: str
     continent: Continent
     created_at: datetime
+
+
+# --- Mi país: estados, ciudades y pasaporte de monumentos -----------------------------
+
+
+class SubdivisionOverview(BaseModel):
+    """Un estado del país con lo que el usuario lleva en él."""
+
+    code: str
+    name_es: str
+    status: PlaceStatus | None = Field(description="Nulo si está por descubrir")
+    is_home: bool
+    first_visited_on: date | None
+
+
+class CityOverview(BaseModel):
+    id: int
+    name_es: str
+    subdivision_code: str | None
+    subdivision_name: str | None
+    status: PlaceStatus
+    is_home: bool
+    trips: int = Field(description="Viajes distintos con una parada en la ciudad")
+    last_visited_on: date | None
+
+
+class PassportMonument(MonumentBrief):
+    kind: MonumentKind
+    subdivision_code: str | None
+    subdivision_name: str | None
+    location: LonLat
+
+
+class StampTrip(BaseModel):
+    """Viaje del primer recuerdo del monumento; adonde lleva "Ver recuerdos de este lugar"."""
+
+    id: uuid.UUID
+    title: str
+    stop_number: int | None = Field(
+        description="Número de estancia en el viaje (el ?parada= del detalle); nulo si fue escala"
+    )
+
+
+class PassportStamp(PassportMonument):
+    first_stamped_on: date
+    memories: int
+    photo_count: int
+    photo_ids: list[uuid.UUID] = Field(description="Hasta 3 fotos de sus recuerdos")
+    trip: StampTrip
+
+
+class SuggestedStamp(PassportMonument):
+    near: str = Field(description="Parada o casa más cercana")
+    distance_km: float
+
+
+class PassportOut(BaseModel):
+    country_iso3: str
+    stamps: list[PassportStamp] = Field(description="Del primero que sellaste al más reciente")
+    suggested: list[SuggestedStamp] = Field(
+        description="Sin sellar, los más cercanos a tus paradas o a tu casa; uno por estado"
+    )

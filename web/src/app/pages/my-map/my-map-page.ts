@@ -6,6 +6,7 @@ import type { Topology } from 'topojson-specification';
 import type { Country, Progress, Trip, UserMap } from '../../core/api/types';
 import { drawWorld } from '../../core/map/geo-shapes';
 import { MemoryEvents } from '../../core/memory-events';
+import { HomeEvents } from '../../core/home-events';
 import { TripCard } from '../../shared/trip-card';
 import { CountrySummaries } from './country-summaries';
 import { ProgressPanel } from './progress-panel';
@@ -75,6 +76,7 @@ const STRIP_TRIPS = 8;
 export class MyMapPage {
   protected readonly events = inject(MemoryEvents);
   private readonly summaries = inject(CountrySummaries);
+  private readonly homeEvents = inject(HomeEvents);
 
   private readonly countries = httpResource<Country[]>(() => ({
     url: '/api/geo/countries',
@@ -122,13 +124,20 @@ export class MyMapPage {
     // Al guardar un recuerdo cambian el mapa, el progreso y los viajes.
     effect(() => {
       if (!this.events.lastSaved()) return;
-      untracked(() => {
-        this.summaries.invalidate();
-        this.progress.reload();
-        this.userMap.reload();
-        this.trips.reload();
-      });
+      untracked(() => this.reload());
     });
+    // La ciudad de casa cuenta como visitada: al cambiarla cambian el mapa y el progreso.
+    effect(() => {
+      if (!this.homeEvents.changes()) return;
+      untracked(() => this.reload());
+    });
+  }
+
+  private reload(): void {
+    this.summaries.invalidate();
+    this.progress.reload();
+    this.userMap.reload();
+    this.trips.reload();
   }
 
   protected readonly stripTrips = computed(() => (this.trips.value() ?? []).slice(0, STRIP_TRIPS));

@@ -1,0 +1,1058 @@
+slug,name_es,stamp_code,kind,iso3,subdivision_code,lon,lat,source,source_ref
+centro-historico-cdmx,Centro histórico de la Ciudad de México,CMX,unesco,MEX,MX-CMX,-99.133056,19.432778,wikidata,whc:412
+xochimilco,Xochimilco,XOC,unesco,MEX,MX-CMX,-99.098222,19.247583,wikidata,whc:412
+teotihuacan,Teotihuacán,TEO,unesco,MEX,MX-MEX,-98.843889,19.6925,wikidata,whc:414
+centro-historico-oaxaca,Centro histórico de Oaxaca,OAX,unesco,MEX,MX-OAX,-96.721667,17.061944,wikidata,whc:415
+monte-alban,Monte Albán,MA,unesco,MEX,MX-OAX,-96.767778,17.043889,wikidata,whc:415
+centro-historico-puebla,Centro histórico de Puebla,PUE,unesco,MEX,MX-PUE,-98.208333,19.047222,wikidata,whc:416
+palenque,Palenque,PAL,unesco,MEX,MX-CHP,-92.046389,17.484167,wikidata,whc:411
+ciudad-de-guanajuato,Ciudad de Guanajuato,GTO,unesco,MEX,MX-GUA,-101.256667,21.017778,wikidata,whc:482
+chichen-itza,Chichén Itzá,CHI,unesco,MEX,MX-YUC,-88.568611,20.683056,wikidata,whc:483
+centro-historico-morelia,Centro histórico de Morelia,MOR,unesco,MEX,MX-MIC,-101.183333,19.7,wikidata,whc:585
+el-tajin,El Tajín,TAJ,unesco,MEX,MX-VER,-97.378242,20.448058,wikidata,whc:631
+centro-historico-zacatecas,Centro histórico de Zacatecas,ZAC,unesco,MEX,MX-ZAC,-102.55,22.766667,wikidata,whc:676
+monasterios-popocatepetl,Monasterios en las faldas del Popocatépetl,POP,unesco,MEX,MX-MOR,-98.89778,18.93472,wikidata,whc:702
+pinturas-sierra-de-san-francisco,Pinturas rupestres de la Sierra de San Francisco,SSF,unesco,MEX,MX-BCS,-112.916111,27.655556,wikidata,whc:714
+uxmal,Uxmal,UXM,unesco,MEX,MX-YUC,-89.771389,20.359444,wikidata,whc:791
+centro-historico-queretaro,Centro histórico de Querétaro,QRO,unesco,MEX,MX-QUE,-100.366667,20.583333,wikidata,whc:792
+hospicio-cabanas,Hospicio Cabañas,HC,unesco,MEX,MX-JAL,-103.337333,20.676897,wikidata,whc:815
+paquime,Paquimé,PAQ,unesco,MEX,MX-CHH,-107.95556,30.37583,wikidata,whc:560
+tlacotalpan,Tlacotalpan,TLC,unesco,MEX,MX-VER,-95.656274,18.613025,wikidata,whc:862
+campeche,Ciudad fortificada de Campeche,CAM,unesco,MEX,MX-CAM,-90.541667,19.847222,wikidata,whc:895
+xochicalco,Xochicalco,XCH,unesco,MEX,MX-MOR,-99.296639,18.804306,wikidata,whc:939
+calakmul,Calakmul,CAL,unesco,MEX,MX-CAM,-89.810556,18.105,wikidata,whc:1061
+misiones-sierra-gorda,Misiones de la Sierra Gorda,SG,unesco,MEX,MX-QUE,-99.463889,21.203889,wikidata,whc:1079
+casa-luis-barragan,Casa Luis Barragán,CLB,unesco,MEX,MX-CMX,-99.1925,19.411111,wikidata,whc:1136
+paisaje-agavero-tequila,Paisaje agavero de Tequila,TEQ,unesco,MEX,MX-JAL,-103.769989,20.628286,wikidata,whc:1209
+ciudad-universitaria-unam,Ciudad Universitaria de la UNAM,CU,unesco,MEX,MX-CMX,-99.188056,19.332222,wikidata,whc:1250
+san-miguel-de-allende,San Miguel de Allende y Atotonilco,SMA,unesco,MEX,MX-GUA,-100.746389,20.914444,wikidata,whc:1274
+cuevas-yagul-mitla,Cuevas prehistóricas de Yagul y Mitla,YAG,unesco,MEX,MX-OAX,-96.421111,16.950833,wikidata,whc:1352
+acueducto-padre-tembleque,Acueducto del Padre Tembleque,APT,unesco,MEX,MX-HID,-98.662222,19.836389,wikidata,whc:1463
+tehuacan-cuicatlan,Valle de Tehuacán-Cuicatlán,TEH,unesco,MEX,MX-PUE,-97.3994,18.2114,wikidata,whc:1534
+templo-mayor,Templo Mayor,TM,archaeological,MEX,MX-CMX,-99.131389,19.435,wikidata,Q774021
+tlatelolco,Zona arqueológica de Tlatelolco,TLT,archaeological,MEX,MX-CMX,-99.1375,19.4511,wikidata,Q14623034
+cuicuilco,Cuicuilco,CUI,archaeological,MEX,MX-CMX,-99.181667,19.301667,wikidata,Q1143307
+tenayuca,Tenayuca,TEN,archaeological,MEX,MX-MEX,-99.168525,19.532522,wikidata,Q647989
+malinalco,Malinalco,MAL,archaeological,MEX,MX-MEX,-99.503056,18.953333,wikidata,Q21503942
+calixtlahuaca,Calixtlahuaca,CLX,archaeological,MEX,MX-MEX,-99.693056,19.333611,wikidata,Q1027061
+tula,Tula,TOL,archaeological,MEX,MX-HID,-99.341139,20.063472,wikidata,Q568672
+gran-piramide-cholula,Gran Pirámide de Cholula,CHO,archaeological,MEX,MX-PUE,-98.301944,19.0575,wikidata,Q1417475
+cantona,Cantona,CAN,archaeological,MEX,MX-PUE,-97.485833,19.552222,wikidata,Q388615
+cacaxtla,Cacaxtla,CAC,archaeological,MEX,MX-TLA,-98.339949,19.243572,wikidata,Q1024995
+teopanzolco,Teopanzolco,TPZ,archaeological,MEX,MX-MOR,-99.222014,18.930447,wikidata,Q2404076
+el-tepozteco,El Tepozteco,TEP,archaeological,MEX,MX-MOR,-99.101164,19.000911,wikidata,Q2352495
+chalcatzingo,Chalcatzingo,CHZ,archaeological,MEX,MX-MOR,-98.770806,18.67675,wikidata,Q1059465
+el-cerrito,El Cerrito,CER,archaeological,MEX,MX-QUE,-100.4425,20.550833,wikidata,Q5350993
+plazuelas,Plazuelas,PLA,archaeological,MEX,MX-GUA,-101.826667,20.404167,wikidata,Q1504007
+guachimontones,Guachimontones,GUA,archaeological,MEX,MX-JAL,-103.835719,20.695149,wikidata,Q2989048
+tzintzuntzan,Tzintzuntzan,TZI,archaeological,MEX,MX-MIC,-101.574,19.6236,wikidata,Q14237615
+la-quemada,La Quemada,LQ,archaeological,MEX,MX-ZAC,-102.821111,22.456389,wikidata,Q2112520
+cuarenta-casas,Cuarenta Casas,CC,archaeological,MEX,MX-CHH,-108.169256,29.553494,wikidata,Q1142826
+las-labradas,Las Labradas,LAB,archaeological,MEX,MX-SIN,-106.766667,23.620556,wikidata,Q5402637
+cempoala,Cempoala,CEM,archaeological,MEX,MX-VER,-96.404111,19.447083,wikidata,Q1053364
+quiahuiztlan,Quiahuiztlán,QUI,archaeological,MEX,MX-VER,-96.414917,19.669667,wikidata,Q384562
+san-lorenzo,San Lorenzo Tenochtitlán,SLT,archaeological,MEX,MX-VER,-94.8,17.733333,wikidata,Q772613
+la-venta,La Venta,LV,archaeological,MEX,MX-TAB,-94.031667,18.105278,wikidata,Q913166
+comalcalco,Comalcalco,COM,archaeological,MEX,MX-TAB,-93.201111,18.279444,wikidata,Q12907186
+mitla,Mitla,MIT,archaeological,MEX,MX-OAX,-96.4,16.916667,wikidata,Q1366027
+yaxchilan,Yaxchilán,YAX,archaeological,MEX,MX-CHP,-90.966667,16.9,wikidata,Q662263
+bonampak,Bonampak,BON,archaeological,MEX,MX-CHP,-91.065,16.704,wikidata,Q605455
+tonina,Toniná,TON,archaeological,MEX,MX-CHP,-92.009675,16.901219,wikidata,Q1042074
+izapa,Izapa,IZA,archaeological,MEX,MX-CHP,-92.179822,14.923406,wikidata,Q2334607
+edzna,Edzná,EDZ,archaeological,MEX,MX-CAM,-90.229083,19.596778,wikidata,Q774512
+becan,Becán,BEC,archaeological,MEX,MX-CAM,-89.466667,18.516667,wikidata,Q813784
+mayapan,Mayapán,MAY,archaeological,MEX,MX-YUC,-89.460556,20.629444,wikidata,Q567966
+dzibilchaltun,Dzibilchaltún,DZI,archaeological,MEX,MX-YUC,-89.5903,21.091,wikidata,Q26596
+ek-balam,Ek Balam,EKB,archaeological,MEX,MX-YUC,-88.136264,20.891086,wikidata,Q988570
+kabah,Kabáh,KAB,archaeological,MEX,MX-YUC,-89.647297,20.248425,wikidata,Q325468
+labna,Labná,LNA,archaeological,MEX,MX-YUC,-89.579,20.1725,wikidata,Q1522451
+sayil,Sayil,SAY,archaeological,MEX,MX-YUC,-89.652178,20.177758,wikidata,Q1419214
+tulum,Zona arqueológica de Tulum,TUL,archaeological,MEX,MX-ROO,-87.428889,20.214722,wikidata,Q725883
+coba,Cobá,COB,archaeological,MEX,MX-ROO,-87.7251,20.4898,wikidata,Q1104936
+muyil,Muyil,MUY,archaeological,MEX,MX-ROO,-87.613889,20.078889,wikidata,Q1548550
+kohunlich,Kohunlich,KOH,archaeological,MEX,MX-ROO,-88.783333,18.416667,wikidata,Q785823
+dzibanche,Dzibanché,DZB,archaeological,MEX,MX-ROO,-88.759028,18.6375,wikidata,Q847614
+chacchoben,Chacchobén,CHA,archaeological,MEX,MX-ROO,-88.2325,19.000833,wikidata,Q928886
+san-gervasio,San Gervasio,SGV,archaeological,MEX,MX-ROO,-86.848297,20.500351,wikidata,Q601383
+el-rey,El Rey,REY,archaeological,MEX,MX-ROO,-86.781111,21.060833,wikidata,Q1324550
+senso-ji,Templo Sensō-ji,SEN,other,JPN,,139.7967,35.7148,curated,
+fushimi-inari,Fushimi Inari-taisha,INA,other,JPN,,135.7727,34.9671,curated,
+todai-ji,Tōdai-ji,TOD,unesco,JPN,,135.8398,34.689,curated,whc:870
+cupula-bomba-atomica,Cúpula de la Bomba Atómica,GEN,unesco,JPN,,132.4536,34.3955,curated,whc:775
+unesco-2,Centro Histórico de Quito,QUI,unesco,ECU,,-78.512083,-0.22,wikidata,whc:2
+unesco-3,Catedral de Aquisgrán,CAT,unesco,DEU,,6.083922,50.77475,wikidata,whc:3
+unesco-4,L'Anse aux Meadows,ANS,unesco,CAN,,-55.531222,51.595267,wikidata,whc:4
+unesco-10,Valle bajo del Awash,VAL,unesco,ETH,,40.5794,11.1,wikidata,whc:10
+unesco-12,Sitio arqueológico de las estelas grabadas de Tiya,EST,unesco,ETH,,38.612111,8.434917,wikidata,whc:12
+unesco-13,Melka Kunture,MEL,unesco,ETH,,38.608333,8.7025,wikidata,whc:13
+unesco-15,Aksum,AKS,unesco,ETH,,38.733333,14.116667,wikidata,whc:15
+unesco-17,Valle bajo del Omo,VBO,unesco,ETH,,36.0138,4.4969,wikidata,whc:17
+unesco-18,Iglesias talladas en la roca de Lalibela,IGL,unesco,ETH,,39.04042,12.02935,wikidata,whc:18
+unesco-19,Fasil Ghebi,FAS,unesco,ETH,,37.469722,12.608056,wikidata,whc:19
+unesco-20,Ciudad vieja de Damasco,DAM,unesco,SYR,,36.30639,33.511112,wikidata,whc:20
+unesco-21,Ciudad vieja de Alepo,ALE,unesco,SYR,,37.15,36.183333,wikidata,whc:21
+unesco-22,Ciudad vieja de Bosra,BOS,unesco,SYR,,36.481667,32.518056,wikidata,whc:22
+unesco-23,Palmira,PAL,unesco,SYR,,38.267222,34.56,wikidata,whc:23
+unesco-26,Isla de Gorea,GOR,unesco,SEN,,-17.398333,14.666944,wikidata,whc:26
+unesco-27,Parque nacional Mesa Verde,MES,unesco,USA,,-108.494444,37.260375,wikidata,whc:27
+unesco-29,Ciudad Vella de Cracovia,VEL,unesco,POL,,19.93688,50.06209,wikidata,whc:29
+unesco-30,Centro histórico de Varsovia,VAR,unesco,POL,,21.012222,52.249722,wikidata,whc:30
+unesco-31,Campo de concentración de Auschwitz,CAM,unesco,POL,,19.178333,50.035833,wikidata,whc:31
+unesco-32,reales minas de sal de Wielicka y Bochnia,REA,unesco,POL,,20.063889,49.979167,wikidata,whc:32
+unesco-34,Fuertes y castillos de Volta,FUE,unesco,GHA,,-1.241,5.103694,wikidata,whc:34
+unesco-35,Construcciones tradicionales ashantis,CON,unesco,GHA,,-1.62583,6.40111,wikidata,whc:35
+unesco-36,Medina de Túnez,MED,unesco,TUN,,10.17006,36.799027,wikidata,whc:36
+unesco-37,Sitio arqueológico de Cartago,CAR,unesco,TUN,,10.33084,36.85788,wikidata,whc:37
+unesco-38,Anfiteatro de El Djem,ANF,unesco,TUN,,10.706944,35.296389,wikidata,whc:38
+unesco-39,Zona de conservación de Ngorongoro,CON,unesco,TZA,,35.46,-3.21,wikidata,whc:39
+unesco-42,iglesia de Boyana,IGL,unesco,BGR,,23.266172,42.644672,wikidata,whc:42
+unesco-43,Caballero de Madara,CAB,unesco,BGR,,27.118894,43.277375,wikidata,whc:43
+unesco-44,Tumba tracia de Kazanlak,TUM,unesco,BGR,,25.399167,42.625556,wikidata,whc:44
+unesco-45,iglesias rupestres de Ivanovo,IRI,unesco,BGR,,25.988056,43.695556,wikidata,whc:45
+unesco-55,Røros Mining Town and the Circumference,RRO,unesco,NOR,,11.385556,62.573889,wikidata,whc:55
+unesco-58,iglesia de madera de Urnes,IGL,unesco,NOR,,7.3225,61.298056,wikidata,whc:58
+unesco-59,Bryggen,BRY,unesco,NOR,,5.323333,60.3975,wikidata,whc:59
+unesco-64,Parque nacional Tikal,TIK,unesco,GTM,,-89.616667,17.216667,wikidata,whc:64
+unesco-65,Antigua Guatemala,GUA,unesco,GTM,,-90.73381,14.556504,wikidata,whc:65
+unesco-78,Independence Hall,IND,unesco,USA,,-75.15,39.948889,wikidata,whc:78
+unesco-79,Paphos,PAP,unesco,CYP,,32.40556,34.75833,wikidata,whc:79
+unesco-80,Mont-Saint-Michel and its Bay,MON,unesco,FRA,,-1.51056,48.63556,wikidata,whc:80
+unesco-81,catedral de Chartres,CAT,unesco,FRA,,1.487778,48.447778,wikidata,whc:81
+unesco-83,Palacio de Versalles,PAL,unesco,FRA,,2.120278,48.804722,wikidata,whc:83
+unesco-84,basílica de Vézelay,BAS,unesco,FRA,,3.748333,47.466389,wikidata,whc:84
+unesco-85,sitios prehistóricos y cuevas con pinturas del valle del Vézère,PRE,unesco,FRA,,1.17,45.0575,wikidata,whc:85
+unesco-86,Memphis and its Necropolis – the Pyramid Fields from Giza to Dahshur,MEM,unesco,EGY,,31.1304,29.976,wikidata,whc:86
+unesco-87,Ancient Thebes with its Necropolis,THE,unesco,EGY,,32.610278,25.720556,wikidata,whc:87
+unesco-88,"Monumentos de Nubia, desde Abu Simbel hasta Philae",NUB,unesco,EGY,,31.626111,22.336389,wikidata,whc:88
+unesco-89,El Cairo Histórico,CAI,unesco,EGY,,31.2627,30.046,wikidata,whc:89
+unesco-90,Abu Mena,ABU,unesco,EGY,,29.66349,30.84105,wikidata,whc:90
+unesco-91,Centro histórico de Roma,ROM,unesco,ITA,,12.4866,41.8928,wikidata,whc:91
+unesco-93,Santa Maria delle Grazie,SAN,unesco,ITA,,9.171111,45.465833,wikidata,whc:93
+unesco-94,arte rupestre de Val Camonica,ART,unesco,ITA,,10.35,46.023889,wikidata,whc:94
+unesco-95,Ciudad antigua de Dubrovnik,DUB,unesco,HRV,,18.1091,42.6409,wikidata,whc:95
+unesco-96,Stari Ras y Sopoćani,STA,unesco,SRB,,20.42278,43.11889,wikidata,whc:96
+unesco-97,Historical Complex of Split with the Palace of Diocletian,HIS,unesco,HRV,,16.438889,43.508333,wikidata,whc:97
+unesco-99,Natural and Cultural Heritage of the Ohrid region,NAT,unesco,ALB,,20.664017,40.900703,wikidata,whc:99
+unesco-102,Al-Qal'a de Beni Hammad,QAL,unesco,DZA,,4.793333,35.813889,wikidata,whc:102
+unesco-113,Choga Zanbil,CHO,unesco,IRN,,48.520833,32.008333,wikidata,whc:113
+unesco-114,Persépolis,PER,unesco,IRN,,52.89,29.935,wikidata,whc:114
+unesco-115,Plaza de Naqsh-e Yahán,PLA,unesco,IRN,,51.677333,32.658222,wikidata,whc:115
+unesco-116,Ciudades antiguas de Djenné,DJE,unesco,MLI,,-4.555,13.90639,wikidata,whc:116
+unesco-119,Tombuctú,TOM,unesco,MLI,,-2.999444,16.773333,wikidata,whc:119
+unesco-121,Valle de Katmandú,VAL,unesco,NPL,,85.325222,27.673444,wikidata,whc:121
+unesco-124,Centro histórico de Ouro Preto,OUR,unesco,BRA,,-43.50364,-20.385773,wikidata,whc:124
+unesco-125,Natural and Culturo-Historical Region of Kotor,NAT,unesco,MNE,,18.77,42.43,wikidata,whc:125
+unesco-129,Copán,COP,unesco,HND,,-89.142442,14.837964,wikidata,whc:129
+unesco-130,Hipogeo de Hal Saflieni,HIP,unesco,MLT,,14.506883,35.869558,wikidata,whc:130
+unesco-131,La Valeta,VAL,unesco,MLT,,14.5125,35.897778,wikidata,whc:131
+unesco-132,Templos megalíticos de Malta,TEM,unesco,MLT,,14.269444,36.049167,wikidata,whc:132
+unesco-135,Fortificaciones de la costa caribe de Panamá,FOR,unesco,PAN,,-79.655833,9.553889,wikidata,whc:135
+unesco-138,Mohenjo-Daro,MOH,unesco,PAK,,68.138889,27.329167,wikidata,whc:138
+unesco-139,Taxila,TAX,unesco,PAK,,72.7875,33.745833,wikidata,whc:139
+unesco-140,Ruinas búdicas de Takht-i-Bahi y vestigios de Sahr-i-Bahlol,RUI,unesco,PAK,,71.945833,34.320833,wikidata,whc:140
+unesco-143,"Historical Monuments at Makli, Thatta",HIS,unesco,PAK,,67.898611,24.756389,wikidata,whc:143
+unesco-144,Ruins of Kilwa Kisiwani and Ruins of Songo Mnara,RUI,unesco,TZA,,39.522778,-8.957778,wikidata,whc:144
+unesco-147,Kakadu National Park,KAK,unesco,AUS,,132.5195,-13.0055,wikidata,whc:147
+unesco-148,Ciudad vieja de Jerusalén y sus murallas,JER,unesco,ISR,,35.23191,31.778214,wikidata,whc:148
+unesco-149,Quiriguá,QUI,unesco,GTM,,-89.040278,15.269444,wikidata,whc:149
+unesco-157,Ninstints,NIN,unesco,CAN,,-131.2175,52.098889,wikidata,whc:157
+unesco-158,Precipicio de los Bisontes de Head-Smashed-In,PRE,unesco,CAN,,-113.625,49.7494,wikidata,whc:158
+unesco-160,Palacio de Fontainebleau,PF,unesco,FRA,,2.700556,48.402222,wikidata,whc:160
+unesco-162,Catedral de Amiens,CA,unesco,FRA,,2.3021,49.89457,wikidata,whc:162
+unesco-163,"Roman Theatre and its Surroundings and the ""Triumphal Arch"" of Orange",ROM,unesco,FRA,,4.808417,44.135722,wikidata,whc:163
+unesco-164,Monumentos romanos y románicos de Arlés,RRA,unesco,FRA,,4.630694,43.677639,wikidata,whc:164
+unesco-165,Abadía de Fontenay,ABA,unesco,FRA,,4.389327,47.639661,wikidata,whc:165
+unesco-166,Ópera de Sídney,OPE,unesco,AUS,,151.214897,-33.857058,wikidata,whc:166
+unesco-167,Región de los Lagos Willandra,REG,unesco,AUS,,143.101406,-33.618142,wikidata,whc:167
+unesco-168,Catedral de Espira,CE,unesco,DEU,,8.4425,49.317222,wikidata,whc:168
+unesco-169,Residencia de Wurzburgo,RES,unesco,DEU,,9.938889,49.792798,wikidata,whc:169
+unesco-170,medina de Fez,MED,unesco,MAR,,-4.9725,34.0625,wikidata,whc:170
+unesco-171,Fort and Shalamar Gardens in Lahore,FOR,unesco,PAK,,74.309722,31.590278,wikidata,whc:171
+unesco-173,Stone Town,STO,unesco,TZA,,39.198789,-6.164944,wikidata,whc:173
+unesco-175,Villa medicea,VIL,unesco,ITA,,11.304167,43.857778,wikidata,whc:175
+unesco-179,Tassili n'Ajjer,TAS,unesco,DZA,,9.0,25.666667,wikidata,whc:179
+unesco-181,Reserva natural de Tasmania,RES,unesco,AUS,,146.1729,-42.5957,wikidata,whc:181
+unesco-183,Leptis Magna,LEP,unesco,LBY,,14.290496,32.638332,wikidata,whc:183
+unesco-184,sitio arqueológico de Sabratha,SAB,unesco,LBY,,12.485,32.80528,wikidata,whc:184
+unesco-187,Catedral de Santa María e iglesia de San Miguel de Hildesheim,CSM,unesco,DEU,,9.94389,52.15278,wikidata,whc:187
+unesco-188,Valle de M'Zab,VAL,unesco,DZA,,3.681389,32.487222,wikidata,whc:188
+unesco-189,Centro histórico de la Ciudad de Olinda,OLI,unesco,BRA,,-34.845,-8.013333,wikidata,whc:189
+unesco-190,Cirene,CIR,unesco,LBY,,21.85,32.816667,wikidata,whc:190
+unesco-191,Djémila,DJE,unesco,DZA,,5.73667,36.32056,wikidata,whc:191
+unesco-192,Shibam,SHI,unesco,YEM,,48.626667,15.926944,wikidata,whc:192
+unesco-193,Tipasa de Mauretania,TIP,unesco,DZA,,2.44077,36.5951,wikidata,whc:193
+unesco-194,Timgad,TIM,unesco,DZA,,6.468666,35.484237,wikidata,whc:194
+unesco-198,Cahokia,CAH,unesco,USA,,-90.064444,38.653889,wikidata,whc:198
+unesco-200,Anuradhapura,ANU,unesco,LKA,,80.410833,8.335,wikidata,whc:200
+unesco-201,Polonnaruwa,POL,unesco,LKA,,81.0,7.933333,wikidata,whc:201
+unesco-202,Sigiriya,SIG,unesco,LKA,,80.759722,7.956944,wikidata,whc:202
+unesco-203,De la gran salina de Salins-les-Bains a la Salina Real de Arc-et-Senans - La producción de sal ignígena,GRA,unesco,FRA,,5.876389,46.9375,wikidata,whc:203
+unesco-204,Habana Vieja y su sistema de fortificaciones,HAB,unesco,CUB,,-82.35,23.133333,wikidata,whc:204
+unesco-206,Centro histórico de Angra do Heroísmo,ANG,unesco,PRT,,-27.22,38.655,wikidata,whc:206
+unesco-208,Cultural Landscape and Archaeological Remains of the Bamiyan Valley,LAN,unesco,AFG,,67.826803,34.832042,wikidata,whc:208
+unesco-211,Minaret and Archaeological Remains of Jam,MIN,unesco,AFG,,64.5159,34.3964,wikidata,whc:211
+unesco-216,Rila Monastery,RIL,unesco,BGR,,23.4,42.116667,wikidata,whc:216
+unesco-217,Ancient City of Nessebar,NES,unesco,BGR,,27.73,42.65611,wikidata,whc:217
+unesco-228,Centro histórico de Aviñón,AVI,unesco,FRA,,4.806111,43.952778,wikidata,whc:228
+unesco-229,"Place Stanislas, Place de la Carrière and Place d'Alliance in Nancy",PLA,unesco,FRA,,6.183333,48.693611,wikidata,whc:229
+unesco-230,Saint-Savin,SAI,unesco,FRA,,0.863611,46.566111,wikidata,whc:230
+unesco-231,Fuerte Rojo de Delhi,FUE,unesco,IND,,77.240278,28.655833,wikidata,whc:231
+unesco-232,Tumba de Humayun,TUM,unesco,IND,,77.250602,28.593264,wikidata,whc:232
+unesco-233,Complejo de Qutb,COM,unesco,IND,,77.18543,28.524382,wikidata,whc:233
+unesco-234,iglesias y conventos de Goa,IGL,unesco,IND,,73.9117,15.5024,wikidata,whc:234
+unesco-239,Pattadakal,PAT,unesco,IND,,75.814639,15.951333,wikidata,whc:239
+unesco-240,Khajuraho Group of Monuments,KHA,unesco,IND,,79.92222,24.85222,wikidata,whc:240
+unesco-241,Hampi,HAM,unesco,IND,,76.462162,15.334547,wikidata,whc:241
+unesco-242,Cuevas de Ajantā,CUE,unesco,IND,,75.700472,20.553417,wikidata,whc:242
+unesco-243,Ellora,ELL,unesco,IND,,75.179167,20.026389,wikidata,whc:243
+unesco-244,Grutas de Elefanta,GRU,unesco,IND,,72.931389,18.963333,wikidata,whc:244
+unesco-246,Templo de Suria,TEM,unesco,IND,,86.094596,19.887444,wikidata,whc:246
+unesco-247,fuertes de las colinas del Rajastán,FCR,unesco,IND,,74.646111,24.883306,wikidata,whc:247
+unesco-249,Group of monuments at Mahabalipuram,GRO,unesco,IND,,80.191667,12.616667,wikidata,whc:249
+unesco-250,Grandes templos vivientes Chola,GRA,unesco,IND,,79.1325,10.783056,wikidata,whc:250
+unesco-251,Fuerte de Agra,FA,unesco,IND,,78.021297,27.179583,wikidata,whc:251
+unesco-252,Taj Mahal,TAJ,unesco,IND,,78.041944,27.175,wikidata,whc:252
+unesco-255,Fatehpur Sikri,FAT,unesco,IND,,77.661111,27.091111,wikidata,whc:255
+unesco-263,Monasterio de los Jerónimos en Lisboa y la Torre de Belem,MON,unesco,PRT,,-9.21583,38.69194,wikidata,whc:263
+unesco-264,Monasterio de Batalha,MB,unesco,PRT,,-8.826111,39.659167,wikidata,whc:264
+unesco-265,Convento de Cristo,CON,unesco,PRT,,-8.419258,39.603636,wikidata,whc:265
+unesco-266,Fortaleza y sitio histórico nacional de San Juan de Puerto Rico,FOR,unesco,USA,,-66.119167,18.463889,wikidata,whc:266
+unesco-267,Ciudad vieja de Berna,BER,unesco,CHE,,7.450278,46.948056,wikidata,whc:267
+unesco-268,abadía de San Galo,ABA,unesco,CHE,,9.377222,47.423056,wikidata,whc:268
+unesco-269,Abadía de San Juan de Müstair,ASJ,unesco,CHE,,10.447778,46.629167,wikidata,whc:269
+unesco-271,iglesia de Wies,IGL,unesco,DEU,,10.900445,47.6806,wikidata,whc:271
+unesco-272,Ciudad hanseática de Lübeck,HAN,unesco,DEU,,10.69167,53.86667,wikidata,whc:272
+unesco-273,Cusco,CUS,unesco,PER,,-71.978611,-13.516944,wikidata,whc:273
+unesco-274,Santuario histórico de Machu Picchu,SAN,unesco,PER,,-72.583333,-13.116667,wikidata,whc:274
+unesco-275,misiones jesuíticas guaraníes,MIS,unesco,ARG,,-55.531669,-27.255281,wikidata,whc:275
+unesco-276,Samarra,SAM,unesco,IRQ,,43.88568,34.1959,wikidata,whc:276
+unesco-277,Hatra,HAT,unesco,IRQ,,42.718333,35.588056,wikidata,whc:277
+unesco-278,Babylon,BAB,unesco,IRQ,,44.431644,32.541781,wikidata,whc:278
+unesco-285,"Puerto, fortalezas y conjunto monumental de Cartagena",PUE,unesco,COL,,-75.533333,10.416667,wikidata,whc:285
+unesco-286,Ciudad del Vaticano,VAT,unesco,VAT,,12.453,41.904,wikidata,whc:286
+unesco-287,Tadrart Acacus,TAD,unesco,LBY,,10.333319,24.833429,wikidata,whc:287
+unesco-288,Palacios de Augustusburg y Falkenlust,PAL,unesco,DEU,,6.908056,50.8275,wikidata,whc:288
+unesco-292,Catedral de Colonia,CC,unesco,DEU,,6.958333,50.941389,wikidata,whc:292
+unesco-293,Anjar,ANJ,unesco,LBN,,35.929722,33.725833,wikidata,whc:293
+unesco-294,Baalbek,BAA,unesco,LBN,,36.200556,34.015363,wikidata,whc:294
+unesco-295,Biblos,BIB,unesco,LBN,,35.646846,34.119501,wikidata,whc:295
+unesco-299,Tyre,TYR,unesco,LBN,,35.194938,33.273713,wikidata,whc:299
+unesco-300,Centro histórico de Quebec,QUE,unesco,CAN,,-71.210556,46.809444,wikidata,whc:300
+unesco-306,Montes Matobo,MON,unesco,ZWE,,28.5,-20.5,wikidata,whc:306
+unesco-307,Isla de la Libertad,LIB,unesco,USA,,-74.045,40.69,wikidata,whc:307
+unesco-309,Centro histórico de Salvador de Bahía,SAL,unesco,BRA,,-38.5,-12.9667,wikidata,whc:309
+unesco-310,Cueva de Altamira y arte rupestre paleolítico del norte de España,CUE,unesco,ESP,,-4.116111,43.3825,wikidata,whc:310
+unesco-311,Acueducto de Segovia,ACU,unesco,ESP,,-4.117806,40.947889,wikidata,whc:311
+unesco-312,Monumentos de Oviedo y del Reino de Asturias,OVI,unesco,ESP,,-5.865833,43.378889,wikidata,whc:312
+unesco-313,centro histórico de Córdoba,COR,unesco,ESP,,-4.779722,37.879194,wikidata,whc:313
+unesco-314,Alhambra,ALH,unesco,ESP,,-3.58821,37.17634,wikidata,whc:314
+unesco-316,catedral de Burgos,CAT,unesco,ESP,,-3.704472,42.340806,wikidata,whc:316
+unesco-318,Monasterio y sitio de El Escorial en Madrid,MON,unesco,ESP,,-4.147778,40.589167,wikidata,whc:318
+unesco-320,Obras de Antoni Gaudí,OBR,unesco,ESP,,2.027819,41.363828,wikidata,whc:320
+unesco-321,Ciudad-mezquita de Bagerhat,MEZ,unesco,BGD,,89.75855,22.66097,wikidata,whc:321
+unesco-323,Palacios Reales de Abomey,PAL,unesco,BEN,,1.98806,7.18556,wikidata,whc:323
+unesco-326,Petra,PET,unesco,JOR,,35.440278,30.328889,wikidata,whc:326
+unesco-327,Qusair Amra,QUS,unesco,JOR,,36.587306,31.80175,wikidata,whc:327
+unesco-330,Chavín de Huántar,CHA,unesco,PER,,-77.178453,-9.592775,wikidata,whc:330
+unesco-331,Medina de Marrakech,MM,unesco,MAR,,-7.98667,31.63139,wikidata,whc:331
+unesco-332,Punic Town of Kerkuane and its Necropolis,PUN,unesco,TUN,,11.0992,36.9464,wikidata,whc:332
+unesco-334,Santuario del Buen Jesús de Matosinhos (Congonhas),SAN,unesco,BRA,,-43.860694,-20.507778,wikidata,whc:334
+unesco-344,puente del Gard,PUE,unesco,FRA,,4.5355,43.9473,wikidata,whc:344
+unesco-345,Ciudadela de Carcasona,CIU,unesco,FRA,,2.363788,43.206439,wikidata,whc:345
+unesco-347,casco viejo de Santiago de Compostela,SAN,unesco,ESP,,-8.54468,42.88076,wikidata,whc:347
+unesco-348,Ciudad vieja de Ávila e iglesias extramuros,AVI,unesco,ESP,,-4.700111,40.656389,wikidata,whc:348
+unesco-351,iglesias pintadas de la región de Troodos,IGL,unesco,CYP,,33.095833,34.920278,wikidata,whc:351
+unesco-352,Arte rupestre de Alta,ART,unesco,NOR,,23.187778,69.946944,wikidata,whc:352
+unesco-353,Patrimonio mundial de la cultura Chaco,PAT,unesco,USA,,-107.970833,36.063778,wikidata,whc:353
+unesco-356,Santa Sofía,SAN,unesco,TUR,,28.98,41.008333,wikidata,whc:356
+unesco-357,Göreme National Park and the Rock Sites of Cappadocia,GOR,unesco,TUR,,34.85,38.66667,wikidata,whc:357
+unesco-358,Gran Mezquita de Divriği,GRA,unesco,TUR,,38.121583,39.371222,wikidata,whc:358
+unesco-359,Tumba tracia de Svechtari,TTS,unesco,BGR,,26.7663,43.744964,wikidata,whc:359
+unesco-361,Centro Histórico de Évora,EVO,unesco,PRT,,-7.907778,38.573056,wikidata,whc:361
+unesco-362,Gadamés,GAD,unesco,LBY,,9.5,30.133333,wikidata,whc:362
+unesco-364,Gran Zimbabue,GRA,unesco,ZWE,,30.933,-20.27,wikidata,whc:364
+unesco-365,Khami,KHA,unesco,ZWE,,28.423436,-20.143292,wikidata,whc:365
+unesco-366,Chan Chan,CC,unesco,PER,,-79.075,-8.110556,wikidata,whc:366
+unesco-367,"Monumentos romanos de Tréveris, Catedral de San Pedro e Iglesia de Nuestra Señora",ROM,unesco,DEU,,6.63306,49.75,wikidata,whc:367
+unesco-370,Castillo de Durham,CAS,unesco,GBR,,-1.57558,54.7749,wikidata,whc:370
+unesco-371,Garganta de Ironbridge,GAR,unesco,GBR,,-2.472778,52.626389,wikidata,whc:371
+unesco-372,abadía de Fountains,ABA,unesco,GBR,,-1.58139,54.1097,wikidata,whc:372
+unesco-373,Stonehenge,STO,unesco,GBR,,-1.826111,51.178889,wikidata,whc:373
+unesco-374,Castillos y murallas del rey Eduardo en Gwynedd,CMR,unesco,GBR,,-4.276944,53.139722,wikidata,whc:374
+unesco-377,Hattusha: the Hittite Capital,HAT,unesco,TUR,,34.62056,40.01389,wikidata,whc:377
+unesco-378,Arquitectura Mudéjar de Aragón,ARQ,unesco,ESP,,-1.10722,40.34389,wikidata,whc:378
+unesco-379,Ciudad Histórica de Toledo,TOL,unesco,ESP,,-4.024613,39.856901,wikidata,whc:379
+unesco-381,Ciudad Vieja de Salamanca,SAL,unesco,ESP,,-5.6645,40.96525,wikidata,whc:381
+unesco-383,"Catedral, Alcázar y Archivo de Indias en Sevilla",CAA,unesco,ESP,,-5.99155,37.38384,wikidata,whc:383
+unesco-384,Ciudad vieja de Cáceres,CAC,unesco,ESP,,-6.37,39.474167,wikidata,whc:384
+unesco-385,Antigua Ciudad de Saná,SAN,unesco,YEM,,44.208056,15.355556,wikidata,whc:385
+unesco-387,San Kilda,SAN,unesco,GBR,,-8.5875,57.815,wikidata,whc:387
+unesco-389,monasterio de Studenica,MON,unesco,SRB,,20.531639,43.486722,wikidata,whc:389
+unesco-392,Templo de Apolo,TEM,unesco,GRC,,21.900387,37.429655,wikidata,whc:392
+unesco-393,archaeological Site of Delphi,ARC,unesco,GRC,,22.500215,38.482015,wikidata,whc:393
+unesco-394,Venecia,VEN,unesco,ITA,,12.331944,45.439722,wikidata,whc:394
+unesco-395,Plaza de los Milagros,PLA,unesco,ITA,,10.394778,43.723428,wikidata,whc:395
+unesco-398,Castel del Monte,CAS,unesco,ITA,,16.270935,41.084753,wikidata,whc:398
+unesco-400,"Budapest con las orillas del Danubio, el barrio del Castillo de Buda y la Avenida Andrássy",BUD,unesco,HUN,,19.07067,47.48242,wikidata,whc:400
+unesco-401,Hollókő,HOL,unesco,HUN,,19.591667,47.996111,wikidata,whc:401
+unesco-404,Partenón,PAR,unesco,GRC,,23.726601,37.971527,wikidata,whc:404
+unesco-417,Ibiza,IBI,unesco,ESP,,1.43,38.98,wikidata,whc:417
+unesco-420,Potosí,POT,unesco,BOL,,-65.753333,-19.589167,wikidata,whc:420
+unesco-421,Parque Nacional de Tongariro,TON,unesco,NZL,,175.583333,-39.2,wikidata,whc:421
+unesco-422,Distrito de los Lagos,DIS,unesco,GBR,,-3.166667,54.5,wikidata,whc:422
+unesco-425,Palacio de Blenheim,PAL,unesco,GBR,,-1.360948,51.841363,wikidata,whc:425
+unesco-426,Palace of Westminster and Westminster Abbey including Saint Margaret's Church,PWW,unesco,GBR,,-0.126944,51.500556,wikidata,whc:426
+unesco-428,Bath,BAT,unesco,GBR,,-2.359722,51.381389,wikidata,whc:428
+unesco-429,New Lanark,NEW,unesco,GBR,,-3.781389,55.663611,wikidata,whc:429
+unesco-430,fronteras del Imperio Romano,FRO,unesco,DEU,,-2.601,54.992611,wikidata,whc:430
+unesco-433,Fuerte de Bahla,FUE,unesco,OMN,,57.3007,22.9644,wikidata,whc:433
+unesco-434,"Bat, Al-Khutm y Al-Ayn",BAT,unesco,OMN,,56.745,23.27,wikidata,whc:434
+unesco-437,Monte Tai,MON,unesco,CHN,,117.1,36.266667,wikidata,whc:437
+unesco-438,The Great Wall,GRE,unesco,CHN,,116.0833,40.4167,wikidata,whc:438
+unesco-439,Palacios imperiales de las dinastías Ming y Qing en Beijing y Shenyang,PAL,unesco,CHN,,123.446944,41.794167,wikidata,whc:439
+unesco-440,Cuevas de Mogao,CUE,unesco,CHN,,94.804167,40.037222,wikidata,whc:440
+unesco-441,Mausoleo de Qin Shi Huang,MAU,unesco,CHN,,109.253889,34.381667,wikidata,whc:441
+unesco-442,Monticello and the University of Virginia in Charlottesville,MON,unesco,USA,,-78.503889,38.032778,wikidata,whc:442
+unesco-444,Ksar de Ait Ben Hadu,KSA,unesco,MAR,,-7.133333,31.05,wikidata,whc:444
+unesco-445,Brasilia,BRA,unesco,BRA,,-47.882778,-15.793889,wikidata,whc:445
+unesco-447,Parque nacional Uluṟu-Kata Tjuṯa,ULU,unesco,AUS,,130.985732,-25.322076,wikidata,whc:447
+unesco-448,Monte Nemrut,MON,unesco,TUR,,38.740831,37.980739,wikidata,whc:448
+unesco-449,Zhoukoudian,ZHO,unesco,CHN,,115.92483,39.68896,wikidata,whc:449
+unesco-450,Kandy,KAN,unesco,LKA,,80.635,7.293056,wikidata,whc:450
+unesco-451,Old Town of Galle and its Fortifications,GAL,unesco,LKA,,80.218611,6.021389,wikidata,whc:451
+unesco-454,Monte Atos,MON,unesco,GRC,,24.327222,40.158333,wikidata,whc:454
+unesco-455,Meteora,MET,unesco,GRC,,21.626667,39.7125,wikidata,whc:455
+unesco-456,Monumentos paleocristianos y bizantinos de Tesalónica,PAL,unesco,GRC,,22.9478,40.6386,wikidata,whc:456
+unesco-460,Trinidad y Valle de los Ingenios,TRI,unesco,CUB,,-79.984444,21.803056,wikidata,whc:460
+unesco-474,Parque Nacional del Hortobágy,HOR,unesco,HUN,,21.15678,47.59458,wikidata,whc:474
+unesco-476,Arte rupestre de Chongoni,ART,unesco,MWI,,34.279167,-14.293333,wikidata,whc:476
+unesco-479,Lūang Phabāng,LUA,unesco,LAO,,102.134722,19.89,wikidata,whc:479
+unesco-481,Paisaje cultural de Champasak,CHA,unesco,LAO,,105.8,14.833333,wikidata,whc:481
+unesco-484,Xanthos-Letoon,XAN,unesco,TUR,,29.32028,36.335,wikidata,whc:484
+unesco-485,Pamukkale,PAM,unesco,TUR,,29.123333,37.923889,wikidata,whc:485
+unesco-488,Torre de Londres,TOR,unesco,GBR,,-0.076198,51.5082,wikidata,whc:488
+unesco-491,santuario de Asclepio en Epidauro,SAN,unesco,GRC,,23.0744,37.5986,wikidata,whc:491
+unesco-492,Pueblo de Taos,PUE,unesco,USA,,-105.54167,36.43889,wikidata,whc:492
+unesco-493,Medieval City of Rhodes,MED,unesco,GRC,,28.226937,36.443058,wikidata,whc:493
+unesco-495,"Strasbourg : de la Grande-île à la Neustadt, une scène urbaine européenne",STR,unesco,FRA,,7.74889,48.58444,wikidata,whc:495
+unesco-496,"Catedral, abadía de San Agustín e iglesia de San Martín en Canterbury",CAT,unesco,GBR,,1.083333,51.28,wikidata,whc:496
+unesco-498,Medina de Susa,MS,unesco,TUN,,10.6386,35.8278,wikidata,whc:498
+unesco-499,Keruán,KER,unesco,TUN,,10.1,35.683333,wikidata,whc:499
+unesco-500,Centro histórico de Lima,LIM,unesco,PER,,-77.031389,-12.046667,wikidata,whc:500
+unesco-505,monasterio de Alcobaza,MA,unesco,PRT,,-8.978628,39.548594,wikidata,whc:505
+unesco-511,Mistrá,MIS,unesco,GRC,,22.3673,37.074,wikidata,whc:511
+unesco-514,Corazón neolítico de las Orcadas,COR,unesco,GBR,,-3.215,58.9975,wikidata,whc:514
+unesco-515,abadía de Lorsch,ABA,unesco,DEU,,8.56858,49.65369,wikidata,whc:515
+unesco-516,Acantilados de Bandiagara,ACA,unesco,MLI,,-3.316667,14.416667,wikidata,whc:516
+unesco-517,Olimpia,OLI,unesco,GRC,,21.63,37.638333,wikidata,whc:517
+unesco-518,Monasterio de Poblet,MP,unesco,ESP,,1.0825,41.380833,wikidata,whc:518
+unesco-522,Conjuntos monumentales renacentistas de Úbeda y Baeza,CON,unesco,ESP,,-3.37122,38.01131,wikidata,whc:522
+unesco-524,Sanchi,SAN,unesco,IND,,77.739722,23.479444,wikidata,whc:524
+unesco-526,Ciudad Colonial,COL,unesco,DOM,,-69.883,18.473,wikidata,whc:526
+unesco-527,"Kyiv: Saint-Sophia Cathedral and Related Monastic Buildings, Kyiv-Pechersk Lavra",KYI,unesco,UKR,,30.51686,50.45258,wikidata,whc:527
+unesco-529,Misiones jesuíticas de Chiquitos,MIS,unesco,BOL,,-62.5072,-16.2748,wikidata,whc:529
+unesco-530,Delos,DEL,unesco,GRC,,25.26904,37.38948,wikidata,whc:530
+unesco-532,Palacios y parques de Potsdam y Berlín,PPP,unesco,DEU,,13.033333,52.4,wikidata,whc:532
+unesco-534,Reino de los jardines de Dessau-Wörlitz,REI,unesco,DEU,,12.2814,51.8636,wikidata,whc:534
+unesco-535,"Colegiata, castillo y ciudad vieja de Quedlinburg",COL,unesco,DEU,,11.15,51.78333,wikidata,whc:535
+unesco-537,"Monasteries of Daphni, Hosios Loukas and Nea Moni of Chios",MDH,unesco,GRC,,22.75,38.4,wikidata,whc:537
+unesco-540,Centro Histórico de San Petersburgo,SAN,unesco,RUS,,30.315556,59.938889,wikidata,whc:540
+unesco-541,Centro histórico de Vilna,VIL,unesco,LTU,,25.283333,54.683333,wikidata,whc:541
+unesco-543,Itchan Kala,ITC,unesco,UZB,,60.359476,41.377718,wikidata,whc:543
+unesco-544,Kizhi Pogost,KIZ,unesco,RUS,,35.22345,62.06767,wikidata,whc:544
+unesco-545,Plaza Roja,PLA,unesco,RUS,,37.62,55.754167,wikidata,whc:545
+unesco-546,monasterio de Maulbronn,MON,unesco,DEU,,8.8129,49.0011,wikidata,whc:546
+unesco-547,Montes Huang,MH,unesco,CHN,,118.166667,30.125,wikidata,whc:547
+unesco-548,Parque nacional del Río Abiseo,RIO,unesco,PER,,-77.25,-7.75,wikidata,whc:548
+unesco-549,"Palacio barroco de Caserta y jardines, acueducto de Vanvitelli y complejo arquitectónico de San Leucio",PAL,unesco,ITA,,14.32639,41.07333,wikidata,whc:549
+unesco-550,Historic Centre of San Gimignano,SG,unesco,ITA,,11.042804,43.467057,wikidata,whc:550
+unesco-555,Birka y Hovgården,BIR,unesco,SWE,,17.5425,59.335,wikidata,whc:555
+unesco-556,Forjas de Engelsberg,FOR,unesco,SWE,,16.010278,59.969167,wikidata,whc:556
+unesco-557,Grabados rupestres de Tanum,GRA,unesco,SWE,,11.33641,58.69995,wikidata,whc:557
+unesco-558,Cementerio del Bosque de Estocolmo,CEM,unesco,SWE,,18.099444,59.275556,wikidata,whc:558
+unesco-559,Palacio de Drottningholm,PAL,unesco,SWE,,17.886383,59.321694,wikidata,whc:559
+unesco-561,Templo de Oro de Dambulla,TEM,unesco,LKA,,80.64834,7.856563,wikidata,whc:561
+unesco-564,Old City of Zamość,ZAM,unesco,POL,,23.258611,50.720556,wikidata,whc:564
+unesco-565,Casba de Argel,CAS,unesco,DZA,,3.06028,36.78333,wikidata,whc:565
+unesco-566,Casco Histórico de Sucre,SUC,unesco,BOL,,-65.259592,-19.04799,wikidata,whc:566
+unesco-567,Tiwanaku,TIW,unesco,BOL,,-68.673333,-16.554722,wikidata,whc:567
+unesco-569,Historic Centres of Berat and Gjirokastër,CEN,unesco,ALB,,19.93825,40.707917,wikidata,whc:569
+unesco-570,Butrinto,BUT,unesco,ALB,,20.016628,39.757066,wikidata,whc:570
+unesco-574,Historic Town of Sukhothai and Associated Historic Towns,SUK,unesco,THA,,99.703611,17.021111,wikidata,whc:574
+unesco-575,Ban Chiang,BAN,unesco,THA,,103.358333,17.548611,wikidata,whc:575
+unesco-576,Parque histórico de Ayutthaya,AYU,unesco,THA,,100.557509,14.351626,wikidata,whc:576
+unesco-579,Sammallahdenmäki,SAM,unesco,FIN,,21.775169,61.117674,wikidata,whc:579
+unesco-582,Antigua Rauma,RAU,unesco,FIN,,21.513215,61.128269,wikidata,whc:582
+unesco-583,Suomenlinna,SUO,unesco,FIN,,24.984444,60.143611,wikidata,whc:583
+unesco-584,iglesia vieja de Petäjävesi,IGL,unesco,FIN,,25.183945,62.250137,wikidata,whc:584
+unesco-586,Fuerte de Rohtas,FUE,unesco,PAK,,73.576417,32.965278,wikidata,whc:586
+unesco-592,conjunto de Borobudur,BOR,unesco,IDN,,110.20361,-7.60778,wikidata,whc:592
+unesco-593,Sitio de los primeros hombres de Sangiran,PRI,unesco,IDN,,110.85,-7.45,wikidata,whc:593
+unesco-595,Pitagoreion y Hereo de Samos,PIT,unesco,GRC,,26.886635,37.672043,wikidata,whc:595
+unesco-597,Monasterio de Horezu,MON,unesco,ROU,,24.0069,45.1686,wikidata,whc:597
+unesco-598,Iglesias de Moldavia,IGL,unesco,ROU,,25.933,47.733,wikidata,whc:598
+unesco-599,Isla de Mozambique,MOZ,unesco,MOZ,,40.732778,-15.036667,wikidata,whc:599
+unesco-600,riberas del Sena en París,RIB,unesco,FRA,,2.35889,48.85,wikidata,whc:600
+unesco-601,"Cathedral of Notre-Dame, Former Abbey of Saint-Rémi and Palace of Tau, Reims",CND,unesco,FRA,,4.032778,49.253333,wikidata,whc:601
+unesco-602,Historic Centre of Bukhara,BUK,unesco,SUN,,64.433333,39.766667,wikidata,whc:602
+unesco-603,Samarcanda - Encrucijada de culturas,SAM,unesco,UZB,,67.0,39.66861,wikidata,whc:603
+unesco-604,Monumentos históricos de Nóvgorod y sus alrededores,NOV,unesco,RUS,,31.285556,58.518333,wikidata,whc:604
+unesco-606,Parque nacional de la Sierra de Capivara,SIE,unesco,BRA,,-42.55,-8.6667,wikidata,whc:606
+unesco-611,Zabid,ZAB,unesco,YEM,,43.316667,14.2,wikidata,whc:611
+unesco-613,Ruínas de León Viejo,RUI,unesco,NIC,,-86.617797,12.400547,wikidata,whc:613
+unesco-614,City of Safranbolu,SAF,unesco,TUR,,32.68972,41.26,wikidata,whc:614
+unesco-616,Historic Centre of Prague,PRA,unesco,CZE,,14.41944,50.08972,wikidata,whc:616
+unesco-617,Centro Histórico de Český Krumlov,CES,unesco,CZE,,14.316667,48.816667,wikidata,whc:617
+unesco-618,Historic Town of Banská Štiavnica and the Technical Monuments in its Vicinity,BAN,unesco,SVK,,18.9,48.46111,wikidata,whc:618
+unesco-620,"Levoča, el castillo de Spiš y los monumentos culturales asociados",LEV,unesco,SVK,,20.7675,48.999444,wikidata,whc:620
+unesco-621,Centro Histórico de Telč,TEL,unesco,CZE,,15.45,49.18333,wikidata,whc:621
+unesco-622,Vlkolínec,VLK,unesco,SVK,,19.2784,49.0397,wikidata,whc:622
+unesco-623,"Mines of Rammelsberg, Historic Town of Goslar and Upper Harz Water Management System",MIN,unesco,DEU,,10.34,51.82,wikidata,whc:623
+unesco-625,Castillo de Mir,CAS,unesco,BLR,,26.472894,53.451267,wikidata,whc:625
+unesco-632,Islas Solovetsky,SOL,unesco,RUS,,35.710556,65.024444,wikidata,whc:632
+unesco-633,Monumentos Blancos de Vladímir y Súzdal,BLA,unesco,RUS,,40.4167,56.15,wikidata,whc:633
+unesco-634,iglesia de la Ascensión,IGL,unesco,RUS,,37.670833,55.667222,wikidata,whc:634
+unesco-635,Catedral de San Esteban,CSE,unesco,FRA,,2.39917,47.08222,wikidata,whc:635
+unesco-642,Prambanan,PRA,unesco,IDN,,110.49122,-7.752,wikidata,whc:642
+unesco-648,Misiones jesuíticas de La Santísima Trinidad de Paraná y Jesús de Tavarangüé,MIS,unesco,PRY,,-55.753,-27.056,wikidata,whc:648
+unesco-657,Monasterio de la Trinidad y San Sergio,MON,unesco,RUS,,38.13065,56.31035,wikidata,whc:657
+unesco-658,Coro y su puerto,COR,unesco,VEN,,-69.6833,11.4,wikidata,whc:658
+unesco-659,Brú na Bóinne,BRU,unesco,IRL,,-6.44932,53.69284,wikidata,whc:659
+unesco-660,Monumentos budistas de la región de Hōryū-ji,BUD,unesco,JPN,,135.739575,34.614967,wikidata,whc:660
+unesco-661,Castillo Himeji,CAS,unesco,JPN,,134.693611,34.839444,wikidata,whc:661
+unesco-664,Conjunto arqueológico de Mérida,MER,unesco,ESP,,-6.33869,38.91597,wikidata,whc:664
+unesco-665,Real Monasterio de Santa María de Guadalupe,REA,unesco,ESP,,-5.3275,39.452778,wikidata,whc:665
+unesco-666,Lumbini,LUM,unesco,NPL,,83.275829,27.4814,wikidata,whc:666
+unesco-668,Angkor,ANG,unesco,KHM,,103.859081,13.440881,wikidata,whc:668
+unesco-669,Caminos de Santiago de Compostela: Camino francés y Caminos del Norte de España,CAM,unesco,ESP,,-6.414722,43.335,wikidata,whc:669
+unesco-670,The Sassi and the Park of the Rupestrian Churches of Matera,SAS,unesco,ITA,,16.610278,40.666389,wikidata,whc:670
+unesco-675,Joya de Cerén,JOY,unesco,SLV,,-89.356158,13.827494,wikidata,whc:675
+unesco-677,iglesias barrocas de Filipinas,IGL,unesco,PHL,,120.48305,17.36642,wikidata,whc:677
+unesco-678,Ciudad Imperial de Huế,IMP,unesco,VNM,,107.577778,16.469444,wikidata,whc:678
+unesco-687,Fábrica siderúrgica de Völklingen,FAB,unesco,DEU,,6.84528,49.25056,wikidata,whc:687
+unesco-688,Monumentos históricos de la antigua Kioto,KIO,unesco,JPN,,135.752778,35.060278,wikidata,whc:688
+unesco-689,As Salt,AS,unesco,JOR,,35.727222,32.039167,wikidata,whc:689
+unesco-690,iglesia de peregrinación de San Juan Nepomuceno,IGL,unesco,CZE,,15.94194,49.58,wikidata,whc:690
+unesco-695,Catedral de Roskilde,CAT,unesco,DNK,,12.080308,55.642669,wikidata,whc:695
+unesco-696,Castillo de Kronborg,CAS,unesco,DNK,,12.621944,56.038611,wikidata,whc:696
+unesco-697,"Túmulos, piedras rúnicas e iglesia de Jelling",TUM,unesco,DNK,,9.419743,55.756514,wikidata,whc:697
+unesco-699,City of Luxembourg: its Old Quarters and Fortifications,LUX,unesco,LUX,,6.1325,49.610556,wikidata,whc:699
+unesco-700,Líneas de Nazca,LIN,unesco,PER,,-75.135,-14.6975,wikidata,whc:700
+unesco-703,Residencia de montaña de Chengde,RES,unesco,CHN,,117.9375,40.9875,wikidata,whc:703
+unesco-704,Templo y cementerio de Confucio y residencia de la familia Kong en Qufu,TEM,unesco,CHN,,116.984449,35.596512,wikidata,whc:704
+unesco-705,Ancient Building Complex in the Wudang Mountains,BUI,unesco,CHN,,111.05827,32.44479,wikidata,whc:705
+unesco-707,Potala,POT,unesco,CHN,,91.116944,29.657778,wikidata,whc:707
+unesco-708,Monumentos históricos de Miskheta,MIS,unesco,GEO,,44.71639,41.84389,wikidata,whc:708
+unesco-709,Upper Svaneti,UPP,unesco,GEO,,43.01139,42.91639,wikidata,whc:709
+unesco-710,Monasterio de Gelati,MON,unesco,GEO,,42.768056,42.294722,wikidata,whc:710
+unesco-712,Ciudad de Vicenza y villas de Palladio en el Véneto,VIC,unesco,ITA,,11.55,45.55,wikidata,whc:712
+unesco-715,Parque Nacional Rapa Nui,RAP,unesco,CHL,,-109.348579,-27.072877,wikidata,whc:715
+unesco-717,Historic Centre of Siena,SIE,unesco,ITA,,11.331667,43.318611,wikidata,whc:717
+unesco-722,arrozales en terrazas de las cordilleras de Filipinas,ARR,unesco,PHL,,121.13667,16.93389,wikidata,whc:722
+unesco-723,Paisaje cultural de Sintra,SIN,unesco,PRT,,-9.433823,38.788388,wikidata,whc:723
+unesco-724,Monumentos medievales en Kósovo,MED,unesco,SRB,,20.265556,42.661111,wikidata,whc:724
+unesco-726,Centro histórico de Nápoles,NAP,unesco,ITA,,14.26278,40.85139,wikidata,whc:726
+unesco-728,Ciudad vieja y ciudad nueva de Edimburgo,NUE,unesco,GBR,,-3.216667,55.95,wikidata,whc:728
+unesco-729,"La Bauhaus y sus sitios en Weimar, Dessau y Bernau",BAU,unesco,DEU,,11.32949,50.97477,wikidata,whc:729
+unesco-730,Crespi d'Adda,CRE,unesco,ITA,,9.536111,45.596667,wikidata,whc:730
+unesco-731,ciudad hanseática de Visby,HAN,unesco,SWE,,18.295833,57.641667,wikidata,whc:731
+unesco-732,Kutná Hora: Historical Town Centre with the Church of St Barbara and the Cathedral of Our Lady at Sedlec,KUT,unesco,CZE,,15.266667,49.95,wikidata,whc:732
+unesco-733,"errara, ciudad renacentista, y su delta del Po",ERR,unesco,ITA,,11.619444,44.837778,wikidata,whc:733
+unesco-734,Aldeas históricas de Shirakawa-go y Gokayama,ALD,unesco,JPN,,136.906389,36.256944,wikidata,whc:734
+unesco-736,Seokguram Grotto and Bulguksa Temple,SEO,unesco,ITA,,14.2769,40.846168,wikidata,whc:736
+unesco-737,Janggyeon Panjeon of Haeinsa,JAN,unesco,KOR,,128.098722,35.801611,wikidata,whc:737
+unesco-738,Santuario de Chongmyo,SAN,unesco,KOR,,126.993611,37.574722,wikidata,whc:738
+unesco-741,Ciudad vieja de Lunenburg,LUN,unesco,CAN,,-64.309167,44.376111,wikidata,whc:741
+unesco-742,Santa Cruz de Mompós,SAN,unesco,COL,,-74.425,9.239444,wikidata,whc:742
+unesco-743,Parque Arqueológico Nacional de Tierradentro,TIE,unesco,COL,,-76.033,2.583,wikidata,whc:743
+unesco-744,Parque Arqueológico de San Agustín,SA,unesco,COL,,-76.296111,1.884444,wikidata,whc:744
+unesco-747,Barrio histórico de la ciudad de Colonia del Sacramento,COL,unesco,URY,,-57.851234,-34.471543,wikidata,whc:747
+unesco-750,"Antiguos ksurs de Uadane, Chingueti, Tichit y Ualata",KSU,unesco,MRT,,-11.62361,20.92889,wikidata,whc:750
+unesco-751,Verla,VER,unesco,FIN,,26.640016,61.061992,wikidata,whc:751
+unesco-753,Medina de Essaouira,ME,unesco,MAR,,-9.768904,31.51441,wikidata,whc:753
+unesco-755,Centro histórico de Oporto,OPO,unesco,PRT,,-8.612974,41.143191,wikidata,whc:755
+unesco-757,Skellig Michael,SKE,unesco,IRL,,-10.540556,51.771111,wikidata,whc:757
+unesco-758,abadía de Pannonhalma,ABA,unesco,HUN,,17.761111,47.552778,wikidata,whc:758
+unesco-759,Dutch Water Defence Lines,DUT,unesco,,,4.89306,52.37444,wikidata,whc:759
+unesco-761,Kunta Kinteh Island and Related Sites,KUN,unesco,GMB,,-16.3572,13.3162,wikidata,whc:761
+unesco-762,Aldea-iglesia de Gammelstad,ALD,unesco,SWE,,22.02861,65.64611,wikidata,whc:762
+unesco-763,Paisaje cultural de Lednice-Valtice,LED,unesco,CZE,,16.775,48.7758,wikidata,whc:763
+unesco-770,Canal del Mediodía,CAN,unesco,FRA,,1.418333,43.611111,wikidata,whc:770
+unesco-772,Fertö / Neusiedlersee Cultural Landscape,FER,unesco,AUT,,16.734722,47.800556,wikidata,whc:772
+unesco-773,Pirineos - Monte Perdido,PIR,unesco,ESP,,0.05,42.65,wikidata,whc:773
+unesco-774,Región de Laponia,REG,unesco,SWE,,17.58333,67.33333,wikidata,whc:774
+unesco-776,Santuario Itsukushima,SAN,unesco,JPN,,132.320105,34.29577,wikidata,whc:776
+unesco-777,Monasteries of Haghpat and Sanahin,MON,unesco,ARM,,44.71028,41.095,wikidata,whc:777
+unesco-778,Geoparque nacional Glaciación Cuaternaria Lushan,GEO,unesco,CHN,,115.966667,29.566667,wikidata,whc:778
+unesco-779,"Mount Emei Scenic Area, including Leshan Giant Buddha Scenic Area",MOU,unesco,CHN,,103.76925,29.5449,wikidata,whc:779
+unesco-780,Egas (actual Vergina),EGA,unesco,GRC,,22.32276,40.477966,wikidata,whc:780
+unesco-781,Ciudad histórica fortificada de Cuenca,FOR,unesco,ESP,,-2.13175,40.0766,wikidata,whc:781
+unesco-782,Lonja de la Seda,LON,unesco,ESP,,-0.378333,39.474444,wikidata,whc:782
+unesco-783,Monumentos conmemorativos a Lutero,CON,unesco,DEU,,12.652778,51.864722,wikidata,whc:783
+unesco-784,Historic Centre of the City of Salzburg,SAL,unesco,AUT,,13.0486,47.7997,wikidata,whc:784
+unesco-785,Ferrocarril de Semmering,FS,unesco,AUT,,15.831,47.643,wikidata,whc:785
+unesco-786,Palace and gardens of Schönbrunn,PAL,unesco,AUT,,16.31333,48.18667,wikidata,whc:786
+unesco-787,The Trulli of Alberobello,TRU,unesco,ITA,,17.23694,40.7825,wikidata,whc:787
+unesco-788,Monumentos paleocristianos de Rávena,PR,unesco,ITA,,12.19625,44.420417,wikidata,whc:788
+unesco-789,Centro histórico de Pienza,PIE,unesco,ITA,,11.679,43.0766,wikidata,whc:789
+unesco-790,Sitio arqueológico de Panamá Viejo y distrito histórico de Panamá,PAN,unesco,PAN,,-79.540556,8.951111,wikidata,whc:790
+unesco-793,Medina de Mequinez o Mequínez,MMM,unesco,MAR,,-5.564481,33.894857,wikidata,whc:793
+unesco-794,Dougga,DOU,unesco,TUN,,9.220278,36.423333,wikidata,whc:794
+unesco-795,Maritime Greenwich,MAR,unesco,GBR,,0.0,51.477778,wikidata,whc:795
+unesco-797,Verona,VER,unesco,ITA,,10.992778,45.438611,wikidata,whc:797
+unesco-804,Palau de la Música y Hospital de San Pau,PAL,unesco,ESP,,2.175,41.38778,wikidata,whc:804
+unesco-805,Monasterio de San Millán de la Cogolla,MSM,unesco,ESP,,-2.86505,42.325833,wikidata,whc:805
+unesco-806,Hallstatt-Dachstein Salzkammergut cultural landscape,HAL,unesco,AUT,,13.6464,47.5594,wikidata,whc:806
+unesco-809,basílica Eufrásica,BAS,unesco,HRV,,13.593611,45.228611,wikidata,whc:809
+unesco-810,Historic City of Trogir,TRO,unesco,HRV,,16.25167,43.5125,wikidata,whc:810
+unesco-811,Old Town of Lijiang,LIJ,unesco,CHN,,100.2333,26.8667,wikidata,whc:811
+unesco-812,Ancient City of Ping Yao,PIN,unesco,CHN,,112.1544,37.2014,wikidata,whc:812
+unesco-813,Jardines de Suzhou,JAR,unesco,CHN,,120.625556,31.326667,wikidata,whc:813
+unesco-816,Changdeokgung,CHA,unesco,KOR,,126.991667,37.579444,wikidata,whc:816
+unesco-817,Fortaleza de Hwasong,FOR,unesco,KOR,,127.010203,37.280733,wikidata,whc:817
+unesco-818,Molinos de viento de Kinderdijk,MOL,unesco,,,4.63472,51.88861,wikidata,whc:818
+unesco-819,"Historic Area of Willemstad, Inner City and Harbour, Curaçao",ARE,unesco,CUW,,-68.934201,12.106141,wikidata,whc:819
+unesco-821,Centro histórico de São Luís,SAO,unesco,BRA,,-44.305795,-2.527733,wikidata,whc:821
+unesco-822,Casco histórico de Tallin,TAL,unesco,EST,,24.745278,59.437222,wikidata,whc:822
+unesco-823,Residencias de la casa real de Saboya,RES,unesco,ITA,,7.68583,45.0725,wikidata,whc:823
+unesco-824,Jardín Botánico de Padua,JAR,unesco,ITA,,11.880682,45.39953,wikidata,whc:824
+unesco-825,Zona arqueológica y basílica patriarcal de Aquilea,BAS,unesco,ITA,,13.3675,45.7683,wikidata,whc:825
+unesco-826,"Portovenere, Cinque Terre, and the Islands (Palmaria, Tino and Tinetto)",POR,unesco,ITA,,9.729167,44.106944,wikidata,whc:826
+unesco-827,"Cathedral, Torre Civica and Piazza Grande, Modena",CAT,unesco,ITA,,10.92568,44.64624,wikidata,whc:827
+unesco-828,Historic Centre of Urbino,URB,unesco,ITA,,12.63333,43.725,wikidata,whc:828
+unesco-829,"Áreas arqueológicas de Pompeya, Herculano y Torre Annunziata",ARE,unesco,ITA,,14.483333,40.75,wikidata,whc:829
+unesco-830,Costa Amalfitana,COS,unesco,ITA,,14.6,40.633333,wikidata,whc:830
+unesco-831,Valle de los Templos,VAL,unesco,ITA,,13.59,37.289722,wikidata,whc:831
+unesco-832,Villa romana del Casale,VRC,unesco,ITA,,14.334553,37.364723,wikidata,whc:832
+unesco-833,Su Nuraxi,SU,unesco,ITA,,8.999884,39.702857,wikidata,whc:833
+unesco-835,Ciudad medieval de Toruń,MED,unesco,POL,,18.604722,53.010278,wikidata,whc:835
+unesco-836,Volubilis,VOL,unesco,MAR,,-5.562687,34.039965,wikidata,whc:836
+unesco-837,Medina,MEI,unesco,MAR,,-5.366466,35.571062,wikidata,whc:837
+unesco-840,Valle de Viñales,VAL,unesco,CUB,,-83.716667,22.616667,wikidata,whc:840
+unesco-841,Castillo de San Pedro de la Roca,CAS,unesco,CUB,,-75.8703,19.968706,wikidata,whc:841
+unesco-842,Paestum,PAE,unesco,ITA,,15.005556,40.42,wikidata,whc:842
+unesco-846,Weimar Clásico (Patrimonio de la Humanidad),WEI,unesco,DEU,,11.316667,50.983333,wikidata,whc:846
+unesco-847,Castillo de Malbork,CAS,unesco,POL,,19.027778,54.039722,wikidata,whc:847
+unesco-848,Khirokitia,KHI,unesco,CYP,,33.343719,34.796725,wikidata,whc:848
+unesco-849,Troya,TRO,unesco,TUR,,26.238889,39.9575,wikidata,whc:849
+unesco-850,Ouadi Qadisha (the Holy Valley) and the Forest of the Cedars of God (Horsh Arz el-Rab),OUA,unesco,LBN,,35.951611,34.282944,wikidata,whc:850
+unesco-852,Vecpilsēta,VEC,unesco,LVA,,24.1082,56.9485,wikidata,whc:852
+unesco-853,Necrópolis paleocristiana de Pécs,NEC,unesco,HUN,,18.227778,46.074444,wikidata,whc:853
+unesco-855,Beguinajes flamencos,BEG,unesco,BEL,,4.47375,51.030972,wikidata,whc:855
+unesco-856,Elevadores del Canal del Centro,ELE,unesco,BEL,,4.0945,50.4714,wikidata,whc:856
+unesco-857,Grand-Place,GRA,unesco,BEL,,4.352538,50.846708,wikidata,whc:857
+unesco-859,Columna de la Santísima Trinidad de Olomouc,COL,unesco,CZE,,17.250492,49.59402,wikidata,whc:859
+unesco-860,Gardens and Castle at Kroměříž,GAR,unesco,CZE,,17.381427,49.297172,wikidata,whc:860
+unesco-861,Holašovice,HOL,unesco,CZE,,14.266667,48.966667,wikidata,whc:861
+unesco-863,Centro histórico de Cuenca,CUE,unesco,ECU,,-79.0049,-2.8979,wikidata,whc:863
+unesco-865,Centro histórico de Leópolis,LEO,unesco,UKR,,24.031944,49.841667,wikidata,whc:865
+unesco-866,Sitios de arte rupestre prehistórico del Valle del Côa y de Siega Verde,ART,unesco,ESP,,-6.66111,40.6975,wikidata,whc:866
+unesco-867,Ir.D.F. Woudagemaal,IR,unesco,,,5.678889,52.845833,wikidata,whc:867
+unesco-868,Caminos de Santiago de Compostela en Francia (Patrimonio de la Humanidad),CAM,unesco,FRA,,-0.722944,45.184056,wikidata,whc:868
+unesco-870,Monumentos históricos de la antigua Nara,NAR,unesco,JPN,,135.83944,34.67556,wikidata,whc:870
+unesco-871,Naval City of Karlskrona,NAV,unesco,SWE,,15.583333,56.166667,wikidata,whc:871
+unesco-872,Vieux Lyon,VIE,unesco,FRA,,4.828056,45.763056,wikidata,whc:872
+unesco-873,Provins,PRO,unesco,FRA,,3.298889,48.559722,wikidata,whc:873
+unesco-874,Arte rupestre del arco mediterráneo de la Península Ibérica,ARA,unesco,ESP,,-1.033333,39.79,wikidata,whc:874
+unesco-875,Colonia Iulia Urbs Triumphalis Tarraco,COL,unesco,ESP,,1.255231,41.116478,wikidata,whc:875
+unesco-876,Universidad y recinto histórico de Alcalá de Henares,UNI,unesco,ESP,,-3.363131,40.482925,wikidata,whc:876
+unesco-880,Palacio de Verano,PV,unesco,CHN,,116.2689,39.9975,wikidata,whc:880
+unesco-881,Templo del Cielo,TC,unesco,CHN,,116.4066,39.8822,wikidata,whc:881
+unesco-883,El Fuerte de Samaipata,FUE,unesco,BOL,,-63.818989,-18.178356,wikidata,whc:883
+unesco-884,Castillos y muralla de Bellinzona,CAS,unesco,CHE,,9.022222,46.192778,wikidata,whc:884
+unesco-885,Shahrisabz,SHA,unesco,UZB,,66.833333,39.05,wikidata,whc:885
+unesco-886,Merv,MER,unesco,TKM,,62.1925,37.662778,wikidata,whc:886
+unesco-887,Kuk,KUK,unesco,PNG,,144.33,-5.7825,wikidata,whc:887
+unesco-890,Centro histórico de Diamantina,DIA,unesco,BRA,,-43.6,-18.233333,wikidata,whc:890
+unesco-896,Isla de los Museos,MUS,unesco,DEU,,13.395556,52.521389,wikidata,whc:896
+unesco-897,Castillo de Wartburg,CAS,unesco,DEU,,10.306389,50.966111,wikidata,whc:897
+unesco-899,Beemster,BEE,unesco,,,4.9278,52.55,wikidata,whc:899
+unesco-901,Castillo de Litomyšl,CAS,unesco,CZE,,16.312649,49.873438,wikidata,whc:901
+unesco-902,Centro histórico de Sighișoara,SIG,unesco,ROU,,24.792222,46.217778,wikidata,whc:902
+unesco-904,iglesias de madera de Maramureș,IMM,unesco,ROU,,24.0558,47.8194,wikidata,whc:904
+unesco-905,Kalwaria Zebrzydowska,KAL,unesco,POL,,19.670719,49.860319,wikidata,whc:905
+unesco-906,Fortalezas dacias de las montañas Orastia,FOR,unesco,ROU,,23.3119,45.6231,wikidata,whc:906
+unesco-907,Villa Adriana,VA,unesco,ITA,,12.775278,41.941944,wikidata,whc:907
+unesco-910,Parque nacional de la Fortaleza de Brimstone Hill,FOR,unesco,KNA,,-62.83575,17.34744,wikidata,whc:910
+unesco-911,Monte Wuyi,MW,unesco,CHN,,117.683333,27.716667,wikidata,whc:911
+unesco-912,Esculturas rupestres de Dazu,ESC,unesco,CHN,,105.706944,29.713333,wikidata,whc:912
+unesco-913,Santuarios y templos de Nikkō,STN,unesco,JPN,,139.5994,36.7565,wikidata,whc:913
+unesco-915,Cuna de la Humanidad,CUN,unesco,ZAF,,27.66244,-25.967231,wikidata,whc:915
+unesco-916,Isla Robben,ROB,unesco,ZAF,,18.37,-33.805,wikidata,whc:916
+unesco-922,Rani ki vav,RAN,unesco,IND,,72.10162,23.85892,wikidata,whc:922
+unesco-925,Abrigos rupestres de Bhimbetka,ABR,unesco,IND,,77.614381,22.938633,wikidata,whc:925
+unesco-927,Sarnath,SAR,unesco,IND,,83.021389,25.381111,wikidata,whc:927
+unesco-929,San Cristóbal de La Laguna,SCL,unesco,ESP,,-16.316667,28.485278,wikidata,whc:929
+unesco-930,Palmeral de Elche,PE,unesco,ESP,,-0.690833,38.264444,wikidata,whc:930
+unesco-931,Ciudad de Graz - Centro histórico y palacio de Eggenberg,GRA,unesco,AUT,,15.391667,47.074167,wikidata,whc:931
+unesco-932,Jurisdiction of Saint-Emilion,JUR,unesco,FRA,,0.155278,44.894722,wikidata,whc:932
+unesco-933,The Loire Valley between Sully-sur-Loire and Chalonnes,LOI,unesco,FRA,,0.06218,47.21629,wikidata,whc:933
+unesco-936,Cueva de las Manos,CUE,unesco,ARG,,-70.666667,-47.15,wikidata,whc:936
+unesco-938,Paisaje cultural de Sukur,SUK,unesco,NGA,,13.571667,10.740556,wikidata,whc:938
+unesco-940,Centro histórico de Paramaribo,PAR,unesco,SUR,,-55.15387,5.826,wikidata,whc:940
+unesco-941,Sitios arqueológicos de Micenas y Tirinto,MIC,unesco,GRC,,22.75,37.733333,wikidata,whc:941
+unesco-942,Monasterio de San Juan el Teólogo,MSJ,unesco,GRC,,26.548053,37.309189,wikidata,whc:942
+unesco-943,Campanarios de Bélgica y Francia,CAM,unesco,BEL,,3.514842,50.635266,wikidata,whc:943
+unesco-945,Estación Chhatrapati Shivaji Maharaj,EST,unesco,IND,,72.8355,18.9398,wikidata,whc:945
+unesco-948,Hội An,HOI,unesco,VNM,,108.33265,15.877669,wikidata,whc:948
+unesco-949,Santuario Mi-Sön,SAN,unesco,VNM,,108.124446,15.76324,wikidata,whc:949
+unesco-950,Colina real de Ambohimanga,COL,unesco,MDG,,47.562778,-18.759167,wikidata,whc:950
+unesco-954,Saint Catherine Area,SAI,unesco,EGY,,33.97543,28.55623,wikidata,whc:954
+unesco-956,isla de San Luis,SAN,unesco,SEN,,-16.504439,16.027781,wikidata,whc:956
+unesco-958,Agha Zeynal Bathhouse,AGH,unesco,AZE,,49.837861,40.366528,wikidata,whc:958
+unesco-959,Barrio histórico de la ciudad portuaria de Valparaíso,POR,unesco,CHL,,-71.628,-33.040639,wikidata,whc:959
+unesco-960,Monastery of Geghard and the Upper Azat Valley,MGU,unesco,ARM,,44.79667,40.15889,wikidata,whc:960
+unesco-963,Catedral de Santiago,CAT,unesco,HRV,,15.889167,43.735556,wikidata,whc:963
+unesco-965,Casa Rietveld Schröder,CAS,unesco,,,5.147597,52.085333,wikidata,whc:965
+unesco-968,Paisaje agrícola del sur de Öland,AGR,unesco,SWE,,16.55,56.466667,wikidata,whc:968
+unesco-970,Wachau,WAC,unesco,AUT,,15.43417,48.36444,wikidata,whc:970
+unesco-971,iglesias de Chiloé,IGL,unesco,CHL,,-73.766667,-42.5,wikidata,whc:971
+unesco-972,Sitios Gusuku y bienes culturales asociados del reino de Ryūkyū,GUS,unesco,JPN,,127.683,26.2086,wikidata,whc:972
+unesco-973,Bardejov Town Conservation Reserve,BAR,unesco,SVK,,21.27917,49.29333,wikidata,whc:973
+unesco-974,Reichenau,REC,unesco,DEU,,9.063056,47.693056,wikidata,whc:974
+unesco-975,Complejo industrial de la mina de carbón de Zollverein,COM,unesco,DEU,,7.04408,51.4865,wikidata,whc:975
+unesco-976,Zonas históricas de Kyongju,KYO,unesco,KOR,,129.226667,35.788889,wikidata,whc:976
+unesco-977,"Sitios de dólmenes de Koch'ang, Hwasun y Kanghwa",DOL,unesco,KOR,,126.92917,34.96667,wikidata,whc:977
+unesco-978,Corfú,COR,unesco,GRC,,19.921389,39.623889,wikidata,whc:978
+unesco-980,Kremlin de Kazán,KRE,unesco,RUS,,49.10724,55.797442,wikidata,whc:980
+unesco-981,Bolgar Historical and Archaeological Complex,BOL,unesco,RUS,,49.05639,54.97889,wikidata,whc:981
+unesco-982,Monasterio de Ferapóntov,MF,unesco,RUS,,38.5675,59.956389,wikidata,whc:982
+unesco-983,St George and Related Fortifications,ST,unesco,GBR,,-64.677778,32.379444,wikidata,whc:983
+unesco-984,Paisaje industrial de Blaenavon,IND,unesco,GBR,,-3.092222,51.770278,wikidata,whc:984
+unesco-985,Maloti-Drakensberg Park,MAL,unesco,LSO,,29.3939,-29.4665,wikidata,whc:985
+unesco-986,Ciudad Universitaria de Caracas,UNI,unesco,VEN,,-66.890556,10.490833,wikidata,whc:986
+unesco-987,Muralla romana de Lugo,MUR,unesco,ESP,,-7.559889,43.014194,wikidata,whc:987
+unesco-988,iglesias románicas del Valle de Bohí,IGL,unesco,ESP,,0.803611,42.504722,wikidata,whc:988
+unesco-989,Sitio arqueológico de Atapuerca,ATA,unesco,ESP,,-3.519466,42.350092,wikidata,whc:989
+unesco-990,"Asís, la Basílica de San Francisco y otros sitios franciscanos",ASI,unesco,ITA,,12.622444,43.066167,wikidata,whc:990
+unesco-993,Centro histórico de Goiás,GOI,unesco,BRA,,-50.13336,-15.93328,wikidata,whc:993
+unesco-994,Istmo de Curlandia,IST,unesco,LTU,,20.970833,55.274444,wikidata,whc:994
+unesco-995,Manzana Jesuítica y Estancias de Córdoba,MAN,unesco,ARG,,-64.435278,-31.656111,wikidata,whc:995
+unesco-996,Centro histórico de Brujas,BRU,unesco,BEL,,3.22527,51.20891,wikidata,whc:996
+unesco-1001,Qingchengshan-Dujiangyan National Park,QIN,unesco,CHN,,103.5679,30.9068,wikidata,whc:1001
+unesco-1002,Antiguos poblados del sur de Anhui - Xidi y Hongcun,POB,unesco,CHN,,117.9875,29.904444,wikidata,whc:1002
+unesco-1003,Grutas de Longmen,GRU,unesco,CHN,,112.469722,34.555556,wikidata,whc:1003
+unesco-1004,Tumbas imperiales de las dinastías Ming y Qing,TUM,unesco,CHN,,112.65,31.016667,wikidata,whc:1004
+unesco-1005,Obra de Victor Horta en Bruselas,OBR,unesco,BEL,,4.35,50.816667,wikidata,whc:1005
+unesco-1006,Minas neolíticas de sílex de Spiennes,MIN,unesco,BEL,,3.982575,50.419989,wikidata,whc:1006
+unesco-1008,Paisaje arqueológico de las primeras plantaciones de café de Cuba,PRI,unesco,CUB,,-75.3914,20.03,wikidata,whc:1008
+unesco-1009,Catedral de Nuestra Señora de Tournai,CAT,unesco,BEL,,3.388903,50.606502,wikidata,whc:1009
+unesco-1010,Tierra del incienso,TIE,unesco,OMN,,53.647592,18.253333,wikidata,whc:1010
+unesco-1011,Cathedral and Churches of Echmiatsin and the Archaeological Site of Zvartnots,CAT,unesco,ARM,,44.295139,40.159306,wikidata,whc:1011
+unesco-1014,Parque nacional de Niah,NIA,unesco,MYS,,113.781389,3.813889,wikidata,whc:1014
+unesco-1016,Centro histórico de Arequipa,ARE,unesco,PER,,-71.533333,-16.4,wikidata,whc:1016
+unesco-1018,Efeso,EFE,unesco,TUR,,27.35944,37.92917,wikidata,whc:1018
+unesco-1021,Tsodilo,TSO,unesco,BWA,,21.754167,-18.771667,wikidata,whc:1021
+unesco-1022,Tumbas de los reyes de Buganda en Kasubi,TUM,unesco,UGA,,32.553333,0.329167,wikidata,whc:1022
+unesco-1024,Late Baroque Towns of the Val di Noto,LAT,unesco,ITA,,14.512222,37.239722,wikidata,whc:1024
+unesco-1025,Villa de Este,VE,unesco,ITA,,12.796111,41.9625,wikidata,whc:1025
+unesco-1026,Valle de Orcia,VO,unesco,ITA,,11.55,43.066667,wikidata,whc:1026
+unesco-1027,Gran Montaña de Cobre de Falun,GMC,unesco,SWE,,15.630833,60.604722,wikidata,whc:1027
+unesco-1028,Saltaire,SAL,unesco,GBR,,-1.79026,53.83717,wikidata,whc:1028
+unesco-1030,Fábricas del valle del Derwent,FAB,unesco,GBR,,-1.556,53.108,wikidata,whc:1030
+unesco-1031,Centro histórico de Guimarães,GUI,unesco,PRT,,-8.290838,41.445157,wikidata,whc:1031
+unesco-1033,Centro Histórico de Viena,VIE,unesco,AUT,,16.3722,48.2084,wikidata,whc:1033
+unesco-1039,Grutas de Yungang,GY,unesco,CHN,,113.122222,40.109722,wikidata,whc:1039
+unesco-1040,Masada,MAS,unesco,ISR,,35.353889,31.315556,wikidata,whc:1040
+unesco-1042,Acre,ACR,unesco,ISR,,35.083889,32.926111,wikidata,whc:1042
+unesco-1044,Paisaje cultural de Aranjuez,ARN,unesco,ESP,,-3.60934,40.0364,wikidata,whc:1044
+unesco-1046,Región vitícola del Alto Duero,REG,unesco,PRT,,-7.517743,41.165745,wikidata,whc:1046
+unesco-1052,Villa Tugendhat,VIL,unesco,CZE,,16.615833,49.207222,wikidata,whc:1052
+unesco-1053,iglesias de la Pequeña Polonia,IGL,unesco,POL,,21.186051,49.630591,wikidata,whc:1053
+unesco-1054,iglesias de la Paz de Jawor y Świdnica,IPJ,unesco,POL,,16.189041,51.053914,wikidata,whc:1054
+unesco-1055,Lamu,LAM,unesco,KEN,,40.900278,-2.268611,wikidata,whc:1055
+unesco-1056,conjunto de templos de Mahabodhi,TM,unesco,IND,,84.991358,24.696004,wikidata,whc:1056
+unesco-1058,Mazagán,MAZ,unesco,MAR,,-8.502475,33.256561,wikidata,whc:1058
+unesco-1063,Tokaj Wine Region Historic Cultural Landscape,TOK,unesco,HUN,,21.35,48.15,wikidata,whc:1063
+unesco-1066,Valle Superior del Medio Rin,VAL,unesco,DEU,,7.694169,50.1736,wikidata,whc:1066
+unesco-1067,Centros históricos de Stralsund y Wismar,CEN,unesco,DEU,,13.085278,54.3025,wikidata,whc:1067
+unesco-1068,Sacri Monti de Piamonte y de Lombardía,SAC,unesco,ITA,,9.169556,45.974556,wikidata,whc:1068
+unesco-1070,Faro de Derbent,FAR,unesco,RUS,,48.29601,42.06134,wikidata,whc:1070
+unesco-1073,Gebel Barkal y sitios de la región napatea,GEB,unesco,SDN,,31.816667,18.533333,wikidata,whc:1073
+unesco-1076,Parque nacional de Gobustán,GOB,unesco,AZE,,49.388889,40.105556,wikidata,whc:1076
+unesco-1077,Tajt-e Soleimán,TAJ,unesco,IRN,,47.234167,36.604722,wikidata,whc:1077
+unesco-1078,Barrio judío y basílica de San Procopio en Třebíč,JUD,unesco,CZE,,15.8789,49.2172,wikidata,whc:1078
+unesco-1081,Valle del Orjón,VAL,unesco,MNG,,102.831389,47.556667,wikidata,whc:1081
+unesco-1084,Real Jardín Botánico de Kew,REA,unesco,GBR,,-0.293611,51.478889,wikidata,whc:1084
+unesco-1087,Ayuntamiento de Bremen,AYU,unesco,DEU,,8.8076,53.0759,wikidata,whc:1087
+unesco-1091,Conjunto de tumbas de Koguryo,TUM,unesco,PRK,,125.415,38.863056,wikidata,whc:1091
+unesco-1093,Um er-Rasas,UM,unesco,JOR,,35.919722,31.499722,wikidata,whc:1093
+unesco-1096,Ciudad blanca de Tel Aviv,BLA,unesco,ISR,,34.773889,32.077778,wikidata,whc:1096
+unesco-1097,Monasterio Novodévichi,MN,unesco,RUS,,37.556583,55.725972,wikidata,whc:1097
+unesco-1099,Mapungubwe,MAP,unesco,ZAF,,29.387889,-22.211667,wikidata,whc:1099
+unesco-1100,Bosque Tijuca,BOS,unesco,BRA,,-43.245,-22.963,wikidata,whc:1100
+unesco-1101,Parque Arqueológico de Champaner-Pavagadh,CHA,unesco,IND,,73.533333,22.483333,wikidata,whc:1101
+unesco-1103,Mausoleo de Khoja Ahmad Yasavi,MAU,unesco,KAZ,,68.271042,43.297644,wikidata,whc:1103
+unesco-1106,Pasargada,PAS,unesco,IRN,,53.179444,30.2,wikidata,whc:1106
+unesco-1107,Ruta del incienso - Ciudades del desierto de Néguev,RUT,unesco,ISR,,34.657778,31.0975,wikidata,whc:1107
+unesco-1108,"“Tells” bíblicos – Megido, Hazor y Beer Sheba",TEL,unesco,ISR,,35.18222,32.59722,wikidata,whc:1108
+unesco-1110,Capilla Protestante,CAP,unesco,CHN,,113.53991,22.19975,wikidata,whc:1110
+unesco-1111,Paisaje cultural de los arrozales en terrazas de los hani de Honghe,ARR,unesco,CHN,,102.7377,23.117187,wikidata,whc:1111
+unesco-1112,Kaiping Diaolou and Villages,KAI,unesco,CHN,,112.520782,22.261814,wikidata,whc:1112
+unesco-1113,Fujian Tulou,FUJ,unesco,CHN,,116.975,24.6587,wikidata,whc:1113
+unesco-1114,Yin Xu,YIN,unesco,CHN,,114.318611,36.1225,wikidata,whc:1114
+unesco-1116,Quebrada de Humahuaca,QUE,unesco,ARG,,-65.348861,-23.199861,wikidata,whc:1116
+unesco-1117,Paisaje vitícola de la isla del Pico,VIT,unesco,PRT,,-28.541111,38.513333,wikidata,whc:1117
+unesco-1118,Bosque sagrado de Osun-Osogbo,BOS,unesco,NGA,,4.550625,7.75491,wikidata,whc:1118
+unesco-1127,Parque de Muskau,MUK,unesco,DEU,,14.723229,51.547559,wikidata,whc:1127
+unesco-1130,Assur,ASS,unesco,IRQ,,43.2625,35.456667,wikidata,whc:1130
+unesco-1131,Palacio Real de Exposiciones y Jardines Carlton,PAL,unesco,AUS,,144.970278,-37.806111,wikidata,whc:1131
+unesco-1134,Estación de radiotelegrafía de Varberg,EST,unesco,SWE,,12.404417,57.113983,wikidata,whc:1134
+unesco-1135,Capitales y tumbas del antiguo reino de Koguryo,CTR,unesco,CHN,,126.187222,41.156944,wikidata,whc:1135
+unesco-1137,Reserva cultural de Kernavė,RES,unesco,LTU,,24.841667,54.880556,wikidata,whc:1137
+unesco-1139,Tumba de los Askia,TUM,unesco,MLI,,-0.044444,16.289722,wikidata,whc:1139
+unesco-1140,Koutammakou,KOU,unesco,BEN,,1.066667,10.1,wikidata,whc:1140
+unesco-1141,Sarazm,SAR,unesco,TJK,,67.566667,39.516667,wikidata,whc:1141
+unesco-1142,Sitios sagrados y rutas de peregrinación de los Montes Kii,SAG,unesco,JPN,,135.77639,33.83694,wikidata,whc:1142
+unesco-1143,Archipiélago de Vega,ARC,unesco,NOR,,11.9,65.633333,wikidata,whc:1143
+unesco-1145,Tamgaly,TAM,unesco,KAZ,,75.535,43.803333,wikidata,whc:1145
+unesco-1147,Ecosistema y paisaje cultural de Lopé-Okanda,ECO,unesco,GAB,,11.5,-0.5,wikidata,whc:1147
+unesco-1152,Þingvellir,ING,unesco,ISL,,-21.125,64.258056,wikidata,whc:1152
+unesco-1153,Paisaje cultural agropastoral mediterráneo de Causses y Cévennes,AGR,unesco,FRA,,3.4731,44.2203,wikidata,whc:1153
+unesco-1155,Old town of Regensburg with Stadtamhof,REG,unesco,DEU,,12.096944,49.017222,wikidata,whc:1155
+unesco-1158,necrópolis etruscas de Cerveteri y Tarquinia,NEC,unesco,ITA,,12.101889,42.006833,wikidata,whc:1158
+unesco-1160,Valle de Madriu-Perafita-Claror,VAL,unesco,AND,,1.594426,42.492147,wikidata,whc:1160
+unesco-1165,Centro del Centenario de Wrocław,CEN,unesco,POL,,17.077222,51.106944,wikidata,whc:1165
+unesco-1170,Centro Histórico de Yaroslavl,YAR,unesco,RUS,,39.8875,57.623611,wikidata,whc:1170
+unesco-1174,Parque nacional natural Sierra de Chiribiquete,NAT,unesco,COL,,-72.8054,0.700607,wikidata,whc:1174
+unesco-1178,Oficinas salitreras de Humberstone y Santa Laura,OFI,unesco,CHL,,-69.794444,-20.208333,wikidata,whc:1178
+unesco-1181,Centro reconstruido de El Havre,REC,unesco,FRA,,0.115222,49.4891,wikidata,whc:1181
+unesco-1183,Sitios de arte rupestre de Kondoa,ART,unesco,TZA,,35.83389,-4.72444,wikidata,whc:1183
+unesco-1185,Museo Plantin-Moretus,MUS,unesco,BEL,,4.398164,51.218294,wikidata,whc:1185
+unesco-1187,Arco Geodésico de Struve,ARC,unesco,BLR,,25.649444,52.289444,wikidata,whc:1187
+unesco-1188,Soltaniyeh,SOL,unesco,IRN,,48.7975,36.434722,wikidata,whc:1188
+unesco-1189,"Harar Jugol, la ciudad histórica fortificada",HAR,unesco,ETH,,42.1372,9.3091,wikidata,whc:1189
+unesco-1192,Qal'at al-Bahrain,QAL,unesco,BHR,,50.520556,26.233611,wikidata,whc:1192
+unesco-1194,Pegulingan Temple,PEG,unesco,IDN,,115.31777,-8.41498,wikidata,whc:1194
+unesco-1196,Castillo de Nesvizh,CN,unesco,BLR,,26.691736,53.222878,wikidata,whc:1196
+unesco-1199,Kunya-Urgench,KUN,unesco,TKM,,59.153071,42.326134,wikidata,whc:1199
+unesco-1200,Parque Arqueológico de Neápolis,NEA,unesco,ITA,,15.277494,37.07529,wikidata,whc:1200
+unesco-1201,Monte Mulanje,MON,unesco,MWI,,35.65,-15.9,wikidata,whc:1201
+unesco-1202,Centro Histórico de Cienfuegos,CIE,unesco,CUB,,-80.436389,22.145556,wikidata,whc:1202
+unesco-1207,Sistemas de irrigación aflaj,SIS,unesco,OMN,,57.536056,22.998889,wikidata,whc:1207
+unesco-1208,Arg-é Bam,ARG,unesco,IRN,,58.368475,29.116856,wikidata,whc:1208
+unesco-1211,Red de edificios en el Rolli de Génova,RED,unesco,ITA,,8.931111,44.412222,wikidata,whc:1211
+unesco-1214,Sewell,SEW,unesco,CHL,,-70.3825,-34.085,wikidata,whc:1214
+unesco-1215,Paisaje minero de Cornualles y el oeste de Devon,MIN,unesco,GBR,,-5.383611,50.136111,wikidata,whc:1215
+unesco-1217,puente Vizcaya,PUE,unesco,ESP,,-3.016944,43.323056,wikidata,whc:1217
+unesco-1220,Edificios del Centro Mudial Bahaí,EDI,unesco,ISR,,34.98655,32.81378,wikidata,whc:1220
+unesco-1221,canal Rideau,CAN,unesco,CAN,,-75.765125,44.994386,wikidata,whc:1221
+unesco-1222,inscripción de Behistún,INS,unesco,IRN,,47.435889,34.390361,wikidata,whc:1222
+unesco-1224,Preah Vihear,PRE,unesco,KHM,,104.680278,14.390556,wikidata,whc:1224
+unesco-1225,Ruins of Loropéni,RUI,unesco,BFA,,-3.563056,10.310278,wikidata,whc:1225
+unesco-1226,círculos Megalíticos de Senegambia,CIR,unesco,GMB,,-14.866667,13.7,wikidata,whc:1226
+unesco-1227,Aapravasi Ghat,AAP,unesco,MUS,,57.503056,-20.158611,wikidata,whc:1227
+unesco-1229,Crac des Chevaliers and Qal’at Salah El-Din,CRA,unesco,SYR,,36.263056,34.781667,wikidata,whc:1229
+unesco-1230,Sulamain Too,SUL,unesco,KGZ,,72.783333,40.529444,wikidata,whc:1230
+unesco-1231,Bosques sagrados de kayas de los Mijikenda,BOS,unesco,KEN,,39.596111,-3.931944,wikidata,whc:1231
+unesco-1236,Catedral de León,CAT,unesco,NIC,,-86.878097,12.434997,wikidata,whc:1236
+unesco-1239,Casas de estilo moderno en Berlín,CEM,unesco,DEU,,13.45,52.448333,wikidata,whc:1239
+unesco-1240,Llanura de Stari Grad,LLA,unesco,HRV,,16.638611,43.181667,wikidata,whc:1240
+unesco-1242,Nisa,NIS,unesco,TKM,,58.212408,37.951147,wikidata,whc:1242
+unesco-1243,Lavaux,LAV,unesco,CHE,,6.746111,46.491944,wikidata,whc:1243
+unesco-1245,Centro Histórico de San Marino y Monte Titano,SAN,unesco,SMR,,12.451944,43.932778,wikidata,whc:1245
+unesco-1246,Minas de plata de Iwami Ginzan,MIN,unesco,JPN,,132.4375,35.107222,wikidata,whc:1246
+unesco-1253,Gamzigrad,GAM,unesco,SRB,,22.186167,43.899306,wikidata,whc:1253
+unesco-1255,Twyfelfontein,TWY,unesco,NAM,,14.372583,-20.595583,wikidata,whc:1255
+unesco-1256,Puerto de la Luna,PL,unesco,FRA,,-0.572222,44.838889,wikidata,whc:1256
+unesco-1259,Morne Brabant,MOR,unesco,MUS,,57.313611,-20.460556,wikidata,whc:1259
+unesco-1260,puente Mehmed Paša Sokolović,PUE,unesco,BIH,,19.287872,43.782482,wikidata,whc:1260
+unesco-1262,Monasterios armenios de Irán,MON,unesco,IRN,,45.473333,38.978889,wikidata,whc:1262
+unesco-1265,Parque nacional de Richtersveld,RIC,unesco,ZAF,,17.203889,-28.6,wikidata,whc:1265
+unesco-1268,Historic Center of Agadez,AGA,unesco,NER,,7.9896,16.9744,wikidata,whc:1268
+unesco-1270,Centro Histórico de Camagüey,CAM,unesco,CUB,,-80.4531,22.1424,wikidata,whc:1270
+unesco-1272,Plaza San Francisco,PLA,unesco,BRA,,-37.205556,-11.013611,wikidata,whc:1272
+unesco-1273,iglesias de madera de los Cárpatos,IGL,unesco,SVK,,19.558333,49.336111,wikidata,whc:1273
+unesco-1276,Ferrocarril rético en el paisaje de los ríos Albula y Bernina,FER,unesco,CHE,,10.0197,46.4089,wikidata,whc:1276
+unesco-1277,Monumentos históricos de Hiraizumi,HIR,unesco,JPN,,141.110278,38.988611,wikidata,whc:1277
+unesco-1278,Historic Monuments and Sites in Kaesong,MON,unesco,PRK,,126.508056,37.981667,wikidata,whc:1278
+unesco-1279,Monte Wutai,MOW,unesco,CHN,,113.566944,39.081389,wikidata,whc:1279
+unesco-1280,Chief Roi Mata’s Domain,CHI,unesco,VUT,,168.23399,-17.69364,wikidata,whc:1280
+unesco-1282,Granjas de Hälsingland,GH,unesco,SWE,,16.195833,61.707222,wikidata,whc:1282
+unesco-1283,Fortificaciones de Vauban,FOR,unesco,FRA,,2.758889,50.2825,wikidata,whc:1283
+unesco-1287,Mantua y Sabbionetta,MAN,unesco,ITA,,10.794444,45.159444,wikidata,whc:1287
+unesco-1293,Hegra,HEG,unesco,SAU,,37.9475,26.814167,wikidata,whc:1293
+unesco-1295,Fuerte Jesús,FUE,unesco,KEN,,39.682056,-4.071167,wikidata,whc:1295
+unesco-1298,Palacio Stoclet,PAL,unesco,BEL,,4.41625,50.83514,wikidata,whc:1298
+unesco-1302,"La Chaux-de-Fonds / Le Locle, Watchmaking Town Planning",CHA,unesco,CHE,,6.78,47.08,wikidata,whc:1302
+unesco-1303,Acueducto de Pontcysyllte,ACU,unesco,GBR,,-3.08782,52.9702,wikidata,whc:1303
+unesco-1305,Historic Monuments of Dengfeng in “The Centre of Heaven and Earth”,MDI,unesco,CHN,,113.067719,34.458747,wikidata,whc:1305
+unesco-1306,Sitios australianos de presidios,AUS,unesco,AUS,,150.994444,-33.378333,wikidata,whc:1306
+unesco-1308,Paraty and Ilha Grande – Culture and Biodiversity,PAR,unesco,BRA,,-44.6854,-23.0186,wikidata,whc:1308
+unesco-1310,Cidade Velha,CID,unesco,CPV,,-23.604167,14.916667,wikidata,whc:1310
+unesco-1312,Torre de Hércules,TOR,unesco,ESP,,-8.406389,43.385833,wikidata,whc:1312
+unesco-1313,"Patrimonio del mercurio, Almadén e Idrija",PAT,unesco,ESP,,14.026667,46.003889,wikidata,whc:1313
+unesco-1315,Sistema hidráulico de Shushtar,SIS,unesco,IRN,,48.848687,32.053723,wikidata,whc:1315
+unesco-1318,Centros de poder de los longobardos en Italia (568-774 d.C.),CEN,unesco,ITA,,13.433056,46.094167,wikidata,whc:1318
+unesco-1319,Tumbas reales de la dinastía Joseon,TUM,unesco,KOR,,128.452778,37.197222,wikidata,whc:1319
+unesco-1321,Obra arquitectónica de Le Corbusier,OBR,unesco,ARG,,6.829336,46.468414,wikidata,whc:1321
+unesco-1322,Centro Histórico de Grand-Bassam,GRA,unesco,CIV,,-3.7368,5.1965,wikidata,whc:1322
+unesco-1324,Historic Villages of Korea: Hahoe and Yangdong,VIL,unesco,KOR,,128.516667,36.539167,wikidata,whc:1324
+unesco-1326,Monumento nacional marino de Papahānaumokuākea,MAR,unesco,USA,,-170.5,25.5,wikidata,whc:1326
+unesco-1328,Ciudad imperial de Thang Long,ITL,unesco,VNM,,105.83972,21.0325,wikidata,whc:1328
+unesco-1329,Distrito de At Turaif en ad Dir’iyá,DIS,unesco,SAU,,46.575556,24.733333,wikidata,whc:1329
+unesco-1330,Residencia de los metropolitanos de Bucovina y Dalmacia,RES,unesco,UKR,,25.924906,48.296642,wikidata,whc:1330
+unesco-1333,Konso Cultural Landscape,KON,unesco,ETH,,37.48306,5.25,wikidata,whc:1333
+unesco-1334,Lago del Oeste de Hanzhu,LAG,unesco,CHN,,120.140833,30.2375,wikidata,whc:1334
+unesco-1336,Archaeological Sites of the Island of Meroe,ARC,unesco,SDN,,33.716667,16.933333,wikidata,whc:1336
+unesco-1337,ciudad episcopal de Albi,EPI,unesco,FRA,,2.1425,43.9283,wikidata,whc:1337
+unesco-1338,Jantar Mantar,JAN,unesco,IND,,75.825,26.924722,wikidata,whc:1338
+unesco-1339,Atolón Bikini,ATO,unesco,MHL,,165.4,11.6,wikidata,whc:1339
+unesco-1343,"Sitios culturales de Al Ain: Hafit, Hili, Bidaa Bint Saud y zonas de los oasis",AIN,unesco,ARE,,55.806389,24.067778,wikidata,whc:1343
+unesco-1344,Major Mining Sites of Wallonia,MAJ,unesco,BEL,,3.838333,50.435278,wikidata,whc:1344
+unesco-1345,santuario y tumba del jefe Safí al-Din,SAN,unesco,IRN,,48.291389,38.248611,wikidata,whc:1345
+unesco-1346,Bazar de Tabriz,BAZ,unesco,IRN,,46.292286,38.080772,wikidata,whc:1346
+unesco-1348,Aldeas antiguas del norte de Siria,ALD,unesco,SYR,,36.844167,36.334167,wikidata,whc:1348
+unesco-1349,Grachtengordel,GRA,unesco,,,4.885833,52.366389,wikidata,whc:1349
+unesco-1356,Blue and John Crow Mountains,BLU,unesco,JAM,,-76.571111,18.0775,wikidata,whc:1356
+unesco-1358,Ciudadela de la dinastía Ho,CIU,unesco,VNM,,105.604722,20.078056,wikidata,whc:1358
+unesco-1359,Delta del Saloum,DEL,unesco,SEN,,-16.498611,13.835278,wikidata,whc:1359
+unesco-1360,región minera del norte de Francia,REG,unesco,FRA,,3.54611,50.4625,wikidata,whc:1360
+unesco-1361,"Al-Balad, Jeddah",BAL,unesco,SAU,,39.2,21.4833,wikidata,whc:1361
+unesco-1363,sitios palafíticos prehistóricos de los Alpes,PPA,unesco,AUT,,9.120992,47.674597,wikidata,whc:1363
+unesco-1364,Industria perlífera de Baréin,IND,unesco,BHR,,50.61,26.25,wikidata,whc:1364
+unesco-1366,Mezquita de Selim,MEZ,unesco,TUR,,26.559444,41.678056,wikidata,whc:1366
+unesco-1367,Guarnición fronteriza y fortificaciones de la ciudad de Elvas,GUA,unesco,PRT,,-7.163333,38.880556,wikidata,whc:1367
+unesco-1368,Fábrica Fagus,FF,unesco,DEU,,9.81256,51.9837,wikidata,whc:1368
+unesco-1370,Parque nacional Beit Guvrin,BEI,unesco,ISR,,34.898333,31.613056,wikidata,whc:1370
+unesco-1371,Paisaje Cultural de la Sierra de la Tramontana,SIE,unesco,ESP,,2.69472,39.73083,wikidata,whc:1371
+unesco-1375,Santiniketan,SAT,unesco,IND,,87.6852,23.6776,wikidata,whc:1375
+unesco-1376,Bridgetown,BRI,unesco,BRB,,-59.616667,13.0975,wikidata,whc:1376
+unesco-1377,Uadi Rum,UAD,unesco,JOR,,35.419928,29.5765,wikidata,whc:1377
+unesco-1379,Ópera del Margrave,OPE,unesco,DEU,,11.578664,49.944345,wikidata,whc:1379
+unesco-1382,Conjuntos de petroglifos del Altái mongol,CON,unesco,MNG,,88.395278,49.333889,wikidata,whc:1382
+unesco-1386,Rock Islands Southern Lagoon,ROC,unesco,PLW,,134.3525,7.2469,wikidata,whc:1386
+unesco-1387,Universidad de Coimbra – Alta y Sofía,UNI,unesco,PRT,,-8.425775,40.207811,wikidata,whc:1387
+unesco-1389,Xanadú,XAN,unesco,CHN,,116.185159,42.358021,wikidata,whc:1389
+unesco-1390,Paisaje vitícola del Piamonte: Langhe-Roero y Monferrato,VIT,unesco,ITA,,7.994167,44.651944,wikidata,whc:1390
+unesco-1393,Cuevas de Nahal Me'arot,CUE,unesco,,,34.966111,32.670833,wikidata,whc:1393
+unesco-1396,Archaeological Heritage of the Lenggong Valley,ARC,unesco,MYS,,100.972,5.06791,wikidata,whc:1396
+unesco-1397,Gran Mezquita de Isfahán,GRA,unesco,IRN,,51.685278,32.669722,wikidata,whc:1397
+unesco-1398,Gonbad-e Qābus,GON,unesco,IRN,,55.168991,37.258121,wikidata,whc:1398
+unesco-1399,Ciudad histórica portuaria de Levuka,POR,unesco,FJI,,178.834533,-17.683378,wikidata,whc:1399
+unesco-1401,Rabat,RAB,unesco,MAR,,-6.841389,34.021111,wikidata,whc:1401
+unesco-1402,Zubarah,ZUB,unesco,QAT,,51.027219,25.983395,wikidata,whc:1402
+unesco-1404,Grand-Pré,GRA,unesco,CAN,,-64.309167,45.108889,wikidata,whc:1404
+unesco-1405,Çatalhöyük,CAT,unesco,TUR,,32.828333,37.6675,wikidata,whc:1405
+unesco-1407,País Basari,PAI,unesco,SEN,,-12.845833,12.593333,wikidata,whc:1407
+unesco-1411,"Ciudad antigua del Quersoneso táurico y sus ""chôra""",QUE,unesco,RUS,,33.49139,44.61083,wikidata,whc:1411
+unesco-1412,Estación ballenera vasca de Bahía Roja,EST,unesco,CAN,,-56.429528,51.726917,wikidata,whc:1412
+unesco-1413,Bergpark Wilhelmshöhe,BER,unesco,DEU,,9.4,51.3167,wikidata,whc:1413
+unesco-1415,Pimachiowin Aki,PIM,unesco,CAN,,-95.0,51.0,wikidata,whc:1415
+unesco-1418,"Fujisan, sacred place and source of artistic inspiration",FUJ,unesco,JPN,,138.7275,35.3608,wikidata,whc:1418
+unesco-1422,Palacio de Golestán,PAL,unesco,IRN,,51.420278,35.679722,wikidata,whc:1422
+unesco-1423,Maymand,MAY,unesco,IRN,,55.375556,30.168056,wikidata,whc:1423
+unesco-1424,Tserkvas de madera de la región de los Cárpatos en Polonia y Ucrania,TSE,unesco,POL,,21.0322,49.5339,wikidata,whc:1424
+unesco-1425,"Climats, terroirs of Burgundy",CLI,unesco,FRA,,4.864444,47.058056,wikidata,whc:1425
+unesco-1426,Cueva de Chauvet,CUE,unesco,FRA,,4.416141,44.388122,wikidata,whc:1426
+unesco-1433,basílica de la Natividad,BAS,unesco,PSE,,35.207583,31.704306,wikidata,whc:1433
+unesco-1435,Poverty Point,POV,unesco,USA,,-91.408333,32.6425,wikidata,whc:1435
+unesco-1437,Ciudadela de Erbil,CIU,unesco,IRQ,,44.009,36.191,wikidata,whc:1437
+unesco-1438,Tràng An,TRA,unesco,VNM,,105.9156,20.2557,wikidata,whc:1438
+unesco-1439,Namhansanseong,NAM,unesco,KOR,,127.184194,37.478028,wikidata,whc:1439
+unesco-1440,Burkhan Khaldun,BUR,unesco,MNG,,109.166667,48.783333,wikidata,whc:1440
+unesco-1441,Factoría Van Nelle,FAC,unesco,,,4.433611,51.922778,wikidata,whc:1441
+unesco-1442,Ruta de la Seda: Corredor Chang'an-Tian Shan,RUT,unesco,CHN,,108.8572,34.3044,wikidata,whc:1442
+unesco-1443,Gran Canal de China,GRA,unesco,CHN,,120.223889,30.261389,wikidata,whc:1443
+unesco-1444,Pyu Ancient Cities,PYU,unesco,MMR,,95.818611,22.47,wikidata,whc:1444
+unesco-1446,Al-Maghtas,MAG,unesco,JOR,,35.550278,31.837222,wikidata,whc:1446
+unesco-1447,Corvey,COR,unesco,DEU,,9.41,51.777778,wikidata,whc:1447
+unesco-1449,The Tomioka Silk Mill and Related Industrial Heritage,TOM,unesco,JPN,,138.8878,36.2553,wikidata,whc:1449
+unesco-1450,Thimlich Ohinga,THI,unesco,KEN,,34.326107,-0.891338,wikidata,whc:1450
+unesco-1452,Bursa y Cumalıkızık: nacimiento del Imperio otomano,BUR,unesco,TUR,,29.06234,40.18473,wikidata,whc:1452
+unesco-1453,Precolumbian Chiefdom Settlements with Stone Spheres of the Diquís,PRE,unesco,CRI,,-83.502539,8.938453,wikidata,whc:1453
+unesco-1455,Susa,SUS,unesco,IRN,,48.256111,32.189444,wikidata,whc:1455
+unesco-1456,Shahr-i Sokhta,SHA,unesco,IRN,,61.331944,30.595278,wikidata,whc:1456
+unesco-1457,Pérgamo y su paisaje cultural de estratos múltiples,PER,unesco,TUR,,27.18,39.12583,wikidata,whc:1457
+unesco-1459,Qhapaq Ñan,QHA,unesco,ARG,,-69.591667,-18.25,wikidata,whc:1459
+unesco-1464,paisaje cultural industrial de Fray Bentos,IND,unesco,URY,,-58.331667,-33.117778,wikidata,whc:1464
+unesco-1465,"Champagne hillsides, houses and cellars",CHA,unesco,FRA,,3.94611,49.0775,wikidata,whc:1465
+unesco-1466,misiones de San Antonio,MIS,unesco,USA,,-98.46,29.3281,wikidata,whc:1466
+unesco-1467,Speicherstadt and Kontorhaus District with Chilehaus,SPE,unesco,DEU,,9.991944,53.543333,wikidata,whc:1467
+unesco-1468,Christiansfeld,CHR,unesco,DEU,,9.483056,55.356667,wikidata,whc:1468
+unesco-1469,Par force hunting landscape in North Zealand,PAR,unesco,DNK,,12.3578,55.9136,wikidata,whc:1469
+unesco-1470,Catedral de Naumburgo,CN,unesco,DEU,,11.803889,51.154722,wikidata,whc:1470
+unesco-1471,Parque nacional Beit She'arim,BSA,unesco,ISR,,35.128056,32.704167,wikidata,whc:1471
+unesco-1472,Rock Art in the Hail Region of Saudi Arabia,ROC,unesco,SAU,,40.9,28.0,wikidata,whc:1472
+unesco-1473,Sculptural Ensemble of Constantin Brâncuși at Târgu Jiu,SCU,unesco,ROU,,23.285375,45.037431,wikidata,whc:1473
+unesco-1474,Sitios del sistema tusi,SIS,unesco,CHN,,109.966944,28.998611,wikidata,whc:1474
+unesco-1475,Ennedi,ENN,unesco,TCD,,22.0,17.25,wikidata,whc:1475
+unesco-1477,Áreas históricas de Baekje,ARE,unesco,KOR,,127.127222,36.461944,wikidata,whc:1477
+unesco-1478,Ore Mountain Mining Region,ORE,unesco,CZE,,12.8373,50.4065,wikidata,whc:1478
+unesco-1480,Victorian Gothic and Art Deco Ensembles of Mumbai,VIC,unesco,IND,,72.830083,18.929806,wikidata,whc:1480
+unesco-1481,Ahwar del Irak meridional,AHW,unesco,IRQ,,47.657778,31.562222,wikidata,whc:1481
+unesco-1483,Jardín Botánico de Singapur,JAR,unesco,SGP,,103.8162,1.3151,wikidata,whc:1483
+unesco-1484,Sitios de la revolución industrial de la era Meiji en Japón: siderurgia,REV,unesco,JPN,,131.412222,34.430556,wikidata,whc:1484
+unesco-1485,Forth Bridge,FOR,unesco,GBR,,-3.3876,55.9984,wikidata,whc:1485
+unesco-1486,Sitio del Patrimonio Industrial de Rjukan-Notodden,PAT,unesco,NOR,,8.593611,59.878611,wikidata,whc:1486
+unesco-1487,Palermo árabe-normando y las catedrales de Cefalú y Monreale,PAN,unesco,ITA,,13.353056,38.110833,wikidata,whc:1487
+unesco-1488,Diyarbakır Fortress,DIY,unesco,TUR,,40.227278,37.910861,wikidata,whc:1488
+unesco-1492,"Palestine: Land of Olives and Vines – Cultural Landscape of Southern Jerusalem, Battir",PAL,unesco,PSE,,35.130556,31.719722,wikidata,whc:1492
+unesco-1493,Museo de Arte de Pampulha,MUS,unesco,BRA,,-43.973722,-19.851833,wikidata,whc:1493
+unesco-1495,Sitios de los cristianos ocultos en la región de Nagasaki,CRI,unesco,JPN,,128.903889,32.802222,wikidata,whc:1495
+unesco-1496,La arquitectura del siglo XX de Frank Lloyd Wright,ARQ,unesco,USA,,-79.466476,39.905571,wikidata,whc:1496
+unesco-1498,"Seowon, Korean Neo-Confucian Academies",SEO,unesco,KOR,,128.843428,36.727297,wikidata,whc:1498
+unesco-1499,Astillero de Antigua y sitios arqueológicos conexos,AST,unesco,ATG,,-61.76007,17.00455,wikidata,whc:1499
+unesco-1500,Conjunto de cuevas de Gorham,CUE,unesco,GBR,,-5.341944,36.1225,wikidata,whc:1500
+unesco-1501,Conjunto dolménico de Antequera,DOL,unesco,ESP,,-4.548056,37.023333,wikidata,whc:1501
+unesco-1502,Nalanda,NAL,unesco,IND,,85.443828,25.136797,wikidata,whc:1502
+unesco-1503,Nan Madol,NAN,unesco,FSM,,158.332222,6.841944,wikidata,whc:1503
+unesco-1506,Persian Qanat,PQ,unesco,IRN,,58.654444,34.29,wikidata,whc:1506
+unesco-1507,"Phu Phrabat, un testimonio de la tradición de las piedras Sema del periodo Dvaravati",PHU,unesco,THA,,102.356278,17.731056,wikidata,whc:1507
+unesco-1508,Arte rupestre de Zuojiang Huashan,ART,unesco,CHN,,107.042276,22.248327,wikidata,whc:1508
+unesco-1511,M'Banza Kongo,BAN,unesco,AGO,,14.25,-6.266667,wikidata,whc:1511
+unesco-1513,Parque nacional de Khangchendzonga,KHN,unesco,IND,,88.3123,27.6563,wikidata,whc:1513
+unesco-1517,Filipos,FIL,unesco,GRC,,24.284576,41.012072,wikidata,whc:1517
+unesco-1518,Ani,ANI,unesco,TUR,,43.572778,40.5075,wikidata,whc:1518
+unesco-1519,Afrodisias,AFR,unesco,TUR,,28.723611,37.708333,wikidata,whc:1519
+unesco-1523,Churches of the Pskov School of Architecture,CHU,unesco,RUS,,28.3286,57.8072,wikidata,whc:1523
+unesco-1525,Catedral de la Asunción,CAT,unesco,RUS,,48.652451,55.770124,wikidata,whc:1525
+unesco-1527,Grutas y arte del periodo glacial en el Jura suabo,GRU,unesco,DEU,,9.765556,48.387778,wikidata,whc:1527
+unesco-1528,Sitios prehistóricos de la Menorca talayótica,PRE,unesco,ESP,,3.908889,39.9975,wikidata,whc:1528
+unesco-1529,Tapatapuatea marae,TAP,unesco,FRA,,-151.359167,-16.836111,wikidata,whc:1529
+unesco-1532,Sambor Prei Kuk,SAM,unesco,KHM,,105.040025,12.867283,wikidata,whc:1532
+unesco-1533,Fortificaciones venecianas de defensa de los siglos XVI al XVII: Stato da Terra – Stato da Mar Occidental,FOR,unesco,HRV,,9.663611,45.703333,wikidata,whc:1533
+unesco-1535,Sacred Island of Okinoshima and Associated Sites in the Munakata Region,SAC,unesco,JPN,,130.1056,34.245,wikidata,whc:1535
+unesco-1536,Kujataa,KUJ,unesco,GRL,,-45.598056,61.164444,wikidata,whc:1536
+unesco-1537,Qalhat,QAL,unesco,OMN,,59.369896,22.699996,wikidata,whc:1537
+unesco-1538,Conjunto industrial del siglo XX en Ivrea,IND,unesco,ITA,,7.8692,45.4575,wikidata,whc:1538
+unesco-1539,Tarnowskie Góry Lead-Silver-Zinc Mine and its Underground Water Management System,TAR,unesco,POL,,18.85123,50.4427,wikidata,whc:1539
+unesco-1541,Isla Gulangyu,GUL,unesco,CHN,,118.061944,24.4475,wikidata,whc:1541
+unesco-1542,Túmulos funerarios de Dilmún,TUM,unesco,BHR,,50.512778,26.149722,wikidata,whc:1542
+unesco-1544,Heritage district of Yazd,HER,unesco,IRN,,54.369583,31.900556,wikidata,whc:1544
+unesco-1545,Khomani Cultural Landscape,KHO,unesco,ZAF,,20.374583,-25.687611,wikidata,whc:1545
+unesco-1548,Muelle de Valongo,MUE,unesco,BRA,,-43.187394,-22.897111,wikidata,whc:1548
+unesco-1549,Shaki,SHA,unesco,AZE,,47.170556,41.191944,wikidata,whc:1549
+unesco-1550,Asmara: A Modernist African City,ASM,unesco,ERI,,38.935833,15.335278,wikidata,whc:1550
+unesco-1551,Ahmedabad,AHM,unesco,IND,,72.579722,23.021944,wikidata,whc:1551
+unesco-1552,Roșia Montană Mining Landscape,ROS,unesco,ROU,,23.130556,46.306111,wikidata,whc:1552
+unesco-1553,Archaeological Border complex of Hedeby and the Danevirke,ARC,unesco,DEU,,9.454111,54.461944,wikidata,whc:1553
+unesco-1555,Colonies of Benevolence,COL,unesco,BEL,,6.391589,53.042222,wikidata,whc:1555
+unesco-1557,Aasivissuit–Nipisat,AAS,unesco,GRL,,-51.433206,67.063931,wikidata,whc:1557
+unesco-1558,Žatec and the Landscape of Saaz Hops,ZAT,unesco,CZE,,13.54445,50.329593,wikidata,whc:1558
+unesco-1560,Madinat Al-Zahra,MAD,unesco,ESP,,-4.867785,37.88608,wikidata,whc:1560
+unesco-1561,Quanzhou: Emporium of the World in Song-Yuan China,QUA,unesco,CHN,,118.444167,24.710278,wikidata,whc:1561
+unesco-1562,"Sansa, monasterios budistas de las montañas en Corea",SMB,unesco,KOR,,127.331118,34.996581,wikidata,whc:1562
+unesco-1563,Al-Hasa,HAS,unesco,SAU,,49.621944,25.429444,wikidata,whc:1563
+unesco-1564,Tr'ondëk-Klondike,TR,unesco,CAN,,-139.0,64.0,wikidata,whc:1564
+unesco-1565,Ciudad Vieja de Hebrón,HEB,unesco,PSE,,35.108333,31.525278,wikidata,whc:1565
+unesco-1568,Paisaje arqueológico sasánida de la región del Fars,SAS,unesco,IRN,,52.530136,28.920997,wikidata,whc:1568
+unesco-1569,Maison carrée,MAI,unesco,FRA,,4.356111,43.838194,wikidata,whc:1569
+unesco-1570,Ramappa Temple,RAM,unesco,IND,,79.9425,18.259444,wikidata,whc:1570
+unesco-1571,Le Colline del Prosecco di Conegliano e Valdobbiadene,LE,unesco,ITA,,12.2261,45.953,wikidata,whc:1571
+unesco-1572,Göbekli Tepe,GOB,unesco,TUR,,38.9225,37.223056,wikidata,whc:1572
+unesco-1573,Real Edificio de Mafra,REA,unesco,PRT,,-9.326395,38.936922,wikidata,whc:1573
+unesco-1577,Budj Bim,BUD,unesco,AUS,,141.917,-38.0667,wikidata,whc:1577
+unesco-1578,Risco Caído,RIS,unesco,ESP,,-15.661256,28.043558,wikidata,whc:1578
+unesco-1580,Water Management System of Augsburg,WAT,unesco,DEU,,10.902,48.3655,wikidata,whc:1580
+unesco-1581,"Las Playas del Desembarco, Normandía, 1944",PDN,unesco,FRA,,-0.87959,49.37085,wikidata,whc:1581
+unesco-1582,Ruta colonial transístmica de Panamá,RUT,unesco,PAN,,-79.534742,8.952431,wikidata,whc:1582
+unesco-1585,Trans-Iranian railway,TRA,unesco,IRN,,51.398333,35.658306,wikidata,whc:1585
+unesco-1587,Páramo de las tinajas,PAR,unesco,LAO,,103.1525,19.431111,wikidata,whc:1587
+unesco-1588,Bagan,BAG,unesco,MMR,,94.86,21.1725,wikidata,whc:1588
+unesco-1589,Landscape for Breeding and Training of Ceremonial Carriage Horses at Kladruby nad Labem,LAN,unesco,CZE,,15.4843,50.0567,wikidata,whc:1589
+unesco-1590,Bom Jesus do Monte,BOM,unesco,PRT,,-8.3775,41.5546,wikidata,whc:1590
+unesco-1592,Liangzhu site,LIA,unesco,CHN,,119.985278,30.396667,wikidata,whc:1592
+unesco-1593,Mozu-Furuichi Kofun Group: Mounded Tombs of Ancient Japan,MOZ,unesco,JPN,,135.6094,34.5622,wikidata,whc:1593
+unesco-1594,Observatorio Jodrell Bank,OBS,unesco,GBR,,-2.307139,53.23625,wikidata,whc:1594
+unesco-1595,Port Royal,POR,unesco,JAM,,-76.841389,17.9375,wikidata,whc:1595
+unesco-1597,Writing-on-Stone Provincial Park,WRI,unesco,CAN,,-111.617,49.0819,wikidata,whc:1597
+unesco-1599,Krzemionki Prehistoric Striped Flint Mining Region,KRZ,unesco,POL,,21.5023,50.968,wikidata,whc:1599
+unesco-1602,Ancient ferrous metallurgy sites of Burkina Faso,FER,unesco,BFA,,-3.329,12.5878,wikidata,whc:1602
+unesco-1605,Jaipur,JAI,unesco,IND,,75.82,26.915,wikidata,whc:1605
+unesco-1608,Frontiers of the Roman Empire – The Danube Limes (Western Segment),FRO,unesco,AUT,,16.861,48.115,wikidata,whc:1608
+unesco-1610,Ombilin coal mine,OMB,unesco,IDN,,100.767,-0.683333,wikidata,whc:1610
+unesco-1612,Iglesia de Cristo Obrero y Nuestra Señora de Lourdes,IGL,unesco,URY,,-55.766,-34.744,wikidata,whc:1612
+unesco-1613,Los grandes balnearios de Europa,GBE,unesco,AUT,,5.866944,50.492222,wikidata,whc:1613
+unesco-1614,Artists' Colony in Darmstadt,ART,unesco,DEU,,8.666504,49.875433,wikidata,whc:1614
+unesco-1618,"Paseo del Prado y el Buen Retiro, paisaje de las artes y las ciencias",PAS,unesco,ESP,,-3.686528,40.414139,wikidata,whc:1618
+unesco-1619,Bir Hima,BIR,unesco,SAU,,44.451839,18.249239,wikidata,whc:1619
+unesco-1620,Sitio Roberto Burle Marx,ROB,unesco,BRA,,-43.54474,-23.02385,wikidata,whc:1620
+unesco-1621,"Deer Stone Monuments, the Heart of Bronze Age Culture",DEE,unesco,MNG,,101.225833,47.742778,wikidata,whc:1621
+unesco-1622,Arslantepe,ARS,unesco,TUR,,38.361111,38.381944,wikidata,whc:1622
+unesco-1623,Series de frescos del siglo XIV en Padua,SER,unesco,ITA,,11.879611,45.411889,wikidata,whc:1623
+unesco-1624,Complejo arqueoastronómico de Chankillo,COM,unesco,PER,,-78.2359,-9.5569,wikidata,whc:1624
+unesco-1625,Faro de Cordouan,FAR,unesco,FRA,,-1.173325,45.58632,wikidata,whc:1625
+unesco-1627,Cultural Heritage Sites of Ancient Khuttal,HER,unesco,TJK,,69.556731,37.777742,wikidata,whc:1627
+unesco-1631,Limes Germanicus inferior,LIM,unesco,DEU,,6.453889,51.662222,wikidata,whc:1631
+unesco-1632,Jōmon Prehistoric Sites in Northern Japan,JOM,unesco,JPN,,140.552217,41.065556,wikidata,whc:1632
+unesco-1633,Paisaje de pizarra del noroeste de Gales,PIZ,unesco,GBR,,-4.115,53.120833,wikidata,whc:1633
+unesco-1634,Chinchorro mummies,CHI,unesco,CHL,,-70.321114,-18.480596,wikidata,whc:1634
+unesco-1635,"Niza, ciudad balnearia de invierno de la Riviera",NIZ,unesco,FRA,,7.272306,43.701694,wikidata,whc:1635
+unesco-1636,"ShUM Sites of Speyer, Worms and Mainz",SHU,unesco,DEU,,8.439539,49.316211,wikidata,whc:1636
+unesco-1640,Yerba,YER,unesco,TUN,,10.8833,33.7837,wikidata,whc:1640
+unesco-1641,The Gedeo Cultural Landscape,GED,unesco,ETH,,38.6667,5.1167,wikidata,whc:1641
+unesco-1642,Kŭmgangsan,KUM,unesco,PRK,,128.104903,38.656764,wikidata,whc:1642
+unesco-1643,Las obras de Jože Plečnik en Liubliana – Diseño urbano centrado en el ser humano,OBR,unesco,SVN,,14.502222,46.043333,wikidata,whc:1643
+unesco-1645,Dholavira,DHO,unesco,IND,,70.216667,23.886111,wikidata,whc:1645
+unesco-1647,Cultural Landscape of Hawraman/Uramanat,LAN,unesco,IRN,,46.47785,35.107358,wikidata,whc:1647
+unesco-1648,Sudanese style mosques in northern Côte d'Ivoire,SUD,unesco,CIV,,-6.410167,10.490317,wikidata,whc:1648
+unesco-1650,Pórticos de Bolonia,PB,unesco,ITA,,11.332778,44.491389,wikidata,whc:1650
+unesco-1654,petroglifos del Lago Onega y del mar Blanco,PET,unesco,RUS,,36.012639,61.7299,wikidata,whc:1654
+unesco-1656,Patrimonio medieval judío de Erfurt,PAT,unesco,DEU,,11.029246,50.978644,wikidata,whc:1656
+unesco-1658,Old town of Kuldīga,KUL,unesco,LVA,,21.970556,56.9675,wikidata,whc:1658
+unesco-1660,Viking Age Ring Fortresses,VIK,unesco,DNK,,10.389167,55.391944,wikidata,whc:1660
+unesco-1661,"Modernist Kaunas: Architecture of Optimism, 1919-1939",MOD,unesco,LTU,,23.929167,54.896944,wikidata,whc:1661
+unesco-1662,Parque histórico de Sri Thep,SRI,unesco,THA,,101.150093,15.466585,wikidata,whc:1662
+unesco-1663,Takalik Abaj,TAK,unesco,GTM,,-91.736111,14.645833,wikidata,whc:1663
+unesco-1665,Cultural Landscape of Old Tea Forests of the Jingmai Mountain in Pu’er,LAN,unesco,CHN,,100.02642,22.20129,wikidata,whc:1665
+unesco-1666,Gaya Tumuli,GAY,unesco,KOR,,128.873725,35.237264,wikidata,whc:1666
+unesco-1667,Koh Ker,KOH,unesco,KHM,,104.54727,13.74992,wikidata,whc:1667
+unesco-1668,El caravasar persa,CAR,unesco,IRN,,51.420136,35.058353,wikidata,whc:1668
+unesco-1669,Gordio,GOD,unesco,TUR,,31.978483,39.650479,wikidata,whc:1669
+unesco-1670,Sacred Ensembles of the Hoysalas,SAC,unesco,IND,,75.994072,13.212453,wikidata,whc:1670
+unesco-1675,Silk Roads: Zarafshan-Karakum Corridor,SIL,unesco,TJK,,69.685558,39.441489,wikidata,whc:1675
+unesco-1676,"Human Rights, Liberation and Reconciliation: Nelson Mandela Legacy Sites",HUM,unesco,ZAF,,18.527156,-33.943928,wikidata,whc:1676
+unesco-1678,Astronomical Observatories of Kazan Federal University,AST,unesco,RUS,,49.119097,55.790908,wikidata,whc:1678
+unesco-1680,Jodensavanne,JOD,unesco,SUR,,-54.9823,5.4312,wikidata,whc:1680
+unesco-1681,Escuela de Mecánica de la Armada,ESC,unesco,ARG,,-58.463611,-34.538417,wikidata,whc:1681
+unesco-1683,Planetario de Eisinga,PLA,unesco,,,5.543753,53.187375,wikidata,whc:1683
+unesco-1687,Tell es-Sultan,TEL,unesco,PSE,,35.444564,31.871719,wikidata,whc:1687
+unesco-1688,Cultural Landscape of Kenozero Lake,LAN,unesco,RUS,,38.172611,61.928,wikidata,whc:1688
+unesco-1689,Hopewell Ceremonial Earthworks,HOP,unesco,USA,,-82.446061,40.053658,wikidata,whc:1689
+unesco-1694,Wooden Hypostyle Mosques of Medieval Anatolia,WOO,unesco,TUR,,30.529575,38.755036,wikidata,whc:1694
+unesco-1695,Zagori,ZAG,unesco,GRC,,20.7,39.8667,wikidata,whc:1695
+unesco-1696,Cultural Landscape of Khinalig People and “Köç Yolu” Transhumance Route,LAN,unesco,AZE,,48.8854,40.7059,wikidata,whc:1696
+unesco-1698,Sado Island Gold Mines,SAD,unesco,JPN,,138.257778,38.040833,wikidata,whc:1698
+unesco-1700,Landmarks of the Ancient Kingdom of Saba,LAN,unesco,YEM,,45.335228,15.426769,wikidata,whc:1700
+unesco-1702,Rachid Karami International Fair,RAC,unesco,LBN,,35.825911,34.439614,wikidata,whc:1702
+unesco-1703,Centro histórico de Odesa,ODE,unesco,UKR,,30.741,46.485,wikidata,whc:1703
+unesco-1705,Residence Ensemble Schwerin,REE,unesco,DEU,,11.41889,53.62417,wikidata,whc:1705
+unesco-1707,islas Marquesas,MAR,unesco,FRA,,-139.6,-8.9,wikidata,whc:1707
+unesco-1708,Vía Apia,VIA,unesco,ITA,,12.5325,41.841389,wikidata,whc:1708
+unesco-1709,Murujuga National Park,MUR,unesco,AUS,,116.810972,-20.575278,wikidata,whc:1709
+unesco-1711,Maidam,MAI,unesco,IND,,94.875,26.943611,wikidata,whc:1711
+unesco-1712,Qaryat al-Faw,QAR,unesco,SAU,,45.15,19.7833,wikidata,whc:1712
+unesco-1713,corte real de Tiébélé,COR,unesco,BFA,,-0.961556,11.089722,wikidata,whc:1713
+unesco-1714,Central Axis of Beijing,CEN,unesco,CHN,,116.391608,39.899639,wikidata,whc:1714
+unesco-1715,Śródmieście,SRO,unesco,POL,,18.53891,54.51953,wikidata,whc:1715
+unesco-1716,Ecbatana,ECB,unesco,IRN,,48.516247,34.8065,wikidata,whc:1716
+unesco-1718,Limes Dacicus,LIM,unesco,ROU,,23.159411,47.180789,wikidata,whc:1718
+unesco-1719,El Monte Olimpo y su entorno,MOS,unesco,GRC,,22.3489,40.0783,wikidata,whc:1719
+unesco-1720,Ruinas de Gede,RUI,unesco,KEN,,40.016667,-3.309167,wikidata,whc:1720
+unesco-1721,Umm el-Jimal,UMM,unesco,JOR,,36.369722,32.326667,wikidata,whc:1721
+unesco-1723,The Emergence of Modern Humans: The Pleistocene occupation sites of South Africa,EME,unesco,ZAF,,18.4525,-32.386389,wikidata,whc:1723
+unesco-1725,Alineamientos de Carnac,ALI,unesco,FRA,,-3.079722,47.593333,wikidata,whc:1725
+unesco-1726,"The Palaces of King Ludwig II of Bavaria: Neuschwanstein, Linderhof, Schachen and Herrenchiemsee",PKL,unesco,DEU,,10.749442,47.557489,wikidata,whc:1726
+unesco-1730,Domus de Janas,DOM,unesco,ITA,,8.951,40.085,wikidata,whc:1730
+unesco-1731,Sardis y los túmulos lidios de Bin Tepe,SAR,unesco,TUR,,28.045278,38.481944,wikidata,whc:1731
+unesco-1732,The Complex of Yen Tu Monuments and Landscape,COM,unesco,VNM,,106.719,21.0768,wikidata,whc:1732
+unesco-1733,Palacio de Cnosos,PC,unesco,GRC,,25.163144,35.297928,wikidata,whc:1733
+unesco-1734,Forest Research Institute Malaysia Forest Park Selangor,FOR,unesco,MYS,,101.633333,3.233333,wikidata,whc:1734
+unesco-1735,Jabal Al Fayah,JAB,unesco,ARE,,55.838957,25.111404,wikidata,whc:1735
+unesco-1736,tumbas de la dinastía Xia Occidental,TDX,unesco,CHN,,105.987167,38.435035,wikidata,whc:1736
+unesco-1739,Paisajes militares Maratha de India,MIL,unesco,IND,,73.9425,20.7225,wikidata,whc:1739
+unesco-1740,Petroglyphs along the Bangucheon Stream,PET,unesco,KOR,,129.173997,35.60845,wikidata,whc:1740
+unesco-1744,Prehistoric Sites of the Khorramabad Valley,PRE,unesco,IRN,,48.211389,33.508333,wikidata,whc:1744
+unesco-1745,Paisaje cultural de Diy-Gid-Biy,DIY,unesco,CMR,,13.833333,10.916667,wikidata,whc:1745
+unesco-1748,Cambodian Memorial Sites: From centres of repression to places of peace and reflection,CAM,unesco,KHM,,104.901969,11.484389,wikidata,whc:1748
+unesco-1749,Monasterio de San Hilarión,MON,unesco,PSE,,34.366389,31.447222,wikidata,whc:1749
+unesco-1750,The Roças of Sao Tome and Principe: Colonial Agricultural System and Forced Migration,ROC,unesco,STP,,6.498389,0.317333,wikidata,whc:1750
+unesco-1757,Antiguas capitales de Asuka y Fujiwara,CAP,unesco,JPN,,135.823611,34.470278,wikidata,whc:1757
+unesco-1761,"Wat Phra Mahathat Woramahawihan, Nakhon Si Thammarat",WAT,unesco,THA,,99.966667,8.411389,wikidata,whc:1761
+unesco-1765,Sitios de producción de porcelana artesanal de Jingdezhen,PRO,unesco,CHN,,117.170833,29.584444,wikidata,whc:1765
+unesco-1766,Arquitectura modernista de Tashkent. Modernidad y tradición en Asia Central,ARQ,unesco,UZB,,69.2417,41.3086,wikidata,whc:1766
+unesco-1768,Las medinas de los sultanatos históricos de las Comoras,MED,unesco,COM,,43.232583,-11.744675,wikidata,whc:1768
+unesco-1769,Sidi Bou Said,SID,unesco,TUN,,10.341014,36.869758,wikidata,whc:1769
+unesco-1774,Amazonia Theaters,AMA,unesco,BRA,,-48.493752,-1.452959,wikidata,whc:1774
+unesco-1809,Sebastia,SEB,unesco,PSE,,35.183333,32.266667,wikidata,whc:1809

@@ -5,6 +5,7 @@ import {
   ElementRef,
   afterNextRender,
   inject,
+  input,
   output,
   signal,
   viewChild,
@@ -12,40 +13,43 @@ import {
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Subject, catchError, debounceTime, distinctUntilChanged, of, switchMap } from 'rxjs';
 
-import { type City, MemoriesApi } from '../../core/memories-api';
+import { type City, MemoriesApi } from '../core/memories-api';
 
 const DEBOUNCE_MS = 250;
 const MIN_CHARS = 2;
 
-/** "Cambiar lugar": autocompletar de ciudades (patrón combobox de WAI-ARIA). */
+/**
+ * Autocompletar de ciudades (patrón combobox de WAI-ARIA). Lo usan "Cambiar lugar" en Nuevo
+ * recuerdo y la ciudad de casa en el menú de perfil.
+ */
 @Component({
   selector: 'app-place-search',
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
-    <label class="label" for="place-search-input">Busca la ciudad</label>
+    <label class="label" [for]="inputId() + '-input'">{{ label() }}</label>
     <div class="row">
       <input
         #input
-        id="place-search-input"
+        [id]="inputId() + '-input'"
         class="input"
         type="text"
         role="combobox"
         autocomplete="off"
-        placeholder="Kioto, Oaxaca, Reikiavik…"
+        [placeholder]="placeholder()"
         aria-autocomplete="list"
-        aria-controls="place-search-list"
+        [attr.aria-controls]="inputId() + '-list'"
         [attr.aria-expanded]="results().length > 0"
-        [attr.aria-activedescendant]="active() >= 0 ? 'place-option-' + active() : null"
+        [attr.aria-activedescendant]="active() >= 0 ? inputId() + '-option-' + active() : null"
         (input)="onInput($event)"
         (keydown)="onKeydown($event)"
       />
       <button type="button" class="cancel" (click)="cancelled.emit()">Cancelar</button>
     </div>
     @if (results().length) {
-      <ul id="place-search-list" class="list" role="listbox" aria-label="Ciudades">
+      <ul [id]="inputId() + '-list'" class="list" role="listbox" aria-label="Ciudades">
         @for (city of results(); track city.id; let i = $index) {
           <li
-            [id]="'place-option-' + i"
+            [id]="inputId() + '-option-' + i"
             class="option"
             role="option"
             [class.option--active]="i === active()"
@@ -148,6 +152,10 @@ const MIN_CHARS = 2;
   `,
 })
 export class PlaceSearch {
+  /** Prefijo de los ids; cambia si hay dos buscadores en la página. */
+  readonly inputId = input('place-search');
+  readonly label = input('Busca la ciudad');
+  readonly placeholder = input('Kioto, Oaxaca, Reikiavik…');
   readonly picked = output<City>();
   readonly cancelled = output<void>();
 

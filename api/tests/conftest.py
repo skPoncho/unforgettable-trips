@@ -52,16 +52,21 @@ def client() -> Iterator[TestClient]:
 
 @pytest.fixture(scope="session")
 def geo_data(migrated_database: None) -> None:
-    """Carga países, estados y ciudades reales en huella_test (solo la primera vez).
+    """Carga países, estados, ciudades y monumentos reales en huella_test (solo la primera vez).
 
     Usa la caché de descargas (~/.cache/huella/geo); la BD de pruebas conserva los datos
-    entre corridas, así que después de la primera vez esto no tarda nada.
+    entre corridas, así que después de la primera vez esto no tarda nada. Si cambió el
+    catálogo de monumentos, se vuelve a cargar solo ese.
     """
     from app.db import get_engine
-    from app.geo.load import is_loaded, load_all
+    from app.geo import monuments
+    from app.geo.load import LoadReport, is_loaded, load_all, load_monuments
 
-    if not is_loaded(get_engine()):
-        load_all(get_engine())
+    engine = get_engine()
+    if not is_loaded(engine):
+        load_all(engine)
+    elif not monuments.is_loaded(engine):
+        load_monuments(engine, LoadReport())
 
 
 # --- Datos del usuario -------------------------------------------------------------------
@@ -69,8 +74,8 @@ def geo_data(migrated_database: None) -> None:
 
 @pytest.fixture
 def db(geo_data: None) -> Iterator[Session]:
-    """Sesión directa a huella_test. Al terminar vacía los datos de usuario y monumentos
-    (los catálogos geográficos se quedan)."""
+    """Sesión directa a huella_test. Al terminar vacía los datos de usuario (los catálogos
+    geográficos y de monumentos se quedan)."""
     from app.db import get_engine
 
     session = Session(get_engine())
@@ -78,9 +83,17 @@ def db(geo_data: None) -> Iterator[Session]:
         yield session
     finally:
         session.rollback()
-        session.execute(text("TRUNCATE users, monuments RESTART IDENTITY CASCADE"))
+        session.execute(text("TRUNCATE users RESTART IDENTITY CASCADE"))
         session.commit()
         session.close()
+
+
+@pytest.fixture
+def monuments(db: Session) -> dict[str, int]:
+    """Slug → id del catálogo de monumentos."""
+    from app.seed import monument_ids
+
+    return monument_ids(db)
 
 
 @pytest.fixture

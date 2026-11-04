@@ -3,9 +3,7 @@
 from datetime import date
 
 import pytest
-from sqlalchemy.orm import Session
 
-from app.seed import upsert_monuments
 from app.services.memories import auto_trip_title
 from tests.helpers import KYOTO, add_stop, create_memory, create_trip, place
 
@@ -87,9 +85,7 @@ def test_memory_needs_exactly_one_of_stop_or_place(client, stop_in):
     assert client.post("/api/memories", json={"body": "sin lugar"}).status_code == 422
 
 
-def test_memory_with_monument_and_filters(client, stop_in, db: Session):
-    monuments = upsert_monuments(db)
-    db.commit()
+def test_memory_with_monument_and_filters(client, stop_in, monuments):
     stop = stop_in()
     other = stop_in()
     memory = create_memory(client, stop_id=stop["id"], monument_id=monuments["fushimi-inari"])
@@ -102,7 +98,7 @@ def test_memory_with_monument_and_filters(client, stop_in, db: Session):
 
 
 def test_unknown_monument_is_rejected(client, stop_in):
-    response = client.post("/api/memories", json={"stop_id": stop_in()["id"], "monument_id": 999})
+    response = client.post("/api/memories", json={"stop_id": stop_in()["id"], "monument_id": 10**9})
     assert response.status_code == 422
 
 

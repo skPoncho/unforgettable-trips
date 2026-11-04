@@ -1,4 +1,5 @@
 import { TestBed } from '@angular/core/testing';
+import { Router } from '@angular/router';
 import { RouterTestingHarness } from '@angular/router/testing';
 
 import { App } from './app';
@@ -22,7 +23,13 @@ describe('App', () => {
     const harness = await RouterTestingHarness.create();
     await harness.navigateByUrl('/mi-pais');
     expect(document.title).toBe('Mi país · Huella');
-    expect(harness.routeNativeElement?.querySelector('h1')?.textContent).toBe('Mi país');
+    expect(harness.routeNativeElement?.tagName.toLowerCase()).toBe('app-my-country-page');
+
+    // Ciudades y Monumentos son pestañas de Mi país.
+    await harness.navigateByUrl('/ciudades');
+    expect(TestBed.inject(Router).url).toBe('/mi-pais?pestana=ciudades');
+    await harness.navigateByUrl('/monumentos');
+    expect(TestBed.inject(Router).url).toBe('/mi-pais?pestana=monumentos');
 
     // Una ruta desconocida lleva a Mundo, que es la pantalla Mi mapa.
     await harness.navigateByUrl('/no-existe');

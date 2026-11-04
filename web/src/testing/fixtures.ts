@@ -5,11 +5,15 @@
 import type { Topology } from 'topojson-specification';
 
 import type {
+  CityOverview,
   Country,
   CountrySummary,
   MemoryCreated,
   MemorySuggestion,
+  Me,
+  Passport,
   Progress,
+  SubdivisionOverview,
   Trip,
   TripDetail,
   TripMemory,
@@ -379,4 +383,133 @@ export const japanTripDetail: TripDetail = {
       'Cúpula de la Bomba Atómica',
     ),
   ],
+};
+
+// --- Mi país (fase 6) ---------------------------------------------------------------------
+
+/** Tres "estados" cuadrados: CDMX (casa), Oaxaca (visitado) y Yucatán (por descubrir). */
+export const mexicoTopology: Topology = {
+  type: 'Topology',
+  arcs: [square(-100, 19), square(-97, 16), square(-90, 20)],
+  objects: {
+    states: {
+      type: 'GeometryCollection',
+      geometries: [
+        { type: 'Polygon', id: 'MX-CMX', arcs: [[0]] },
+        { type: 'Polygon', id: 'MX-OAX', arcs: [[1]] },
+        { type: 'Polygon', id: 'MX-YUC', arcs: [[2]] },
+      ],
+    },
+  },
+};
+
+export const mexicoStates: SubdivisionOverview[] = [
+  {
+    code: 'MX-CMX',
+    name_es: 'Ciudad de México',
+    status: 'visited',
+    is_home: true,
+    first_visited_on: null,
+  },
+  {
+    code: 'MX-OAX',
+    name_es: 'Oaxaca',
+    status: 'visited',
+    is_home: false,
+    first_visited_on: '2019-04-13',
+  },
+  { code: 'MX-YUC', name_es: 'Yucatán', status: null, is_home: false, first_visited_on: null },
+];
+
+export const mexicoCities: CityOverview[] = [
+  {
+    id: 3530597,
+    name_es: 'Ciudad de México',
+    subdivision_code: 'MX-CMX',
+    subdivision_name: 'Ciudad de México',
+    status: 'visited',
+    is_home: true,
+    trips: 0,
+    last_visited_on: null,
+  },
+  {
+    id: 3522507,
+    name_es: 'Oaxaca de Juárez',
+    subdivision_code: 'MX-OAX',
+    subdivision_name: 'Oaxaca',
+    status: 'visited',
+    is_home: false,
+    trips: 2,
+    last_visited_on: '2024-12-20',
+  },
+];
+
+export const OAXACA_TRIP_ID = 'cbc5749f-396f-4972-b18b-5c3a898a022b';
+
+export const mexicoPassport: Passport = {
+  country_iso3: 'MEX',
+  stamps: [
+    {
+      id: 3,
+      slug: 'teotihuacan',
+      name_es: 'Teotihuacán',
+      stamp_code: 'TEO',
+      kind: 'unesco',
+      subdivision_code: 'MX-MEX',
+      subdivision_name: 'Estado de México',
+      location: { lon: -98.84, lat: 19.69 },
+      first_stamped_on: '2019-04-13',
+      memories: 1,
+      photo_count: 0,
+      photo_ids: [],
+      trip: { id: 'a1b2c3d4-0000-4000-8000-000000000001', title: 'Escapada', stop_number: 1 },
+    },
+    {
+      id: 4,
+      slug: 'monte-alban',
+      name_es: 'Monte Albán',
+      stamp_code: 'MA',
+      kind: 'unesco',
+      subdivision_code: 'MX-OAX',
+      subdivision_name: 'Oaxaca',
+      location: { lon: -96.77, lat: 17.04 },
+      first_stamped_on: '2024-12-20',
+      memories: 2,
+      photo_count: 24,
+      photo_ids: [
+        'f0000000-0000-4000-8000-000000000001',
+        'f0000000-0000-4000-8000-000000000002',
+        'f0000000-0000-4000-8000-000000000003',
+      ],
+      trip: { id: OAXACA_TRIP_ID, title: 'Oaxaca y Chiapas', stop_number: 2 },
+    },
+  ],
+  suggested: [
+    {
+      id: 41,
+      slug: 'teopanzolco',
+      name_es: 'Teopanzolco',
+      stamp_code: 'TPZ',
+      kind: 'archaeological',
+      subdivision_code: 'MX-MOR',
+      subdivision_name: 'Morelos',
+      location: { lon: -99.22, lat: 18.93 },
+      near: 'Cuernavaca',
+      distance_km: 0.7,
+    },
+  ],
+};
+
+export const me: Me = {
+  id: '0f1e2a3b-0000-4000-8000-00000000ca71',
+  handle: 'carlos',
+  display_name: 'Carlos Barrón',
+  home_city: {
+    id: 3530597,
+    name_es: 'Ciudad de México',
+    country_iso3: 'MEX',
+    subdivision_code: 'MX-CMX',
+  },
+  theme: 'system',
+  profile_public: false,
 };

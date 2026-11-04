@@ -91,6 +91,14 @@
   --entry-active: #152a3b;
   --text-body: #d3dde4;
   --chip: #1a2e3f;
+
+  /* Mi país (pantalla 3): México por estados, pines de monumentos y pasaporte. */
+  --state-line: #3a5266;
+  --state-visited-line: #0b1620;
+  --state-glow: url(#state-glow);
+  --pin: #eef2f4;
+  --pin-ring: #0b1620;
+  --row-active: #1d3446;
 }
 
 :root[data-theme='light'] {
@@ -162,6 +170,13 @@
   --entry-active: #fff8ea;
   --text-body: #22384a;
   --chip: #edf1f4;
+
+  --state-line: #c3cfd9;
+  --state-visited-line: #ffffff;
+  --state-glow: none;
+  --pin: #0f1e2a;
+  --pin-ring: #ffffff;
+  --row-active: #edf1f4;
 }
 
 /* Respaldo sin JavaScript: mismos valores que [data-theme='light']. */
@@ -235,5 +250,12 @@
     --entry-active: #fff8ea;
     --text-body: #22384a;
     --chip: #edf1f4;
+
+    --state-line: #c3cfd9;
+    --state-visited-line: #ffffff;
+    --state-glow: none;
+    --pin: #0f1e2a;
+    --pin-ring: #ffffff;
+    --row-active: #edf1f4;
   }
 }

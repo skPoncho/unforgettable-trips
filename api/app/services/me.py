@@ -11,8 +11,8 @@ from sqlalchemy import delete, select, text
 from sqlalchemy.dialects.postgresql import insert
 from sqlalchemy.orm import Session
 
-from app.errors import NotFoundError
-from app.models import Continent, Country, User, WishlistItem
+from app.errors import InvalidError, NotFoundError
+from app.models import City, Continent, Country, User, WishlistItem
 from app.schemas import (
     CityStatus,
     ContinentProgress,
@@ -24,6 +24,7 @@ from app.schemas import (
     LonLat,
     MapOut,
     MeOut,
+    MePatch,
     MonumentStamp,
     ProgressOut,
     StopoverBrief,
@@ -61,6 +62,16 @@ def me(session: Session, user: User) -> MeOut:
         theme=user.theme,
         profile_public=user.profile_public,
     )
+
+
+def update_me(session: Session, user: User, data: MePatch) -> MeOut:
+    """La ciudad de casa cuenta como visitada (vistas de estado), así que cambia el progreso."""
+    if "home_city_id" in data.model_fields_set:
+        if data.home_city_id is not None and session.get(City, data.home_city_id) is None:
+            raise InvalidError(f"Ciudad desconocida: {data.home_city_id}")
+        user.home_city_id = data.home_city_id
+    session.flush()
+    return me(session, user)
 
 
 def progress(session: Session, user: User) -> ProgressOut:

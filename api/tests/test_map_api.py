@@ -1,6 +1,5 @@
 """Mi mapa (fase 3): ciudades y monumentos del mapa, tarjeta de país y fotos."""
 
-from app.seed import upsert_monuments
 from tests.helpers import (
     KYOTO,
     TOCUMEN,
@@ -59,9 +58,7 @@ def test_a_stopover_without_city_adds_no_city(client, user):
     assert world_map(client)["cities"] == []
 
 
-def test_map_lists_stamped_monuments(client, user, db):
-    monuments = upsert_monuments(db)
-    db.commit()
+def test_map_lists_stamped_monuments(client, user, monuments):
     trip = create_trip(client)
     stop = add_stop(client, trip["id"], place("Kioto", KYOTO, "2025-03-13"))
     create_memory(client, stop_id=stop["id"], monument_id=monuments["fushimi-inari"])
@@ -75,9 +72,9 @@ def test_map_lists_stamped_monuments(client, user, db):
 # --- Tarjeta de país -----------------------------------------------------------------------
 
 
-def test_country_summary_counts_days_cities_monuments_and_photos(client, user, db, storage):
-    monuments = upsert_monuments(db)
-    db.commit()
+def test_country_summary_counts_days_cities_monuments_and_photos(
+    client, user, db, storage, monuments
+):
     trip = create_trip(client, "Japón", visibility="public")
     add_stop(client, trip["id"], place("Tocumen", TOCUMEN, "2025-03-08", visit_type="stopover"))
     tokyo = add_stop(

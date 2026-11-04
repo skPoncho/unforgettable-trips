@@ -122,7 +122,12 @@ function dotsFor(countries: Country[], projection: GeoProjection): Dot[] {
 }
 
 /** México por estados en Mercator, ajustado al país. */
-export function drawMexico(topology: Topology, states: Subdivision[], width = 800, height = 520) {
+export function drawMexico(
+  topology: Topology,
+  states: Pick<Subdivision, 'code' | 'name_es'>[],
+  width = 800,
+  height = 520,
+) {
   const byCode = new Map(states.map((s) => [s.code, s.name_es]));
   const list = features(topology);
   const collection: FeatureCollection<Geometry, Props> = {

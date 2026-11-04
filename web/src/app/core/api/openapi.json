@@ -275,6 +275,37 @@
             }
           }
         }
+      },
+      "patch": {
+        "tags": ["me"],
+        "summary": "Patch Me",
+        "description": "Cambia la ciudad de casa (nula para quitarla). La casa cuenta como visitada.",
+        "operationId": "patch_me_api_me_patch",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/MePatch"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MeOut"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Ciudad desconocida"
+          }
+        }
       }
     },
     "/api/me/progress": {
@@ -351,6 +382,158 @@
           },
           "404": {
             "description": "País desconocido o no visitado"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/me/subdivisions": {
+      "get": {
+        "tags": ["me"],
+        "summary": "Get Subdivisions",
+        "description": "Mi país: todos los estados, visitados o por descubrir, en orden alfabético.",
+        "operationId": "get_subdivisions_api_me_subdivisions_get",
+        "parameters": [
+          {
+            "name": "country",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 3,
+              "maxLength": 3,
+              "description": "ISO3, p. ej. MEX",
+              "title": "Country"
+            },
+            "description": "ISO3, p. ej. MEX"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/SubdivisionOverview"
+                  },
+                  "title": "Response Get Subdivisions Api Me Subdivisions Get"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "País desconocido"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/me/cities": {
+      "get": {
+        "tags": ["me"],
+        "summary": "Get Cities",
+        "description": "Mi país: ciudades visitadas, la casa primero y después las de más viajes.",
+        "operationId": "get_cities_api_me_cities_get",
+        "parameters": [
+          {
+            "name": "country",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 3,
+              "maxLength": 3,
+              "description": "ISO3, p. ej. MEX",
+              "title": "Country"
+            },
+            "description": "ISO3, p. ej. MEX"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/CityOverview"
+                  },
+                  "title": "Response Get Cities Api Me Cities Get"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "País desconocido"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/me/passport": {
+      "get": {
+        "tags": ["me"],
+        "summary": "Get Passport",
+        "description": "Pasaporte de monumentos: sellos del país y hasta 4 sugeridos cerca de tu ruta.",
+        "operationId": "get_passport_api_me_passport_get",
+        "parameters": [
+          {
+            "name": "country",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 3,
+              "maxLength": 3,
+              "description": "ISO3, p. ej. MEX",
+              "title": "Country"
+            },
+            "description": "ISO3, p. ej. MEX"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PassportOut"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "País desconocido"
           },
           "422": {
             "description": "Validation Error",
@@ -1408,6 +1591,78 @@
         ],
         "title": "CityOut"
       },
+      "CityOverview": {
+        "properties": {
+          "id": {
+            "type": "integer",
+            "title": "Id"
+          },
+          "name_es": {
+            "type": "string",
+            "title": "Name Es"
+          },
+          "subdivision_code": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Subdivision Code"
+          },
+          "subdivision_name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Subdivision Name"
+          },
+          "status": {
+            "type": "string",
+            "enum": ["visited", "stopover"],
+            "title": "Status"
+          },
+          "is_home": {
+            "type": "boolean",
+            "title": "Is Home"
+          },
+          "trips": {
+            "type": "integer",
+            "title": "Trips",
+            "description": "Viajes distintos con una parada en la ciudad"
+          },
+          "last_visited_on": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Last Visited On"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "name_es",
+          "subdivision_code",
+          "subdivision_name",
+          "status",
+          "is_home",
+          "trips",
+          "last_visited_on"
+        ],
+        "title": "CityOverview"
+      },
       "CityStatus": {
         "properties": {
           "id": {
@@ -1973,6 +2228,24 @@
         "required": ["id", "handle", "display_name", "home_city", "theme", "profile_public"],
         "title": "MeOut"
       },
+      "MePatch": {
+        "properties": {
+          "home_city_id": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Home City Id"
+          }
+        },
+        "type": "object",
+        "title": "MePatch",
+        "description": "Cambios al perfil. `home_city_id` nulo quita la ciudad de casa."
+      },
       "MemoryCreatedOut": {
         "properties": {
           "id": {
@@ -2407,6 +2680,11 @@
         "required": ["id", "slug", "name_es", "stamp_code"],
         "title": "MonumentBrief"
       },
+      "MonumentKind": {
+        "type": "string",
+        "enum": ["unesco", "archaeological", "other"],
+        "title": "MonumentKind"
+      },
       "MonumentStamp": {
         "properties": {
           "id": {
@@ -2457,6 +2735,123 @@
         "type": "object",
         "required": ["id", "name_es", "distance_km"],
         "title": "NearestCity"
+      },
+      "PassportOut": {
+        "properties": {
+          "country_iso3": {
+            "type": "string",
+            "title": "Country Iso3"
+          },
+          "stamps": {
+            "items": {
+              "$ref": "#/components/schemas/PassportStamp"
+            },
+            "type": "array",
+            "title": "Stamps",
+            "description": "Del primero que sellaste al más reciente"
+          },
+          "suggested": {
+            "items": {
+              "$ref": "#/components/schemas/SuggestedStamp"
+            },
+            "type": "array",
+            "title": "Suggested",
+            "description": "Sin sellar, los más cercanos a tus paradas o a tu casa; uno por estado"
+          }
+        },
+        "type": "object",
+        "required": ["country_iso3", "stamps", "suggested"],
+        "title": "PassportOut"
+      },
+      "PassportStamp": {
+        "properties": {
+          "id": {
+            "type": "integer",
+            "title": "Id"
+          },
+          "slug": {
+            "type": "string",
+            "title": "Slug"
+          },
+          "name_es": {
+            "type": "string",
+            "title": "Name Es"
+          },
+          "stamp_code": {
+            "type": "string",
+            "title": "Stamp Code"
+          },
+          "kind": {
+            "$ref": "#/components/schemas/MonumentKind"
+          },
+          "subdivision_code": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Subdivision Code"
+          },
+          "subdivision_name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Subdivision Name"
+          },
+          "location": {
+            "$ref": "#/components/schemas/LonLat"
+          },
+          "first_stamped_on": {
+            "type": "string",
+            "format": "date",
+            "title": "First Stamped On"
+          },
+          "memories": {
+            "type": "integer",
+            "title": "Memories"
+          },
+          "photo_count": {
+            "type": "integer",
+            "title": "Photo Count"
+          },
+          "photo_ids": {
+            "items": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "type": "array",
+            "title": "Photo Ids",
+            "description": "Hasta 3 fotos de sus recuerdos"
+          },
+          "trip": {
+            "$ref": "#/components/schemas/StampTrip"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "slug",
+          "name_es",
+          "stamp_code",
+          "kind",
+          "subdivision_code",
+          "subdivision_name",
+          "location",
+          "first_stamped_on",
+          "memories",
+          "photo_count",
+          "photo_ids",
+          "trip"
+        ],
+        "title": "PassportStamp"
       },
       "PhotoUploadOut": {
         "properties": {
@@ -2623,6 +3018,35 @@
         "type": "object",
         "required": ["country", "subdivision", "city"],
         "title": "ReverseOut"
+      },
+      "StampTrip": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "title": {
+            "type": "string",
+            "title": "Title"
+          },
+          "stop_number": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Stop Number",
+            "description": "Número de estancia en el viaje (el ?parada= del detalle); nulo si fue escala"
+          }
+        },
+        "type": "object",
+        "required": ["id", "title", "stop_number"],
+        "title": "StampTrip",
+        "description": "Viaje del primer recuerdo del monumento; adonde lleva \"Ver recuerdos de este lugar\"."
       },
       "StopIn": {
         "properties": {
@@ -2948,6 +3372,51 @@
         "required": ["code", "name_es", "country_iso3"],
         "title": "SubdivisionOut"
       },
+      "SubdivisionOverview": {
+        "properties": {
+          "code": {
+            "type": "string",
+            "title": "Code"
+          },
+          "name_es": {
+            "type": "string",
+            "title": "Name Es"
+          },
+          "status": {
+            "anyOf": [
+              {
+                "type": "string",
+                "enum": ["visited", "stopover"]
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Status",
+            "description": "Nulo si está por descubrir"
+          },
+          "is_home": {
+            "type": "boolean",
+            "title": "Is Home"
+          },
+          "first_visited_on": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "First Visited On"
+          }
+        },
+        "type": "object",
+        "required": ["code", "name_es", "status", "is_home", "first_visited_on"],
+        "title": "SubdivisionOverview",
+        "description": "Un estado del país con lo que el usuario lleva en él."
+      },
       "SubdivisionStatus": {
         "properties": {
           "code": {
@@ -3112,6 +3581,77 @@
         "type": "object",
         "required": ["place_name", "location", "city", "subdivision", "country"],
         "title": "SuggestedPlace"
+      },
+      "SuggestedStamp": {
+        "properties": {
+          "id": {
+            "type": "integer",
+            "title": "Id"
+          },
+          "slug": {
+            "type": "string",
+            "title": "Slug"
+          },
+          "name_es": {
+            "type": "string",
+            "title": "Name Es"
+          },
+          "stamp_code": {
+            "type": "string",
+            "title": "Stamp Code"
+          },
+          "kind": {
+            "$ref": "#/components/schemas/MonumentKind"
+          },
+          "subdivision_code": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Subdivision Code"
+          },
+          "subdivision_name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Subdivision Name"
+          },
+          "location": {
+            "$ref": "#/components/schemas/LonLat"
+          },
+          "near": {
+            "type": "string",
+            "title": "Near",
+            "description": "Parada o casa más cercana"
+          },
+          "distance_km": {
+            "type": "number",
+            "title": "Distance Km"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "slug",
+          "name_es",
+          "stamp_code",
+          "kind",
+          "subdivision_code",
+          "subdivision_name",
+          "location",
+          "near",
+          "distance_km"
+        ],
+        "title": "SuggestedStamp"
       },
       "SuggestedTrip": {
         "properties": {

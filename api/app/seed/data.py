@@ -15,84 +15,12 @@ Francia, Portugal, Morelos y Veracruz se agregan viajes; esos totales salen de l
 from dataclasses import dataclass
 from datetime import date
 
-from app.models import MonumentKind, Visibility, VisitType
+from app.models import Visibility, VisitType
 
 HANDLE = "carlos"
 DISPLAY_NAME = "Carlos Barrón"
 HOME_CITY = ("Ciudad de México", "MEX")
 WISHLIST = ("ARG", "MAR", "ISL", "EGY")
-
-
-@dataclass(frozen=True)
-class MonumentSeed:
-    slug: str
-    name_es: str
-    stamp_code: str
-    kind: MonumentKind
-    lon: float
-    lat: float
-
-
-MONUMENTS = (
-    # México: los 8 sellos del pasaporte de la maqueta...
-    MonumentSeed("teotihuacan", "Teotihuacán", "TEO", MonumentKind.unesco, -98.8438, 19.6925),
-    MonumentSeed("chichen-itza", "Chichén Itzá", "CHI", MonumentKind.unesco, -88.5678, 20.6843),
-    MonumentSeed(
-        "tulum",
-        "Zona arqueológica de Tulum",
-        "TUL",
-        MonumentKind.archaeological,
-        -87.4290,
-        20.2147,
-    ),
-    MonumentSeed("palenque", "Palenque", "PAL", MonumentKind.unesco, -92.0463, 17.4838),
-    MonumentSeed("monte-alban", "Monte Albán", "MA", MonumentKind.unesco, -96.7678, 17.0436),
-    MonumentSeed(
-        "centro-historico-puebla",
-        "Centro histórico de Puebla",
-        "PUE",
-        MonumentKind.unesco,
-        -98.1981,
-        19.0433,
-    ),
-    MonumentSeed(
-        "ciudad-de-guanajuato",
-        "Ciudad de Guanajuato",
-        "GTO",
-        MonumentKind.unesco,
-        -101.2566,
-        21.0170,
-    ),
-    MonumentSeed(
-        "hospicio-cabanas", "Hospicio Cabañas", "HC", MonumentKind.unesco, -103.3364, 20.6767
-    ),
-    # ...y los 4 sugeridos (sin visitar).
-    MonumentSeed("el-tajin", "El Tajín", "TAJ", MonumentKind.unesco, -97.3780, 20.4478),
-    MonumentSeed("calakmul", "Calakmul", "CAL", MonumentKind.unesco, -89.8106, 18.1053),
-    MonumentSeed("paquime", "Paquimé", "PAQ", MonumentKind.unesco, -107.9500, 30.3700),
-    MonumentSeed(
-        "misiones-sierra-gorda",
-        "Misiones de la Sierra Gorda",
-        "SG",
-        MonumentKind.unesco,
-        -99.4728,
-        21.2178,
-    ),
-    # Japón: los de la bitácora del viaje.
-    MonumentSeed("senso-ji", "Templo Sensō-ji", "SEN", MonumentKind.other, 139.7967, 35.7148),
-    MonumentSeed(
-        "fushimi-inari", "Fushimi Inari-taisha", "INA", MonumentKind.other, 135.7727, 34.9671
-    ),
-    MonumentSeed("todai-ji", "Tōdai-ji", "TOD", MonumentKind.unesco, 135.8398, 34.6890),
-    MonumentSeed(
-        "cupula-bomba-atomica",
-        "Cúpula de la Bomba Atómica",
-        "GEN",
-        MonumentKind.unesco,
-        132.4536,
-        34.3955,
-    ),
-)
 
 
 @dataclass(frozen=True)
@@ -106,6 +34,7 @@ class StopSeed:
     note: str | None = None
     # Un recuerdo por parada (si hay texto), con sus fotos.
     memory: str | None = None
+    # Slug del catálogo de monumentos (api/data/monuments.csv): otorga el sello.
     monument: str | None = None
     photos: int = 0
 

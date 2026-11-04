@@ -1,8 +1,9 @@
 """Datos semilla de desarrollo: `make seed` (python -m app.seed).
 
 Idempotente: borra al usuario semilla con todo lo suyo (filas y archivos) y lo vuelve a
-crear. Los monumentos se insertan o actualizan por slug. Usa los mismos servicios que la
-API, así que país, estado y ciudad de cada parada salen del punto igual que en producción.
+crear. Los monumentos salen del catálogo que carga `make load-geo`. Usa los mismos
+servicios que la API, así que país, estado y ciudad de cada parada salen del punto igual
+que en producción.
 """
 
 import random
@@ -12,10 +13,8 @@ from datetime import UTC, datetime, time, timedelta
 
 from geoalchemy2 import WKTElement
 from sqlalchemy import Engine, select, text
-from sqlalchemy.dialects.postgresql import insert
 from sqlalchemy.orm import Session
 
-from app.geo.locate import locate
 from app.models import City, Country, Memory, Monument, Photo, User
 from app.schemas import LonLat, MemoryIn, StopIn, TripIn, TripPatch
 from app.seed import data
@@ -44,29 +43,21 @@ def _point(lon: float, lat: float) -> WKTElement:
     return WKTElement(f"POINT({lon} {lat})", srid=4326)
 
 
-def upsert_monuments(session: Session) -> dict[str, int]:
-    for m in data.MONUMENTS:
-        found = locate(session, lon=m.lon, lat=m.lat)
-        if found is None:
-            raise RuntimeError(f"Monumento fuera de todo país: {m.slug}")
-        values = {
-            "slug": m.slug,
-            "name_es": m.name_es,
-            "stamp_code": m.stamp_code,
-            "kind": m.kind,
-            "country_id": found.country.id,
-            "subdivision_id": found.subdivision.id if found.subdivision else None,
-            "city_id": found.city.id if found.city else None,
-            "location": _point(m.lon, m.lat),
-            "source": "seed",
-            "source_ref": None,
-        }
-        session.execute(
-            insert(Monument)
-            .values(**values)
-            .on_conflict_do_update(index_elements=["slug"], set_=values)
+def seed_monument_slugs() -> set[str]:
+    stops = [s for t in data.TRIPS for s in t.stops] + [m.stop for m in data.LOOSE_MEMORIES]
+    return {s.monument for s in stops if s.monument}
+
+
+def monument_ids(session: Session) -> dict[str, int]:
+    """Slug → id de los monumentos del catálogo. Falla si falta alguno de las semillas."""
+    ids = {slug: id_ for slug, id_ in session.execute(select(Monument.slug, Monument.id))}
+    missing = seed_monument_slugs() - ids.keys()
+    if missing:
+        raise RuntimeError(
+            f"Faltan monumentos del catálogo ({', '.join(sorted(missing))}). "
+            "¿Corriste make load-geo?"
         )
-    return {slug: id_ for slug, id_ in session.execute(select(Monument.slug, Monument.id))}
+    return ids
 
 
 def _reset_user(session: Session, storage: StorageBackend) -> None:
@@ -160,8 +151,8 @@ def seed(engine: Engine, storage: StorageBackend, *, with_photos: bool = True) -
         if not session.execute(text("SELECT EXISTS (SELECT 1 FROM cities)")).scalar():
             raise RuntimeError("No hay datos geográficos. Corre make load-geo primero.")
 
-        monument_ids = upsert_monuments(session)
-        report.monuments = len(data.MONUMENTS)
+        monuments = monument_ids(session)
+        report.monuments = len(seed_monument_slugs())
         _reset_user(session, storage)
         user = _create_user(session)
         for iso3 in data.WISHLIST:
@@ -196,9 +187,7 @@ def seed(engine: Engine, storage: StorageBackend, *, with_photos: bool = True) -
                         stop_id=stop.id,
                         body=stop_seed.memory,
                         occurred_on=stop_seed.arrived_on,
-                        monument_id=monument_ids.get(stop_seed.monument)
-                        if stop_seed.monument
-                        else None,
+                        monument_id=monuments[stop_seed.monument] if stop_seed.monument else None,
                     ),
                     stop_seed,
                 )

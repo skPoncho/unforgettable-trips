@@ -37,7 +37,7 @@ import {
 import { MemoryEvents } from '../../core/memory-events';
 import { photoUrl } from '../../core/trips-api';
 import { PlaceMinimap } from './place-minimap';
-import { PlaceSearch } from './place-search';
+import { PlaceSearch } from '../../shared/place-search';
 
 /** Subidas en paralelo. */
 const PARALLEL_UPLOADS = 3;
