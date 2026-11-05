@@ -1,0 +1,8 @@
+# Todo el código corre en contenedores Linux: siempre LF, también en Windows.
+# Con CRLF, el shebang de docker-entrypoint.sh queda como "#!/bin/sh\r" y el
+# contenedor falla con "no such file or directory".
+* text=auto eol=lf
+
+# Lo genera `make build-monuments` con el módulo csv de Python, que escribe CRLF.
+# Se guarda tal cual para que regenerarlo no cambie el archivo.
+api/data/monuments.csv -text
